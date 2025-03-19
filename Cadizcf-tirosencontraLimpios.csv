@@ -1,0 +1,40 @@
+Fecha,Jornada,Local/Visitante,Resultado,GF,GC,Rival,Goles,Disparos,Disparos Puerta,% Disparos Puerta,Goles/Disparos,Goles/DisparosPuerta,Distancia,xG,xGnopenalty,G-xG,nopenalty:G-xG
+14/08/2023,Semana 1 de partido,Visitante,D,0,1,Alavés,0,10,2,20.0,0.00,0.00,22.1,0.3,0.3,-0.3,-0.3
+20/08/2023,Semana 2 de partido,Local,V,2,0,Barcelona,2,24,10,41.7,0.08,0.20,15.5,3.4,3.4,-1.4,-1.4
+26/08/2023,Semana 3 de partido,Visitante,E,1,1,Almería,1,5,2,40.0,0.20,0.50,17.6,0.3,0.3,+0.7,+0.7
+01/09/2023,Semana 4 de partido,Visitante,D,1,3,Villarreal,1,7,3,42.9,0.14,0.33,19.8,0.3,0.3,+0.7,+0.7
+16/09/2023,Semana 5 de partido,Local,V,3,0,Athletic Club,3,20,8,40.0,0.15,0.38,13.4,2.9,2.9,+0.1,+0.1
+24/09/2023,Semana 6 de partido,Local,E,1,1,Betis,1,21,7,33.3,0.05,0.14,16.4,1.8,1.8,-0.8,-0.8
+27/09/2023,Semana 7 de partido,Visitante,E,0,0,Rayo Vallecano,0,9,4,44.4,0.00,0.00,28.2,0.3,0.3,-0.3,-0.3
+01/10/2023,Semana 8 de partido,Local,V,3,2,Atlético Madrid,3,18,9,50.0,0.17,0.33,15.5,2.7,2.7,+0.3,+0.3
+07/10/2023,Semana 9 de partido,Visitante,V,1,0,Girona,1,20,5,25.0,0.05,0.20,22.2,1.2,1.2,-0.2,-0.2
+23/10/2023,Semana 10 de partido,Local,V,2,0,Valencia,2,12,4,33.3,0.17,0.50,16.8,1.5,1.5,+0.5,+0.5
+28/10/2023,Semana 11 de partido,Visitante,E,2,2,Sevilla,2,20,10,50.0,0.10,0.20,16.8,1.2,1.2,+0.8,+0.8
+06/11/2023,Semana 12 de partido,Local,V,1,0,Getafe,1,13,3,23.1,0.08,0.33,21.2,1.2,1.2,-0.2,-0.2
+26/11/2023,Semana 14 de partido,Visitante,V,3,0,Real Madrid,3,14,5,35.7,0.21,0.60,18.8,1.6,1.6,+1.4,+1.4
+29/11/2023,Semana 13 de partido,Local,E,1,1,Mallorca,1,16,3,18.8,0.06,0.33,21.0,1.1,1.1,-0.1,-0.1
+04/12/2023,Semana 15 de partido,Local,E,1,1,Celta Vigo,1,26,7,26.9,0.04,0.14,17.9,2.4,2.4,-1.4,-1.4
+10/12/2023,Semana 16 de partido,Visitante,E,1,1,Osasuna,1,12,3,25.0,0.00,0.00,23.0,1.6,0.9,-0.6,-0.9
+17/12/2023,Semana 17 de partido,Local,E,1,1,Las Palmas,1,7,2,28.6,0.14,0.50,23.1,0.7,0.7,+0.3,+0.3
+21/12/2023,Semana 18 de partido,Visitante,E,0,0,Real Sociedad,0,8,1,12.5,0.00,0.00,15.9,0.5,0.5,-0.5,-0.5
+03/01/2024,Semana 19 de partido,Local,V,2,0,Granada,2,15,8,53.3,0.13,0.25,14.4,3.0,3.0,-1.0,-1.0
+14/01/2024,Semana 20 de partido,Visitante,V,4,1,Valencia,4,9,5,55.6,0.44,0.80,20.5,1.9,1.9,+2.1,+2.1
+19/01/2024,Semana 21 de partido,Local,V,1,0,Alavés,1,12,2,16.7,0.00,0.00,18.1,2.0,1.2,-1.0,-1.2
+28/01/2024,Semana 22 de partido,Visitante,E,0,0,Athletic Club,0,8,0,0.0,0.00,,22.8,0.2,0.2,-0.2,-0.2
+04/02/2024,Semana 23 de partido,Local,E,0,0,Villarreal,0,19,4,21.1,0.00,0.00,18.9,1.2,1.2,-1.2,-1.2
+09/02/2024,Semana 24 de partido,Visitante,V,2,0,Betis,2,14,5,35.7,0.14,0.40,17.2,1.0,1.0,+1.0,+1.0
+17/02/2024,Semana 25 de partido,Local,V,2,0,Osasuna,2,11,4,36.4,0.18,0.50,16.1,2.0,2.0,0.0,0.0
+25/02/2024,Semana 26 de partido,Visitante,E,2,2,Celta Vigo,2,7,3,42.9,0.29,0.67,14.8,0.7,0.7,+1.3,+1.3
+02/03/2024,Semana 27 de partido,Local,E,1,1,Rayo Vallecano,1,9,5,55.6,0.11,0.20,16.3,0.7,0.7,+0.3,+0.3
+09/03/2024,Semana 28 de partido,Visitante,D,0,2,Atlético Madrid,0,8,4,50.0,0.00,0.00,21.5,0.9,0.9,-0.9,-0.9
+15/03/2024,Semana 29 de partido,Local,V,2,0,Real Sociedad,2,14,6,42.9,0.14,0.33,14.3,1.9,1.9,+0.1,+0.1
+29/03/2024,Semana 30 de partido,Visitante,D,0,1,Granada,0,10,2,20.0,0.00,0.00,21.4,0.5,0.5,-0.5,-0.5
+13/04/2024,Semana 31 de partido,Visitante,V,1,0,Barcelona,1,12,1,8.3,0.08,1.00,18.9,0.9,0.9,+0.1,+0.1
+20/04/2024,Semana 32 de partido,Local,V,4,1,Girona,4,10,5,50.0,0.40,0.80,14.4,2.1,2.1,+1.9,+1.9
+28/04/2024,Semana 33 de partido,Visitante,E,1,1,Mallorca,1,9,2,22.2,0.11,0.50,23.4,0.9,0.9,+0.1,+0.1
+04/05/2024,Semana 34 de partido,Local,V,3,0,Real Madrid,3,19,9,47.4,0.16,0.33,19.1,2.3,2.3,+0.7,+0.7
+12/05/2024,Semana 35 de partido,Visitante,D,0,1,Getafe,0,10,4,40.0,0.00,0.00,22.9,0.5,0.5,-0.5,-0.5
+15/05/2024,Semana 36 de partido,Local,D,0,1,Sevilla,0,14,3,21.4,0.00,0.00,19.3,1.3,1.3,-1.3,-1.3
+19/05/2024,Semana 37 de partido,Visitante,E,0,0,Las Palmas,0,9,1,11.1,0.00,0.00,14.5,0.6,0.6,-0.6,-0.6
+25/05/2024,Semana 38 de partido,Local,V,6,1,Almería,5,27,12,44.4,0.19,0.42,17.3,2.9,2.9,+2.1,+2.1
+,,,6-15-17,55,26,,54,508,173,34.1,0.10,0.30,18.3,52.3,50.7,+1.7,+1.3

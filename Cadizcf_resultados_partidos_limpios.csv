@@ -1,0 +1,39 @@
+Fecha,Jornada,Local/Visitante,Resultado,GF,GC,Rival,xG,xGA,Posesión,Column14,Formacion,Formacion Rival
+14/08/2023,Semana 1 de partido,Local,V,1,0,Alavés,0.7,0.3,45,Fali,4-4-2,5-4-1
+20/08/2023,Semana 2 de partido,Visitante,D,0,2,Barcelona,1.1,3.4,26,Álex Fernández,4-4-2,3-4-3
+26/08/2023,Semana 3 de partido,Local,E,1,1,Almería,1.6,0.3,52,Isaac Carcelen,4-4-2,4-2-3-1
+01/09/2023,Semana 4 de partido,Local,V,3,1,Villarreal,2.1,0.3,43,Isaac Carcelen,4-4-2,4-3-3
+16/09/2023,Semana 5 de partido,Visitante,D,0,3,Athletic Club,0.3,2.9,35,Isaac Carcelen,4-4-2,4-2-3-1
+24/09/2023,Semana 6 de partido,Visitante,E,1,1,Betis,0.2,1.8,37,Isaac Carcelen,4-4-2,4-2-3-1
+27/09/2023,Semana 7 de partido,Local,E,0,0,Rayo Vallecano,0.6,0.3,52,Isaac Carcelen,4-4-2,4-2-3-1
+01/10/2023,Semana 8 de partido,Visitante,D,2,3,Atlético Madrid,0.8,2.7,31,Jeremías Ledesma,5-3-2,3-5-2
+07/10/2023,Semana 9 de partido,Local,D,0,1,Girona,0.4,1.2,27,Isaac Carcelen,4-4-2,3-4-3
+23/10/2023,Semana 10 de partido,Visitante,D,0,2,Valencia,0.6,1.5,39,Isaac Carcelen,4-4-2,4-2-3-1
+28/10/2023,Semana 11 de partido,Local,E,2,2,Sevilla,1.1,1.2,34,Isaac Carcelen,4-4-2,4-3-3
+06/11/2023,Semana 12 de partido,Visitante,D,0,1,Getafe,0.5,1.2,55,Isaac Carcelen,4-4-2,4-4-2
+26/11/2023,Semana 14 de partido,Local,D,0,3,Real Madrid,1.2,1.6,39,Jeremías Ledesma,5-4-1,4-2-2-2
+29/11/2023,Semana 13 de partido,Visitante,E,1,1,Mallorca,0.3,1.1,33,Isaac Carcelen,4-4-2,5-3-2
+04/12/2023,Semana 15 de partido,Visitante,E,1,1,Celta Vigo,0.3,2.4,32,Isaac Carcelen,4-4-2,4-4-2
+10/12/2023,Semana 16 de partido,Local,E,1,1,Osasuna,0.9,1.6,45,Isaac Carcelen,4-4-2,4-3-3
+17/12/2023,Semana 17 de partido,Visitante,E,1,1,Las Palmas,1.6,0.7,36,Isaac Carcelen,4-4-2,4-5-1
+21/12/2023,Semana 18 de partido,Local,E,0,0,Real Sociedad,1.0,0.5,40,Isaac Carcelen,4-4-2,4-1-4-1
+03/01/2024,Semana 19 de partido,Visitante,D,0,2,Granada,0.8,3.0,45,Isaac Carcelen,4-4-2,4-4-2
+14/01/2024,Semana 20 de partido,Local,D,1,4,Valencia,1.1,1.9,57,Isaac Carcelen,4-5-1,4-4-2
+19/01/2024,Semana 21 de partido,Visitante,D,0,1,Alavés,0.3,2.0,51,Jeremías Ledesma,4-4-2,4-2-3-1
+28/01/2024,Semana 22 de partido,Local,E,0,0,Athletic Club,0.4,0.2,43,Isaac Carcelen,4-4-2,4-2-3-1
+04/02/2024,Semana 23 de partido,Visitante,E,0,0,Villarreal,0.7,1.2,41,Isaac Carcelen,4-4-2,4-4-2
+09/02/2024,Semana 24 de partido,Local,D,0,2,Betis,0.8,1.0,53,Jeremías Ledesma,4-4-2,4-2-3-1
+17/02/2024,Semana 25 de partido,Visitante,D,0,2,Osasuna,0.5,2.0,44,Jeremías Ledesma,4-4-2,4-3-3
+25/02/2024,Semana 26 de partido,Local,E,2,2,Celta Vigo,2.2,0.7,65,Jeremías Ledesma,4-4-2,4-4-2
+02/03/2024,Semana 27 de partido,Visitante,E,1,1,Rayo Vallecano,1.0,0.7,47,Jeremías Ledesma,4-4-2,4-2-3-1
+09/03/2024,Semana 28 de partido,Local,V,2,0,Atlético Madrid,1.1,0.9,40,Jeremías Ledesma,4-4-2,5-3-2
+15/03/2024,Semana 29 de partido,Visitante,D,0,2,Real Sociedad,0.8,1.9,37,Jeremías Ledesma,4-4-2,4-3-3
+29/03/2024,Semana 30 de partido,Local,V,1,0,Granada,1.6,0.5,59,Jeremías Ledesma,4-4-2,5-4-1
+13/04/2024,Semana 31 de partido,Local,D,0,1,Barcelona,1.0,0.9,38,Jeremías Ledesma,4-4-2,4-3-3
+20/04/2024,Semana 32 de partido,Visitante,D,1,4,Girona,1.6,2.1,43,Jeremías Ledesma,4-4-2,4-2-3-1
+28/04/2024,Semana 33 de partido,Local,E,1,1,Mallorca,0.4,0.9,58,Jeremías Ledesma,4-4-2,5-4-1
+04/05/2024,Semana 34 de partido,Visitante,D,0,3,Real Madrid,0.9,2.3,30,Jeremías Ledesma,4-5-1,4-3-3
+12/05/2024,Semana 35 de partido,Local,V,1,0,Getafe,1.5,0.5,45,Jeremías Ledesma,4-4-2,5-3-2
+15/05/2024,Semana 36 de partido,Visitante,V,1,0,Sevilla,2.5,1.3,44,Jeremías Ledesma,4-4-2,5-3-2
+19/05/2024,Semana 37 de partido,Local,E,0,0,Las Palmas,0.9,0.6,49,Jeremías Ledesma,4-4-2,4-3-3
+25/05/2024,Semana 38 de partido,Visitante,D,1,6,Almería,0.5,2.9,54,Álex Fernández,4-2-3-1,4-2-3-1
