@@ -46,7 +46,7 @@ server <- function(input, output, session) {
   })
   
   output$grafico <- renderPlot({
-    req(input$grafico_seleccionado)  # Asegurar que se haya seleccionado algo
+    req(input$grafico_seleccionado)  
     
     gg <- switch(input$grafico_seleccionado,
                  
