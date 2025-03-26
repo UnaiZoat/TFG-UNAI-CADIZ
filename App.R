@@ -6,9 +6,14 @@ library(plotly)
 datosCadizResultados <- read.csv("Cadizcf_resultados_partidos_limpios.csv", header = TRUE, sep = ",")
 datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
 datosTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
+datosTirosJugador <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
 
 datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
 datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
+
+top_goleadores <- datosTirosJugador %>%
+  arrange(desc(Goles)) %>%
+  slice_head(n=7)
 
 ui <- fluidPage(
   titlePanel("Análisis del Cádiz CF"),
@@ -16,7 +21,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("tipo_analisis", "Selecciona el análisis:",
-                  choices = c("Resultados", "Tiros", "Tiros en Contra")),
+                  choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores")),
       
       uiOutput("selector_grafico")
     ),
@@ -40,7 +45,12 @@ server <- function(input, output, session) {
                        "Tiros" = c("Relación entre Disparos y Goles",
                                    "Comparación de xG con y sin penaltis"),
                        
-                       "Tiros en Contra" = c("Relación entre Disparos Recibidos y Goles en Contra"))
+                       "Tiros en Contra" = c("Relación entre Disparos Recibidos y Goles en Contra"),
+    
+                       "Tiros Jugadores" =c("Goles por disparo vs Goles por disparo a puerta",
+                                            "Relacion entre Disparos cada 90min y Goles",
+                                            "Comparacion de Goles vs xG",
+                                            "Efectividad por edad"))
     
     selectInput("grafico_seleccionado", "Selecciona un gráfico:", choices = opciones)
   })
@@ -94,7 +104,40 @@ server <- function(input, output, session) {
                    geom_point(color="blue", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="red", se=FALSE) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
+                   theme_minimal(),
+                 
+                 "Goles por disparo vs Goles por disparo a puerta"=ggplot(top_goleadores, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
+                   geom_point(size=3)+
+                   geom_smooth(method = "lm",se=FALSE,color="red")+
+                   geom_text(hjust=0.5,vjust=-1,size=3)+
+                   labs(title = "Goles por disparo vs Goles por disparo a puerta",
+                        x="Goles/Disparo", y="Goles/DisparoPuerta")+
+                   theme_minimal(),
+                 
+                 "Relacion entre Disparos cada 90min y Goles"=ggplot(top_goleadores, aes(x=Disparos.cada.90min, y=Goles, color=Nombre,label=Nombre))+
+                   geom_point(size=2)+
+                   geom_smooth(method="lm",se=FALSE,color="blue")+
+                   geom_text(hjust=0.5,vjust=-1,size=3)+
+                   labs(title="Relacion entre Disparos cada 90min y Goles",
+                        x="Disparos cada 90min", y="Goles")+
+                   theme_minimal(),
+                 
+                 "Comparacion de Goles vs xG"= ggplot(top_goleadores,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
+                   geom_point(size=3)+
+                   geom_abline(slope = 1,intercept = 0,linetype="dashed",color="red")+
+                   geom_text(hjust=0.5,vjust=1,size=3)+
+                   labs(title = "Comparacion de Goles vs xG",
+                        x="xG",y="Goles")+
+                   theme_minimal(),
+                 
+                 "Efectividad por edad"=ggplot(top_goleadores,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
+                   geom_point(size=3)+
+                   geom_smooth(method="lm",se=FALSE,color="red")+
+                   geom_text(hjust=0.5,vjust=-1,size=3)+
+                   labs(title = "Efectividad por edad",
+                        x="Edad",y="Goles por disparo a puerta")+
                    theme_minimal()
+                 
     )
     
     gg 

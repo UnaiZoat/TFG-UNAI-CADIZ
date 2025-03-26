@@ -31,10 +31,17 @@ ggplot(top_goleadores,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
   geom_point(size=3)+
   geom_abline(slope = 1,intercept = 0,linetype="dashed",color="red")+
   geom_text(hjust=0.5,vjust=1,size=3)+
-  labs(title = "Comparicion de Goles vs xG",
+  labs(title = "Comparacion de Goles vs xG",
        x="xG",y="Goles")+
   theme_minimal()
 
+ggplot(top_goleadores,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
+  geom_point(size=3)+
+  geom_smooth(method="lm",se=FALSE,color="red")+
+  geom_text(hjust=0.5,vjust=-1,size=3)+
+  labs(title = "Efectividad por edad",
+       x="Edad",y="Goles por disparo a puerta")+
+  theme_minimal()
 
 
 
