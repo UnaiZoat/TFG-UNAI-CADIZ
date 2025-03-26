@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(plotly)
+library(bslib)
 
 datosCadizResultados <- read.csv("Cadizcf_resultados_partidos_limpios.csv", header = TRUE, sep = ",")
 datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
@@ -16,7 +17,17 @@ top_goleadores <- datosTirosJugador %>%
   slice_head(n=7)
 
 ui <- fluidPage(
-  titlePanel("Análisis del Cádiz CF"),
+  theme = bs_theme(
+    bg = "#ffff00",         
+    fg = "#0000ff",         
+    primary = "#0000ff",    
+    base_font = font_google("Roboto")  
+  ),
+  
+  titlePanel(
+    tags$h1("Análisis del Cádiz CF", 
+            style = "color:#0000ff; font-size: 40px; font-family: 'Roboto'; text-shadow: 1px 1px #0000ff;")
+  ),
   
   sidebarLayout(
     sidebarPanel(
@@ -27,7 +38,13 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      plotOutput("grafico")
+      plotOutput("grafico"),
+      
+      br(),
+      br(),
+      tags$img(src = "escudo.png", 
+               height = "200px", 
+               style = "display: block; margin-left: 100px; margin-right: 100px;")
     )
   )
 )
