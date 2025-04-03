@@ -8,9 +8,11 @@ datosCadizResultados <- read.csv("Cadizcf_resultados_partidos_limpios.csv", head
 datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
 datosTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
 datosTirosJugador <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
+datosGolesafavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
 
 datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
 datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
+datosGolesafavor$Minute <- as.numeric(datosGolesafavor$Minute)
 
 top_goleadores <- datosTirosJugador %>%
   arrange(desc(Goles)) %>%
@@ -32,7 +34,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("tipo_analisis", "Selecciona el análisis:",
-                  choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores")),
+                  choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
       
       uiOutput("selector_grafico")
     ),
@@ -67,7 +69,12 @@ server <- function(input, output, session) {
                        "Tiros Jugadores" =c("Goles por disparo vs Goles por disparo a puerta",
                                             "Relacion entre Disparos cada 90min y Goles",
                                             "Comparacion de Goles vs xG",
-                                            "Efectividad por edad"))
+                                            "Efectividad por edad"),
+    
+                        "Goles a favor" =c("Goles en Casa vs Fuera",
+                                           "Goles con cada parte del cuerpo",
+                                           "Distribución goles por minuto",
+                                           "Distancia de los Goles"))
     
     selectInput("grafico_seleccionado", "Selecciona un gráfico:", choices = opciones)
   })
@@ -153,6 +160,26 @@ server <- function(input, output, session) {
                    geom_text(hjust=0.5,vjust=-1,size=3)+
                    labs(title = "Efectividad por edad",
                         x="Edad",y="Goles por disparo a puerta")+
+                   theme_minimal(),
+                 
+                 "Goles en Casa vs Fuera"=ggplot(datosGolesafavor, aes(x=Sedes, fill = Sedes))+
+                   geom_bar() +
+                   labs(title = "Goles en Casa vs Fuera", x="Sede", y="Goles")+
+                   theme_minimal(),
+                 
+                 "Goles con cada parte del cuerpo"=ggplot(datosGolesafavor, aes(x=Parte.del.cuerpo, fill = Parte.del.cuerpo))+
+                   geom_bar() +
+                   labs(title = "Goles con cada parte del cuerpo", x="Parte del cuerpo", y="Goles")+
+                   theme_minimal(),
+                 
+                 "Distribución goles por minuto"=ggplot(datosGolesafavor,aes(x=Minute))+
+                   geom_histogram(binwidth = 5, fill="blue", color="black")+
+                   labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
+                   theme_minimal(),
+                 
+                 "Distancia de los Goles"=ggplot(datosGolesafavor, aes(x=Distance))+
+                   geom_histogram(binwidth= 5,fill="blue", color="black") +
+                   labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
                    theme_minimal()
                  
     )
