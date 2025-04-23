@@ -28,12 +28,12 @@ ui <- fluidPage(
   
   titlePanel(
     tags$h1("Análisis del Cádiz CF", 
-            style = "color:#0000ff; font-size: 40px; font-family: 'Roboto'; text-shadow: 1px 1px #0000ff;")
+            style = "color:#0000ff; font-size: 40px; font-family: 'Roboto'; text-shadow: 1px 1px #0000ff;text-align: center;")
   ),
   
   sidebarLayout(
     sidebarPanel(
-      selectInput("tipo_analisis", "Selecciona el análisis:",
+      selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
                   choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
       
       uiOutput("selector_grafico")
@@ -43,10 +43,11 @@ ui <- fluidPage(
       plotOutput("grafico"),
       
       br(),
+      uiOutput("explicacion_grafico"),
       br(),
       tags$img(src = "escudo.png", 
-               height = "200px", 
-               style = "display: block; margin-left: 100px; margin-right: 100px;")
+               height = "150px", 
+               style = "display: center; margin-left: 100px; margin-right: 100px;")
     )
   )
 )
@@ -76,7 +77,7 @@ server <- function(input, output, session) {
                                            "Distribución goles por minuto",
                                            "Distancia de los Goles"))
     
-    selectInput("grafico_seleccionado", "Selecciona un gráfico:", choices = opciones)
+    selectInput("grafico_seleccionado", "Selecciona un gráfico de análisis:", choices = opciones)
   })
   
   output$grafico <- renderPlot({
@@ -185,6 +186,46 @@ server <- function(input, output, session) {
     )
     
     gg 
+  })
+  output$explicacion_grafico <- renderUI({
+    
+    texto <- switch(input$grafico_seleccionado,
+           
+           "Resultados en Casa vs Fuera" = "Aquí podemos ver la diferencia de resultados (Victoria,Empate o Derrota) en los partidos jugados como local o visitante",
+           
+           "Posesión según Resultado" = "Aquí podemos ver los distintos porcentajes de posesión en cada partido y si han contribuido a una victoria, un empate o derrota",
+           
+           "Relación entre Posesión y Goles Marcados" = "Una relación entra la posesión y los goles marcados, para comprobar la efectividad de esta. Contiene además información sobre las victorias, empates y derrotas en cada caso",
+           
+           "Relación entre Posesión y Goles en Contra" = "Similar al gráfico anterior pero teniendo en cuenta los goles en contra, lo que indica si cuando se ha cedido posesión se han concedido más goles o no",
+           
+           "Comparación entre xG y Goles Marcados" = "Comparación entre los goles esperados y los goles realmente marcados, para ver si se ha cumplido la efectividad esperada o no",
+           
+           "Relación entre Disparos y Goles" = "Una comparativa entre los disparos y los goles marcados, para ver si la selección de tiro ha sido buena",
+           
+           "Comparación de xG con y sin penaltis" = "Una comparativa para ver si los penaltis han influido mucho en los goles esperados",
+           
+           "Relación entre Disparos Recibidos y Goles en Contra" = "Un análisis de todos los disparos en contra recibidos para ver cuántos se han traducido en un gol para el rival, comprobando así la efectividad de portero y defensas",
+           
+           "Goles por disparo vs Goles por disparo a puerta" = "Comprobación de la efectivad de los mayores goleadores, teniendo en cuenta sus disparos en general y sus disparos a puerta",
+           
+           "Relacion entre Disparos cada 90min y Goles" = "Efectividad de los mayores goleadores teniendo en cuenta cuantos disparos realizan cada 90min y cuantos de esos se traducen en goles",
+           
+           "Comparacion de Goles vs xG" = "Comparación de los goles esperados y los goles marcados de los máximos goleadores",
+           
+           "Efectividad por edad" = "La edad de los máximos goleadores y cómo de efectivos son teniendo en cuenta los goles por disparos a puerta",
+           
+           "Goles en Casa vs Fuera" = "Una comparativa entre los goles conseguidos de local vs los goles conseguidos de visitante",
+           
+           "Goles con cada parte del cuerpo" = "Un análisis de los goles según la parte del cuerpo con la que se ha rematado",
+           
+           "Distribución goles por minuto" = "Cantidad de goles que se han marcado en cada minuto de juego, para comprobar si la efectividad es mayor al inicio o al final del encuentro",
+           
+           "Distancia de los Goles" = "Comparación entre la distancia de los distintos goles logrados, viendo así si se es más efectivo disparando cerca o lejos de la porteria rival"
+           
+           )
+    
+    HTML(paste0("<div style='text-align: justified; font-style:bold; color: #0000ff;'>", texto, "</div>"))
   })
 }
 
