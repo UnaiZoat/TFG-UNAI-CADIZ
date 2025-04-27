@@ -20,15 +20,15 @@ top_goleadores <- datosTirosJugador %>%
 
 ui <- fluidPage(
   theme = bs_theme(
-    bootswatch = "cosmo",
+    bootswatch = "flatly",
     bg = "#ffff00",         
-    fg = "#0000ff",         
-    primary = "#0000ff"
+    fg = "#0033a0",         
+    primary = "#0033a0"
   ),
   
   titlePanel(
     div(
-      style = "text-align: center; font-size: 100px, font-weight: bold; color: #0000ff;",
+      style = "text-align: center; font-size: 35px, font-weight: bold; color: #0033a0;margin-bottom:20px;",
       "Análisis del Cádiz CF"
     )
   ),
@@ -38,18 +38,18 @@ ui <- fluidPage(
       selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
                   choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
       
-      uiOutput("selector_grafico")
-    ),
-    
-    mainPanel(
-      plotOutput("grafico"),
-      
-      br(),
-      uiOutput("explicacion_grafico"),
+      uiOutput("selector_grafico"),
       br(),
       tags$img(src = "escudo.png", 
                height = "150px", 
-               style = "display: center; margin-left: 100px; margin-right: 100px;")
+               style = "display: block; margin-left: auto; margin-right: auto;"),
+    ),
+    
+    mainPanel(
+      plotOutput("grafico", height= "550px"),
+      
+      br(),
+      uiOutput("explicacion_grafico"),
     )
   )
 )
@@ -90,100 +90,100 @@ server <- function(input, output, session) {
                  "Resultados en Casa vs Fuera" = ggplot(datosCadizResultados, aes(x=Local.Visitante, fill=Resultado)) +
                    geom_bar(position = "dodge") +
                    labs(title = "Resultados en Casa vs Fuera", x= "Condición", y= "Cantidad de Partidos") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Posesión según Resultado" = ggplot(datosCadizResultados, aes(x=Posesión, fill=Resultado)) +
                    geom_histogram(binwidth = 5, position= "dodge", color="black") +
                    labs(title= "Posesión según Resultado", x="Posesión(%)", y= "Cantidad de Partidos") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Relación entre Posesión y Goles Marcados" = ggplot(datosCadizResultados, aes(x=Posesión, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles Marcados", x="Posesión(%)", y= "Goles") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Relación entre Posesión y Goles en Contra" = ggplot(datosCadizResultados, aes(x=Posesión, y=GC, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles en Contra", x="Posesión(%)", y= "Goles") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Comparación entre xG y Goles Marcados" = ggplot(datosCadizResultados, aes(x=xG, y=GF, color=Resultado)) +
                    geom_point(size=3) +
-                   geom_abline(slope = 1, intercept = 0, linetype="dashed", color="black") +
+                   geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title = "Comparación entre xG y Goles Marcados", x="xG (Goles Esperados)", y = "Goles Marcados") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
 
                  "Relación entre Disparos y Goles" = ggplot(datosCadizTiros, aes(x=Disparos, y=GF)) + 
-                   geom_point(color="blue", size=3, alpha=0.7) +
-                   geom_smooth(method="lm", color="red", se=FALSE) +
+                   geom_point(color="#ffff00", size=3, alpha=0.7) +
+                   geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Comparación de xG con y sin penaltis" = ggplot(datosCadizTiros, aes(x=xG, y=xG...nopenalty)) + 
-                   geom_point(color="blue", size=3, alpha=0.7) +
-                   geom_abline(slope = 1, intercept = 0, linetype="dashed", color="red") +
+                   geom_point(color="#ffff00", size=3, alpha=0.7) +
+                   geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title="Comparación de xG con y sin penaltis", x="xG", y="xG sin penaltis") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
 
                  "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosTirosEnContra, aes(x=Disparos, y=GF)) + 
-                   geom_point(color="blue", size=3, alpha=0.7) +
-                   geom_smooth(method="lm", color="red", se=FALSE) +
+                   geom_point(color="#ffff00", size=3, alpha=0.7) +
+                   geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Goles por disparo vs Goles por disparo a puerta"=ggplot(top_goleadores, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
                    geom_point(size=3)+
-                   geom_smooth(method = "lm",se=FALSE,color="red")+
+                   geom_smooth(method = "lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
                    labs(title = "Goles por disparo vs Goles por disparo a puerta",
                         x="Goles/Disparo", y="Goles/DisparoPuerta")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Relacion entre Disparos cada 90min y Goles"=ggplot(top_goleadores, aes(x=Disparos.cada.90min, y=Goles, color=Nombre,label=Nombre))+
                    geom_point(size=2)+
-                   geom_smooth(method="lm",se=FALSE,color="blue")+
+                   geom_smooth(method="lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
                    labs(title="Relacion entre Disparos cada 90min y Goles",
                         x="Disparos cada 90min", y="Goles")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Comparacion de Goles vs xG"= ggplot(top_goleadores,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
                    geom_point(size=3)+
-                   geom_abline(slope = 1,intercept = 0,linetype="dashed",color="red")+
+                   geom_abline(slope = 1,intercept = 0,linetype="dashed",color="#ffff00")+
                    geom_text(hjust=0.5,vjust=1,size=3)+
                    labs(title = "Comparacion de Goles vs xG",
                         x="xG",y="Goles")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Efectividad por edad"=ggplot(top_goleadores,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
                    geom_point(size=3)+
-                   geom_smooth(method="lm",se=FALSE,color="red")+
+                   geom_smooth(method="lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
                    labs(title = "Efectividad por edad",
                         x="Edad",y="Goles por disparo a puerta")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Goles en Casa vs Fuera"=ggplot(datosGolesafavor, aes(x=Sedes, fill = Sedes))+
                    geom_bar() +
                    labs(title = "Goles en Casa vs Fuera", x="Sede", y="Goles")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Goles con cada parte del cuerpo"=ggplot(datosGolesafavor, aes(x=Parte.del.cuerpo, fill = Parte.del.cuerpo))+
                    geom_bar() +
                    labs(title = "Goles con cada parte del cuerpo", x="Parte del cuerpo", y="Goles")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Distribución goles por minuto"=ggplot(datosGolesafavor,aes(x=Minute))+
-                   geom_histogram(binwidth = 5, fill="blue", color="black")+
+                   geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
                    labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
-                   theme_minimal(),
+                   mi_tema_cadiz(),
                  
                  "Distancia de los Goles"=ggplot(datosGolesafavor, aes(x=Distance))+
-                   geom_histogram(binwidth= 5,fill="blue", color="black") +
+                   geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
-                   theme_minimal()
+                   mi_tema_cadiz()
                  
     )
     
@@ -227,8 +227,25 @@ server <- function(input, output, session) {
            
            )
     
-    HTML(paste0("<div style='text-align: justified; font-style:bold; color: #0000ff;'>", texto, "</div>"))
+    HTML(paste0("<div style='text-align: justified; font-style:bold; font-weight:bold; color: #0033a0;'>", texto, "</div>"))
   })
+}
+
+mi_tema_cadiz <- function(){
+  theme_minimal() +
+    theme(
+      panel.background = element_rect(fill= "#0033a0"),
+      plot.background = element_rect(fill = "#0033a0"),
+      panel.grid.major = element_line(color = "gray80"),
+      panel.grid.minor = element_line(color = "gray80"),
+      text = element_text(family = "Arial", size = 15, color = "#ffff00"),
+      plot.title = element_text(face = "bold",hjust=0.5,size=20,color= "#ffff00"),
+      axis.title = element_text(face = "bold"),
+      axis.text = element_text(color = "white"),
+      legend.position = "bottom",
+      legend.title = element_blank()
+      
+    )
 }
 
 shinyApp(ui = ui, server = server)
