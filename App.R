@@ -20,15 +20,17 @@ top_goleadores <- datosTirosJugador %>%
 
 ui <- fluidPage(
   theme = bs_theme(
+    bootswatch = "cosmo",
     bg = "#ffff00",         
     fg = "#0000ff",         
-    primary = "#0000ff",    
-    base_font = font_google("Roboto")  
+    primary = "#0000ff"
   ),
   
   titlePanel(
-    tags$h1("Análisis del Cádiz CF", 
-            style = "color:#0000ff; font-size: 40px; font-family: 'Roboto'; text-shadow: 1px 1px #0000ff;text-align: center;")
+    div(
+      style = "text-align: center; font-size: 100px, font-weight: bold; color: #0000ff;",
+      "Análisis del Cádiz CF"
+    )
   ),
   
   sidebarLayout(
