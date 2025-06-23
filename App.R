@@ -28,7 +28,7 @@ ui <- fluidPage(
   
   titlePanel(
     div(
-      style = "text-align: center; font-size: 35px, font-weight: bold; color: #0033a0;margin-bottom:20px;",
+      style = "text-align: center; font-size: 40px, font-weight: bold; color: #0033a0;margin-bottom:20px;",
       "Análisis del Cádiz CF"
     )
   ),
@@ -46,10 +46,17 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      plotOutput("grafico", height= "550px"),
       
       br(),
-      uiOutput("explicacion_grafico"),
+      plotOutput("grafico", height= "500px"),
+      
+      br(),
+      uiOutput("detalle_grafico"),
+      br()
+      
+      
+      
+      
     )
   )
 )
@@ -189,46 +196,61 @@ server <- function(input, output, session) {
     
     gg 
   })
-  output$explicacion_grafico <- renderUI({
+  output$detalle_grafico <- renderUI({
+    req(input$grafico_seleccionado)
     
-    texto <- switch(input$grafico_seleccionado,
-           
-           "Resultados en Casa vs Fuera" = "Aquí podemos ver la diferencia de resultados (Victoria,Empate o Derrota) en los partidos jugados como local o visitante",
-           
-           "Posesión según Resultado" = "Aquí podemos ver los distintos porcentajes de posesión en cada partido y si han contribuido a una victoria, un empate o derrota",
-           
-           "Relación entre Posesión y Goles Marcados" = "Una relación entra la posesión y los goles marcados, para comprobar la efectividad de esta. Contiene además información sobre las victorias, empates y derrotas en cada caso",
-           
-           "Relación entre Posesión y Goles en Contra" = "Similar al gráfico anterior pero teniendo en cuenta los goles en contra, lo que indica si cuando se ha cedido posesión se han concedido más goles o no",
-           
-           "Comparación entre xG y Goles Marcados" = "Comparación entre los goles esperados y los goles realmente marcados, para ver si se ha cumplido la efectividad esperada o no",
-           
-           "Relación entre Disparos y Goles" = "Una comparativa entre los disparos y los goles marcados, para ver si la selección de tiro ha sido buena",
-           
-           "Comparación de xG con y sin penaltis" = "Una comparativa para ver si los penaltis han influido mucho en los goles esperados",
-           
-           "Relación entre Disparos Recibidos y Goles en Contra" = "Un análisis de todos los disparos en contra recibidos para ver cuántos se han traducido en un gol para el rival, comprobando así la efectividad de portero y defensas",
-           
-           "Goles por disparo vs Goles por disparo a puerta" = "Comprobación de la efectivad de los mayores goleadores, teniendo en cuenta sus disparos en general y sus disparos a puerta",
-           
-           "Relacion entre Disparos cada 90min y Goles" = "Efectividad de los mayores goleadores teniendo en cuenta cuantos disparos realizan cada 90min y cuantos de esos se traducen en goles",
-           
-           "Comparacion de Goles vs xG" = "Comparación de los goles esperados y los goles marcados de los máximos goleadores",
-           
-           "Efectividad por edad" = "La edad de los máximos goleadores y cómo de efectivos son teniendo en cuenta los goles por disparos a puerta",
-           
-           "Goles en Casa vs Fuera" = "Una comparativa entre los goles conseguidos de local vs los goles conseguidos de visitante",
-           
-           "Goles con cada parte del cuerpo" = "Un análisis de los goles según la parte del cuerpo con la que se ha rematado",
-           
-           "Distribución goles por minuto" = "Cantidad de goles que se han marcado en cada minuto de juego, para comprobar si la efectividad es mayor al inicio o al final del encuentro",
-           
-           "Distancia de los Goles" = "Comparación entre la distancia de los distintos goles logrados, viendo así si se es más efectivo disparando cerca o lejos de la porteria rival"
-           
-           )
+    explicacion <- switch(input$grafico_seleccionado,
+                          "Resultados en Casa vs Fuera" = "Aquí podemos ver la diferencia de resultados (Victoria, Empate o Derrota) en los partidos jugados como local o visitante",
+                          "Posesión según Resultado" = "Aquí podemos ver los distintos porcentajes de posesión en cada partido y si han contribuido a una victoria, un empate o derrota",
+                          "Relación entre Posesión y Goles Marcados" = "Una relación entra la posesión y los goles marcados, para comprobar la efectividad de esta. Contiene además información sobre las victorias, empates y derrotas en cada caso",
+                          "Relación entre Posesión y Goles en Contra" = "Similar al gráfico anterior pero teniendo en cuenta los goles en contra, lo que indica si cuando se ha cedido posesión se han concedido más goles o no",
+                          "Comparación entre xG y Goles Marcados" = "Comparación entre los goles esperados y los goles realmente marcados, para ver si se ha cumplido la efectividad esperada o no",
+                          "Relación entre Disparos y Goles" = "Una comparativa entre los disparos y los goles marcados, para ver si la selección de tiro ha sido buena",
+                          "Comparación de xG con y sin penaltis" = "Una comparativa para ver si los penaltis han influido mucho en los goles esperados",
+                          "Relación entre Disparos Recibidos y Goles en Contra" = "Un análisis de todos los disparos en contra recibidos para ver cuántos se han traducido en un gol para el rival, comprobando así la efectividad de portero y defensas",
+                          "Goles por disparo vs Goles por disparo a puerta" = "Comprobación de la efectividad de los mayores goleadores, teniendo en cuenta sus disparos en general y sus disparos a puerta",
+                          "Relacion entre Disparos cada 90min y Goles" = "Efectividad de los mayores goleadores teniendo en cuenta cuántos disparos realizan cada 90min y cuántos de esos se traducen en goles",
+                          "Comparacion de Goles vs xG" = "Comparación de los goles esperados y los goles marcados de los máximos goleadores",
+                          "Efectividad por edad" = "La edad de los máximos goleadores y cómo de efectivos son teniendo en cuenta los goles por disparos a puerta",
+                          "Goles en Casa vs Fuera" = "Una comparativa entre los goles conseguidos de local vs los goles conseguidos de visitante",
+                          "Goles con cada parte del cuerpo" = "Un análisis de los goles según la parte del cuerpo con la que se ha rematado",
+                          "Distribución goles por minuto" = "Cantidad de goles que se han marcado en cada minuto de juego, para comprobar si la efectividad es mayor al inicio o al final del encuentro",
+                          "Distancia de los Goles" = "Comparación entre la distancia de los distintos goles logrados, viendo así si se es más efectivo disparando cerca o lejos de la portería rival"
+    )
     
-    HTML(paste0("<div style='text-align: justified; font-style:bold; font-weight:bold; color: #0033a0;'>", texto, "</div>"))
+    interpretacion <- switch(input$grafico_seleccionado,
+                             "Resultados en Casa vs Fuera" = "Este gráfico muestra si el equipo obtiene mejores resultados jugando en casa o fuera. Si las victorias se concentran en casa, podría indicar que el equipo se hace fuerte en su estadio.",
+                             "Posesión según Resultado" = "Permite observar si tener más el balón se relaciona con ganar partidos. Una posesión alta en victorias podría indicar un estilo de juego dominante.",
+                             "Relación entre Posesión y Goles Marcados" = "Una relación positiva indicaría que el equipo marca más goles cuando domina la posesión, lo que sugiere que se beneficia de controlar el juego.",
+                             "Relación entre Posesión y Goles en Contra" = "Una tendencia negativa podría sugerir que ceder la posesión al rival lleva a encajar más goles.",
+                             "Comparación entre xG y Goles Marcados" = "Si los goles superan al xG, los delanteros están siendo muy efectivos. Si es al revés, falta efectividad.",
+                             "Relación entre Disparos y Goles" = "Una correlación fuerte indica que generar muchos disparos se traduce en goles, mostrando un buen nivel ofensivo.",
+                             "Comparación de xG con y sin penaltis" = "Una gran diferencia sugiere que los penaltis tienen un peso importante en la producción ofensiva del equipo.",
+                             "Relación entre Disparos Recibidos y Goles en Contra" = "Evalúa la solidez defensiva: si se encajan muchos goles con pocos tiros recibidos, puede haber problemas de portero o defensa.",
+                             "Goles por disparo vs Goles por disparo a puerta" = "Identifica a los delanteros más certeros. Cuanto más alto estén, más efectivos son en aprovechar sus oportunidades.",
+                             "Relacion entre Disparos cada 90min y Goles" = "Evalúa la relación entre la frecuencia de disparos y los goles marcados, útil para detectar delanteros eficientes.",
+                             "Comparacion de Goles vs xG" = "Permite detectar jugadores que superan las expectativas (goles > xG) o que están por debajo del rendimiento esperado.",
+                             "Efectividad por edad" = "Muestra si hay relación entre edad y rendimiento, útil para tomar decisiones sobre jóvenes promesas o jugadores veteranos.",
+                             "Goles en Casa vs Fuera" = "Ayuda a identificar si el equipo se comporta de forma similar como local y visitante, o si existe dependencia del entorno.",
+                             "Goles con cada parte del cuerpo" = "Muestra si el equipo domina el juego aéreo, usa bien ambas piernas, o si hay carencias técnicas.",
+                             "Distribución goles por minuto" = "Permite ver si el equipo tiende a marcar en ciertas fases del partido: inicio, medio o final.",
+                             "Distancia de los Goles" = "Indica si se prefieren tiros lejanos o cercanos, lo que sugiere el estilo de juego (más directo o más elaborado)."
+    )
+    
+    HTML(paste0(
+      "<div style='background-color:#f3f3f3; padding:12px; border-radius:6px; border-left:4px solid #0033a0;'>",
+      
+      "<h5 style='color:#0033a0; font-weight:bold;'>Explicación del gráfico</h5>",
+      "<p style='text-align:justify;'>", explicacion, "</p>",
+      
+      "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué conclusiones puedo sacar?</h5>",
+      "<p style='text-align:justify;'>", interpretacion, "</p>",
+      
+      "</div>"
+    ))
   })
+  
+  
 }
 
 mi_tema_cadiz <- function(){
