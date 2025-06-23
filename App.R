@@ -28,7 +28,7 @@ ui <- fluidPage(
   
   titlePanel(
     div(
-      style = "text-align: center; font-size: 40px, font-weight: bold; color: #0033a0;margin-bottom:20px;",
+      style = "text-align: center; font-size: 45px; font-weight: 900; color: #0033a0; margin-bottom:20px;",
       "Análisis del Cádiz CF"
     )
   ),
@@ -41,13 +41,12 @@ ui <- fluidPage(
       uiOutput("selector_grafico"),
       br(),
       tags$img(src = "escudo.png", 
-               height = "150px", 
+               height = "130px", 
                style = "display: block; margin-left: auto; margin-right: auto;"),
     ),
     
     mainPanel(
       
-      br(),
       plotOutput("grafico", height= "500px"),
       
       br(),
