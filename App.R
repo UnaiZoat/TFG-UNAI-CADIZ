@@ -18,7 +18,9 @@ top_goleadores <- datosTirosJugador %>%
   arrange(desc(Goles)) %>%
   slice_head(n=7)
 
-ui <- fluidPage(
+ui <- navbarPage(
+  id = "navbar",
+  title = div("Análisis del Cádiz CF", style="color: #0033a0; font-weight: bold; font-size: 25px;"),
   theme = bs_theme(
     bootswatch = "flatly",
     bg = "#ffff00",         
@@ -26,37 +28,47 @@ ui <- fluidPage(
     primary = "#0033a0"
   ),
   
-  titlePanel(
-    div(
-      style = "text-align: center; font-size: 45px; font-weight: 900; color: #0033a0; margin-bottom:20px;",
-      "Análisis del Cádiz CF"
-    )
+  tabPanel("Inicio",
+           fluidPage(
+             titlePanel(h1("Bienvenido al Análisis del Cádiz CF", align = "center")),
+             tags$img(src = "escudo.png", height = "200px", style = "display: block; margin: auto;"),
+             br(),
+             HTML(paste0(
+               "<div style='background-color:#f3f3f3; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:800px; margin:auto;'>",
+               
+               "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
+               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada, incluyendo análisis de Resultados, Tiros, Goles, entre otros.</p>",
+               
+               "<p style='text-align:center; margin-top:20px;'>",
+               actionButton("go_analisis", "Ir al análisis", 
+             style="color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px;"),
+               "</p>",
+               
+               "</div>"
+             )),
+             
+             br(), br()
+           )
   ),
   
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
-                  choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
-      
-      uiOutput("selector_grafico"),
-      br(),
-      tags$img(src = "escudo.png", 
-               height = "130px", 
-               style = "display: block; margin-left: auto; margin-right: auto;"),
-    ),
-    
-    mainPanel(
-      
-      plotOutput("grafico", height= "500px"),
-      
-      br(),
-      uiOutput("detalle_grafico"),
-      br()
-      
-      
-      
-      
-    )
+  
+  
+  tabPanel("Análisis",
+           sidebarLayout(
+             sidebarPanel(
+               selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
+                           choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
+               uiOutput("selector_grafico"),
+               br(),
+               tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
+             ),
+             
+             mainPanel(
+               plotOutput("grafico", height= "500px"),
+               br(),
+               uiOutput("detalle_grafico")
+             )
+           )
   )
 )
 
@@ -86,6 +98,13 @@ server <- function(input, output, session) {
                                            "Distancia de los Goles"))
     
     selectInput("grafico_seleccionado", "Selecciona un gráfico de análisis:", choices = opciones)
+    
+    
+  })
+  
+  
+  observeEvent(input$go_analisis, {
+    updateNavbarPage(session, inputId = "navbar", selected = "Análisis")
   })
   
   output$grafico <- renderPlot({
