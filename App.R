@@ -31,13 +31,21 @@ ui <- navbarPage(
   tabPanel("Inicio",
            fluidPage(
              titlePanel(h1("Bienvenido al Análisis del Cádiz CF", align = "center")),
-             tags$img(src = "escudo.png", height = "200px", style = "display: block; margin: auto;"),
+             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;"),
              br(),
              HTML(paste0(
                "<div style='background-color:#f3f3f3; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:800px; margin:auto;'>",
                
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
-               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada, incluyendo análisis de Resultados, Tiros, Goles, entre otros.</p>",
+               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada, incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'</p>",
+               
+               "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué es el Big Data?</h5>",
+               "<p style='text-align:justify; font-size:15px;'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
+               datos relacionados con todos los aspectos del juego.</p>",
+               
+               "<h5 style='color:#0033a0; font-weight:bold;'>¿Por qué el Big Data es importante para mi equipo?</h5>",
+               "<p style='text-align:justify; font-size:15px;'>El análisis de estos datos nos aporta mucha información interesante que puede servirnos para ayudar a mejorar el rendimiento, tomar decisiones
+               sobre alineaciones y fichajes, decidir que estilo de juego funciona mejor con nuestra plantilla, etc....</p>",
                
                "<p style='text-align:center; margin-top:20px;'>",
                actionButton("go_analisis", "Ir al análisis", 
@@ -64,9 +72,10 @@ ui <- navbarPage(
              ),
              
              mainPanel(
-               plotOutput("grafico", height= "500px"),
+               plotOutput("grafico", height= "450px"),
                br(),
-               uiOutput("detalle_grafico")
+               uiOutput("detalle_grafico"),
+               br()
              )
            )
   )
