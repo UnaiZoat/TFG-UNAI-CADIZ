@@ -45,10 +45,11 @@ ui <- navbarPage(
                
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Por qué el Big Data es importante para mi equipo?</h5>",
                "<p style='text-align:justify; font-size:15px;'>El análisis de estos datos nos aporta mucha información interesante que puede servirnos para ayudar a mejorar el rendimiento, tomar decisiones
-               sobre alineaciones y fichajes, decidir que estilo de juego funciona mejor con nuestra plantilla, etc....</p>",
+               sobre alineaciones y fichajes, decidir que estilo de juego funciona mejor con nuestra plantilla, etc....
+               En esta Web tu también podrás aprender a visualizar y analizar estos datos</p>",
                
                "<p style='text-align:center; margin-top:20px;'>",
-               actionButton("go_analisis", "Ir al análisis", 
+               actionButton("go_analisis", "Empieza el análisis", 
              style="color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px;"),
                "</p>",
                
@@ -72,7 +73,13 @@ ui <- navbarPage(
              ),
              
              mainPanel(
-               plotOutput("grafico", height= "450px"),
+               helpText(
+                 tags$span(
+                   "💡 Puedes interactuar con el gráfico: Descargalo como PNG,muevete por el gráfico, haz zoom o vuelve al zoom original",
+                   style = "color: blue; text-align: right; display: block;"
+                 )
+               ),
+               plotlyOutput("grafico", height= "450px"),
                br(),
                uiOutput("detalle_grafico"),
                br()
@@ -116,8 +123,10 @@ server <- function(input, output, session) {
     updateNavbarPage(session, inputId = "navbar", selected = "Análisis")
   })
   
-  output$grafico <- renderPlot({
-    req(input$grafico_seleccionado)  
+  output$grafico <- renderPlotly({
+    req(input$grafico_seleccionado)
+    
+    
     
     gg <- switch(input$grafico_seleccionado,
                  
@@ -221,7 +230,16 @@ server <- function(input, output, session) {
                  
     )
     
-    gg 
+    ggplotly(gg) %>%
+      config(
+        displayModeBar = TRUE,
+        displaylogo = FALSE,
+        modeBarButtonsToRemove = list(
+          "zoom2d","select2d", "lasso2d", 
+          "autoScale2d",  "hoverCompareCartesian", "hoverClosestCartesian"
+        ),
+        modeBarButtonsToAdd = list("toImage")
+      )
   })
   output$detalle_grafico <- renderUI({
     req(input$grafico_seleccionado)
