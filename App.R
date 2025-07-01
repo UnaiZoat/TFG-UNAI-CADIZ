@@ -171,7 +171,8 @@ server <- function(input, output, session) {
                        "Tiros" = c("Relación entre Disparos y Goles",
                                    "Comparación de xG con y sin penaltis"),
                        
-                       "Tiros en Contra" = c("Relación entre Disparos Recibidos y Goles en Contra"),
+                       "Tiros en Contra" = c("Relación entre Disparos Recibidos y Goles en Contra",
+                                             "Comparación xG concedido vs Goles recibidos"),
     
                        "Tiros Jugadores" =c("Goles por disparo vs Goles por disparo a puerta",
                                             "Relacion entre Disparos cada 90min y Goles",
@@ -244,6 +245,12 @@ server <- function(input, output, session) {
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
+                   mi_tema_cadiz(),
+                 
+                 "Comparación xG concedido vs Goles recibidos" = ggplot(datosTirosEnContra, aes(x=xG, y=GF)) +
+                   geom_point(size=3, color="#ffff00") +
+                   geom_abline(slope=1, intercept=0, linetype="dashed", color="#ffff00") +
+                   labs(title="xG en Contra vs Goles Recibidos", x="xG Concedido", y="Goles Concedidos") +
                    mi_tema_cadiz(),
                  
                  "Goles por disparo vs Goles por disparo a puerta"=ggplot(top_goleadores, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
@@ -323,6 +330,8 @@ server <- function(input, output, session) {
                           "Relación entre Disparos y Goles" = "Una comparativa entre los disparos y los goles marcados, para ver si la selección de tiro ha sido buena",
                           "Comparación de xG con y sin penaltis" = "Una comparativa para ver si los penaltis han influido mucho en los goles esperados",
                           "Relación entre Disparos Recibidos y Goles en Contra" = "Un análisis de todos los disparos en contra recibidos para ver cuántos se han traducido en un gol para el rival, comprobando así la efectividad de portero y defensas",
+                          "Comparación xG concedido vs Goles recibidos" ="Relación entre los goles esperados en contra (xG) y los goles realmente encajados por el equipo en cada partido. El xG en contra refleja la calidad de las ocasiones que el rival ha generado, 
+                          mientras que los goles recibidos son los que efectivamente terminaron en la red.",
                           "Goles por disparo vs Goles por disparo a puerta" = "Comprobación de la efectividad de los mayores goleadores, teniendo en cuenta sus disparos en general y sus disparos a puerta",
                           "Relacion entre Disparos cada 90min y Goles" = "Efectividad de los mayores goleadores teniendo en cuenta cuántos disparos realizan cada 90min y cuántos de esos se traducen en goles",
                           "Comparacion de Goles vs xG" = "Comparación de los goles esperados y los goles marcados de los máximos goleadores",
@@ -342,6 +351,7 @@ server <- function(input, output, session) {
                              "Relación entre Disparos y Goles" = "Una correlación fuerte indica que generar muchos disparos se traduce en goles, mostrando un buen nivel ofensivo.",
                              "Comparación de xG con y sin penaltis" = "Una gran diferencia sugiere que los penaltis tienen un peso importante en la producción ofensiva del equipo.",
                              "Relación entre Disparos Recibidos y Goles en Contra" = "Evalúa la solidez defensiva: si se encajan muchos goles con pocos tiros recibidos, puede haber problemas de portero o defensa.",
+                             "Comparación xG concedido vs Goles recibidos" = "Si el equipo encaja más goles que los esperados (puntos por encima de la línea), puede indicar problemas defensivos o bajo rendimiento del portero.",
                              "Goles por disparo vs Goles por disparo a puerta" = "Identifica a los delanteros más certeros. Cuanto más alto estén, más efectivos son en aprovechar sus oportunidades.",
                              "Relacion entre Disparos cada 90min y Goles" = "Evalúa la relación entre la frecuencia de disparos y los goles marcados, útil para detectar delanteros eficientes.",
                              "Comparacion de Goles vs xG" = "Permite detectar jugadores que superan las expectativas (goles > xG) o que están por debajo del rendimiento esperado.",
