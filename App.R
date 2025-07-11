@@ -13,6 +13,35 @@ datosGolesafavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= "
 datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
 datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
 datosGolesafavor$Minute <- as.numeric(datosGolesafavor$Minute)
+cambio_nombres <- c(
+  "Date" = "Fecha",
+  "Time" = "Hora",
+  "Comp" = "Competición",
+  "Round" = "Jornada",
+  "Day" = "Día",
+  "Venue" = "Local.Visitante",
+  "Result" = "Resultado",
+  "GF" = "GF",
+  "GA" = "GC",
+  "Opponent" = "Rival",
+  "xG" = "xG",
+  "xGA" = "xGA",
+  "Poss" = "Posesión",
+  "Attendance" = "Asistencia",
+  "Captain" = "Capitán",
+  "Formation" = "Formación",
+  "Opp Formation" = "Formación Rival",
+  "Referee" = "Árbitro",
+  "Match Report" = "Informe",
+  "Notes" = "Notas"
+)
+
+# Renombrar columnas automáticamente
+colnames(datosCadizResultados) <- ifelse(
+  colnames(datosCadizResultados) %in% names(cambio_nombres),
+  cambio_nombres[colnames(datosCadizResultados)],
+  colnames(datosCadizResultados)  # mantener las no mapeadas
+)
 
 top_goleadores <- datosTirosJugador %>%
   arrange(desc(Goles)) %>%
@@ -87,75 +116,7 @@ ui <- navbarPage(
            )
   ),
   
-  tabPanel("Actualiza datos",
-           fluidPage(
-             titlePanel(h2("Actualizalos datos", align = "center")),
-             tags$hr(),
-             
-             HTML(paste0(
-               "<div style='background-color:#f9f9f9; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>",
-               
-               "<h5 style='color:#0033a0;'>📈 ¿Qué puedes hacer aquí?</h5>",
-               "<ul style='font-size:15px; text-align:justify;'>",
-               "<li><strong>Actualizar los datos</strong> de las categorías actuales con archivos nuevos (por ejemplo, nuevos partidos o estadísticas).</li>",
-               "<li><strong>Analizar una temporada anterior</strong> subiendo estadísticas de otra temporada ya disputada</li>",
-               "<li>Los archivos deben estar en formato <strong>.csv</strong> y tener una estructura similar a los datos actuales.</li>",
-               "</ul>",
-               
-               "<p style='font-size:14px; color:#555;'>Puedes subir uno o varios archivos (Resultados, Tiros, Goles, etc.) y la app los cargará automáticamente.</p>",
-               "</div>"
-             )),
-             
-             br(),
-             
-             fileInput("cargar_csvs", 
-                       label = "📤 Sube tus archivos CSV (uno o varios):", 
-                       multiple = TRUE,
-                       accept = c(".csv"),
-                       width = "60%"),
-             
-             uiOutput("resultado_carga_csv"),
-             
-             tags$hr(),
-             tags$img(src = "escudo.png", height = "100px", style = "display: block; margin: auto;")
-           )
-           
-           
-           ),
-  tabPanel("Cambia equipo",
-           fluidPage(
-             titlePanel(h2("Actualizar o personalizar los datos", align = "center")),
-             tags$hr(),
-             
-             HTML(paste0(
-               "<div style='background-color:#f9f9f9; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>",
-               
-               "<h5 style='color:#0033a0;'>📈 ¿Qué puedes hacer aquí?</h5>",
-               "<ul style='font-size:15px; text-align:justify;'>",
-               "<li><strong>Actualizar los datos</strong> de las categorías actuales con archivos nuevos pertenecientes a otro equipo de la liga española.</li>",
-               "<li>Los archivos deben estar en formato <strong>.csv</strong> y tener una estructura similar a los datos actuales.</li>",
-               "</ul>",
-               
-               "<p style='font-size:14px; color:#555;'>Puedes subir uno o varios archivos (Resultados, Tiros, Goles, etc.) y la app los cargará automáticamente.</p>",
-               "</div>"
-             )),
-             
-             br(),
-             
-             fileInput("cargar_csvs", 
-                       label = "📤 Sube tus archivos CSV (uno o varios):", 
-                       multiple = TRUE,
-                       accept = c(".csv"),
-                       width = "60%"),
-             
-             uiOutput("resultado_carga_csv"),
-             
-             tags$hr(),
-             tags$img(src = "escudo.png", height = "100px", style = "display: block; margin: auto;")
-           )
-           
-           
-  )
+ 
 )
 
 server <- function(input, output, session) {
@@ -385,38 +346,6 @@ server <- function(input, output, session) {
     ))
   })
 
-  observeEvent(input$cargar_csvs, {
-    req(input$cargar_csvs)
-    
-    output$resultado_carga_csv <- renderUI({
-      archivos <- input$cargar_csvs$name
-      HTML(paste0(
-        "<div style='color:green; font-size:16px;'>✅ Se han subido los siguientes archivos:</div>",
-        "<ul>",
-        paste0("<li>", archivos, "</li>", collapse = ""),
-        "</ul>"
-      ))
-    })
-    
-    for (i in 1:nrow(input$cargar_csvs)) {
-      archivo <- input$cargar_csvs$datapath[i]
-      nombre <- tolower(input$cargar_csvs$name[i])
-      
-      df <- read.csv(archivo)
-      
-      if (grepl("resultados", nombre)) {
-        resultados_data <<- df
-      } else if (grepl("tirosjugadores", nombre)) {
-        tiros_jugadores_data <<- df
-      } else if (grepl("tiros", nombre)) {
-        tiros_data <<- df
-      } else if (grepl("goles", nombre)) {
-        goles_data <<- df
-      } else {
-        warning(paste("Archivo no reconocido:", nombre))
-      }
-    }
-  })
   
 }
 
