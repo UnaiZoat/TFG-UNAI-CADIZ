@@ -5,6 +5,9 @@ library(plotly)
 library(bslib)
 
 datosCadizResultados <- read.csv("Cadizcf_resultados_partidos_limpios.csv", header = TRUE, sep = ",")
+datosCadizResultados2022 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
+datosCadizResultados2021 <- read.csv("cadizresultados2021.csv", header = TRUE, sep = ",")
+datosCadizResultados2020 <- read.csv("cadizresultados2020.csv", header = TRUE, sep = ",")
 datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
 datosTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
 datosTirosJugador <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
@@ -37,15 +40,29 @@ cambio_nombres <- c(
 )
 
 # Renombrar columnas automáticamente
-colnames(datosCadizResultados) <- ifelse(
-  colnames(datosCadizResultados) %in% names(cambio_nombres),
-  cambio_nombres[colnames(datosCadizResultados)],
-  colnames(datosCadizResultados)  # mantener las no mapeadas
+colnames(datosCadizResultados2022) <- ifelse(
+  colnames(datosCadizResultados2022) %in% names(cambio_nombres),
+  cambio_nombres[colnames(datosCadizResultados2022)],
+  colnames(datosCadizResultados2022)  # mantener las no mapeadas
+)
+
+colnames(datosCadizResultados2021) <- ifelse(
+  colnames(datosCadizResultados2021) %in% names(cambio_nombres),
+  cambio_nombres[colnames(datosCadizResultados2021)],
+  colnames(datosCadizResultados2021)  # mantener las no mapeadas
+)
+
+colnames(datosCadizResultados2020) <- ifelse(
+  colnames(datosCadizResultados2020) %in% names(cambio_nombres),
+  cambio_nombres[colnames(datosCadizResultados2020)],
+  colnames(datosCadizResultados2020)  # mantener las no mapeadas
 )
 
 top_goleadores <- datosTirosJugador %>%
   arrange(desc(Goles)) %>%
   slice_head(n=7)
+
+
 
 ui <- navbarPage(
   id = "navbar",
@@ -97,6 +114,13 @@ ui <- navbarPage(
                selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
                            choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
                uiOutput("selector_grafico"),
+               checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
+               conditionalPanel(
+                 condition = "input.usar_temporada_anterior == true",
+                 selectInput("anio_temporada", "Selecciona la temporada:", 
+                             choices = c("2022", "2021", "2020"), 
+                             selected = "2022")
+               ),
                br(),
                tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
              ),
@@ -115,9 +139,11 @@ ui <- navbarPage(
              )
            )
   ),
-  
- 
+
+
 )
+
+
 
 server <- function(input, output, session) {
   
@@ -159,33 +185,39 @@ server <- function(input, output, session) {
   output$grafico <- renderPlotly({
     req(input$grafico_seleccionado)
     
-    
+    datosResultados <- if (isTRUE(input$usar_temporada_anterior)) {
+      req(input$anio_temporada)
+      nombre_dataset <- paste0("datosCadizResultados", input$anio_temporada)
+      get(nombre_dataset)
+    } else {
+      datosCadizResultados
+    }
     
     gg <- switch(input$grafico_seleccionado,
                  
-                 "Resultados en Casa vs Fuera" = ggplot(datosCadizResultados, aes(x=Local.Visitante, fill=Resultado)) +
+                 "Resultados en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill=Resultado)) +
                    geom_bar(position = "dodge") +
                    labs(title = "Resultados en Casa vs Fuera", x= "Condición", y= "Cantidad de Partidos") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(), 
                  
-                 "Posesión según Resultado" = ggplot(datosCadizResultados, aes(x=Posesión, fill=Resultado)) +
+                 "Posesión según Resultado" = ggplot(datosResultados, aes(x=Posesión, fill=Resultado)) +
                    geom_histogram(binwidth = 5, position= "dodge", color="black") +
                    labs(title= "Posesión según Resultado", x="Posesión(%)", y= "Cantidad de Partidos") +
                    mi_tema_cadiz(),
                  
-                 "Relación entre Posesión y Goles Marcados" = ggplot(datosCadizResultados, aes(x=Posesión, y=GF, color=Resultado)) +
+                 "Relación entre Posesión y Goles Marcados" = ggplot(datosResultados, aes(x=Posesión, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles Marcados", x="Posesión(%)", y= "Goles") +
                    mi_tema_cadiz(),
                  
-                 "Relación entre Posesión y Goles en Contra" = ggplot(datosCadizResultados, aes(x=Posesión, y=GC, color=Resultado)) +
+                 "Relación entre Posesión y Goles en Contra" = ggplot(datosResultados, aes(x=Posesión, y=GC, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles en Contra", x="Posesión(%)", y= "Goles") +
                    mi_tema_cadiz(),
                  
-                 "Comparación entre xG y Goles Marcados" = ggplot(datosCadizResultados, aes(x=xG, y=GF, color=Resultado)) +
+                 "Comparación entre xG y Goles Marcados" = ggplot(datosResultados, aes(x=xG, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title = "Comparación entre xG y Goles Marcados", x="xG (Goles Esperados)", y = "Goles Marcados") +
@@ -285,6 +317,8 @@ server <- function(input, output, session) {
         modeBarButtonsToAdd = list("toImage")
       )
   })
+  
+  
   output$detalle_grafico <- renderUI({
     req(input$grafico_seleccionado)
     

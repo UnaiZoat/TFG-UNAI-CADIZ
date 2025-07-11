@@ -5,7 +5,7 @@ library(rvest)
 library(writexl)
 
 # ⚙️ Define el año de inicio de la temporada (ej. 2021 para la 2021-2022)
-año <- 2021
+año <- 2020
 
 # Crea el string de temporada
 temporada <- paste0(año, "-", año + 1)
