@@ -9,18 +9,30 @@ datosCadizResultados2022 <- read.csv("cadizresultados2022.csv", header = TRUE, s
 datosCadizResultados2021 <- read.csv("cadizresultados2021.csv", header = TRUE, sep = ",")
 datosCadizResultados2020 <- read.csv("cadizresultados2020.csv", header = TRUE, sep = ",")
 datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
-datosTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
-datosTirosJugador <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
-datosGolesafavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
+datosCadizTiros2022 <- read.csv("cadiztiros2022.csv", header = TRUE, sep = ",")
+datosCadizTiros2021 <- read.csv("cadiztiros2021.csv", header = TRUE, sep = ",")
+datosCadizTiros2020 <- read.csv("cadiztiros2020.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2022 <- read.csv("cadiztirosencontra2022.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2021 <- read.csv("cadiztirosencontra2021.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2020 <- read.csv("cadiztirosencontra2020.csv", header = TRUE, sep = ",")
+datosCadizTopGoleadores <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2022 <- read.csv("cadiztopgoleadores2022.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2021 <- read.csv("cadiztopgoleadores2021.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2020 <- read.csv("cadiztopgoleadores2020.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
 
 datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
 datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
 datosGolesafavor$Minute <- as.numeric(datosGolesafavor$Minute)
 
 
-top_goleadores <- datosTirosJugador %>%
+top_goleadores <- datosCadizTopGoleadores %>%
   arrange(desc(Goles)) %>%
-  slice_head(n=7)
+  slice_head(n=8)
 
 
 
@@ -145,12 +157,84 @@ server <- function(input, output, session) {
   output$grafico <- renderPlotly({
     req(input$grafico_seleccionado)
     
+    sufijo_categoria <- switch(input$grafico_seleccionado,
+                               "Resultados en Casa vs Fuera" = "Resultados",
+                               "Posesión según Resultado" = "Resultados",
+                               "Relación entre Posesión y Goles Marcados" = "Resultados",
+                               "Relación entre Posesión y Goles en Contra" = "Resultados",
+                               "Comparación entre xG y Goles Marcados" = "Resultados",
+                               "Relación entre Disparos y Goles" = "Tiros",
+                               "Comparación de xG con y sin penaltis" = "Tiros",
+                               "Relación entre Disparos Recibidos y Goles en Contra" = "TirosEnContra",
+                               "Comparación xG concedido vs Goles recibidos" = "TirosEnContra",
+                               "Distancia media tiros en contra" = "TirosEnContra",
+                               "Goles por disparo vs Goles por disparo a puerta" = "TopGoleadores",
+                               "Relacion entre Disparos cada 90min y Goles" = "TopGoleadores",
+                               "Comparacion de Goles vs xG" = "TopGoleadores",
+                               "Efectividad por edad" = "TopGoleadores",
+                               "Goles en Casa vs Fuera" = "GolesAFavor",
+                               "Goles con cada parte del cuerpo" = "GolesAFavor",
+                               "Distribución goles por minuto" = "GolesAFavor",
+                               "Distancia de los Goles" = "GolesAFavor",
+                               "Resultados" # Valor por defecto
+    )
+    
+    # Construir el nombre del dataset dinámicamente
     datosResultados <- if (isTRUE(input$usar_temporada_anterior)) {
       req(input$anio_temporada)
-      nombre_dataset <- paste0("datosCadizResultados", input$anio_temporada)
-      get(nombre_dataset)
+      nombre_dataset <- paste0("datosCadiz", sufijo_categoria, input$anio_temporada)
+      
+      if (exists(nombre_dataset)) {
+        datos <- get(nombre_dataset)
+        
+        # Filtrar solo los primeros 8 goleadores si es la categoría TopGoleadores
+        if (sufijo_categoria == "TopGoleadores") {
+          # Asumiendo que hay una columna 'Goles' para ordenar
+          if ("Goles" %in% colnames(datos)) {
+            datos <- datos %>%
+              arrange(desc(Goles)) %>%
+              head(8)
+          } else {
+            # Si no hay columna 'Goles', tomar los primeros 8 registros
+            datos <- datos %>% head(8)
+          }
+        }
+        
+        datos
+      } else {
+        showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
+        return(NULL)
+      }
     } else {
-      datosCadizResultados
+      nombre_dataset <- paste0("datosCadiz", sufijo_categoria)
+      
+      if (exists(nombre_dataset)) {
+        datos <- get(nombre_dataset)
+        
+        # Filtrar solo los primeros 8 goleadores si es la categoría TopGoleadores
+        if (sufijo_categoria == "TopGoleadores") {
+          # Asumiendo que hay una columna 'Goles' para ordenar
+          if ("Goles" %in% colnames(datos)) {
+            datos <- datos %>%
+              arrange(desc(Goles)) %>%
+              head(8)
+          } else {
+            # Si no hay columna 'Goles', tomar los primeros 8 registros
+            datos <- datos %>% head(8)
+          }
+        }
+        
+        datos
+      } else {
+        showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
+        return(NULL)
+      }
+    }
+    
+    # Validar que los datos existen
+    if (is.null(datosResultados) || nrow(datosResultados) == 0) {
+      showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
+      return(NULL)
     }
     
     gg <- switch(input$grafico_seleccionado,
@@ -182,37 +266,41 @@ server <- function(input, output, session) {
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title = "Comparación entre xG y Goles Marcados", x="xG (Goles Esperados)", y = "Goles Marcados") +
                    mi_tema_cadiz(),
-
-                 "Relación entre Disparos y Goles" = ggplot(datosCadizTiros, aes(x=Disparos, y=GF)) + 
+                 
+                 "Relación entre Disparos y Goles" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
                    mi_tema_cadiz(),
                  
-                 "Comparación de xG con y sin penaltis" = ggplot(datosCadizTiros, aes(x=xG, y=xG...nopenalty)) + 
+                 "Comparación de xG con y sin penaltis" = ggplot(datosResultados, aes(x=xG, y=xG...nopenalty)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title="Comparación de xG con y sin penaltis", x="xG", y="xG sin penaltis") +
                    mi_tema_cadiz(),
-
-                 "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosTirosEnContra, aes(x=Disparos, y=GF)) + 
-                   geom_point(color="#ffff00", size=3, alpha=0.7) +
+                 
+                 "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=as.numeric(Disparos), y=as.numeric(GF))) + 
+                   geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   scale_x_continuous(limits=c(0, 25)) +  
+                   scale_y_continuous(limits=c(0, 5)) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
                    mi_tema_cadiz(),
                  
-                 "Comparación xG concedido vs Goles recibidos" = ggplot(datosTirosEnContra, aes(x=xG, y=GF)) +
-                   geom_point(size=3, color="#ffff00") +
-                   geom_abline(slope=1, intercept=0, linetype="dashed", color="#ffff00") +
+                 "Comparación xG concedido vs Goles recibidos" = ggplot(datosResultados, aes(x=as.numeric(xG), y=as.numeric(GF))) +
+                   geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
+                   geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   scale_x_continuous(limits=c(0, 4)) +  
+                   scale_y_continuous(limits=c(0, 5)) +
                    labs(title="xG en Contra vs Goles Recibidos", x="xG Concedido", y="Goles Concedidos") +
                    mi_tema_cadiz(),
                  
-                 "Distancia media tiros en contra" = ggplot(datosTirosEnContra, aes(x=Distancia)) +
+                 "Distancia media tiros en contra" = ggplot(datosResultados, aes(x=Distancia)) +
                    geom_histogram(binwidth=1, fill="#ffff00", color="black") +
                    labs(title="Distancia de los Tiros en Contra", x="Distancia (metros)", y="Número de Tiros") +
                    mi_tema_cadiz(),
                  
-                 "Goles por disparo vs Goles por disparo a puerta"=ggplot(top_goleadores, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
+                 "Goles por disparo vs Goles por disparo a puerta" = ggplot(datosResultados, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
                    geom_point(size=3)+
                    geom_smooth(method = "lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
@@ -220,7 +308,7 @@ server <- function(input, output, session) {
                         x="Goles/Disparo", y="Goles/DisparoPuerta")+
                    mi_tema_cadiz(),
                  
-                 "Relacion entre Disparos cada 90min y Goles"=ggplot(top_goleadores, aes(x=Disparos.cada.90min, y=Goles, color=Nombre,label=Nombre))+
+                 "Relacion entre Disparos cada 90min y Goles" = ggplot(datosResultados, aes(x=Disparos.cada.90min, y=Goles, color=Nombre,label=Nombre))+
                    geom_point(size=2)+
                    geom_smooth(method="lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
@@ -228,7 +316,7 @@ server <- function(input, output, session) {
                         x="Disparos cada 90min", y="Goles")+
                    mi_tema_cadiz(),
                  
-                 "Comparacion de Goles vs xG"= ggplot(top_goleadores,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
+                 "Comparacion de Goles vs xG" = ggplot(datosResultados,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
                    geom_point(size=3)+
                    geom_abline(slope = 1,intercept = 0,linetype="dashed",color="#ffff00")+
                    geom_text(hjust=0.5,vjust=1,size=3)+
@@ -236,7 +324,7 @@ server <- function(input, output, session) {
                         x="xG",y="Goles")+
                    mi_tema_cadiz(),
                  
-                 "Efectividad por edad"=ggplot(top_goleadores,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
+                 "Efectividad por edad" = ggplot(datosResultados,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
                    geom_point(size=3)+
                    geom_smooth(method="lm",se=FALSE,color="#ffff00")+
                    geom_text(hjust=0.5,vjust=-1,size=3)+
@@ -244,22 +332,22 @@ server <- function(input, output, session) {
                         x="Edad",y="Goles por disparo a puerta")+
                    mi_tema_cadiz(),
                  
-                 "Goles en Casa vs Fuera"=ggplot(datosGolesafavor, aes(x=Sedes, fill = Sedes))+
+                 "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Sedes, fill = Sedes))+
                    geom_bar() +
                    labs(title = "Goles en Casa vs Fuera", x="Sede", y="Goles")+
                    mi_tema_cadiz(),
                  
-                 "Goles con cada parte del cuerpo"=ggplot(datosGolesafavor, aes(x=Parte.del.cuerpo, fill = Parte.del.cuerpo))+
+                 "Goles con cada parte del cuerpo" = ggplot(datosResultados, aes(x=Parte.del.cuerpo, fill = Parte.del.cuerpo))+
                    geom_bar() +
                    labs(title = "Goles con cada parte del cuerpo", x="Parte del cuerpo", y="Goles")+
                    mi_tema_cadiz(),
                  
-                 "Distribución goles por minuto"=ggplot(datosGolesafavor,aes(x=Minute))+
+                 "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
                    geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
                    labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
                    mi_tema_cadiz(),
                  
-                 "Distancia de los Goles"=ggplot(datosGolesafavor, aes(x=Distance))+
+                 "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distance))+
                    geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
                    mi_tema_cadiz()
