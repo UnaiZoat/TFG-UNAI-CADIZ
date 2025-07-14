@@ -16,47 +16,7 @@ datosGolesafavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= "
 datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
 datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
 datosGolesafavor$Minute <- as.numeric(datosGolesafavor$Minute)
-cambio_nombres <- c(
-  "Date" = "Fecha",
-  "Time" = "Hora",
-  "Comp" = "Competición",
-  "Round" = "Jornada",
-  "Day" = "Día",
-  "Venue" = "Local.Visitante",
-  "Result" = "Resultado",
-  "GF" = "GF",
-  "GA" = "GC",
-  "Opponent" = "Rival",
-  "xG" = "xG",
-  "xGA" = "xGA",
-  "Poss" = "Posesión",
-  "Attendance" = "Asistencia",
-  "Captain" = "Capitán",
-  "Formation" = "Formación",
-  "Opp Formation" = "Formación Rival",
-  "Referee" = "Árbitro",
-  "Match Report" = "Informe",
-  "Notes" = "Notas"
-)
 
-# Renombrar columnas automáticamente
-colnames(datosCadizResultados2022) <- ifelse(
-  colnames(datosCadizResultados2022) %in% names(cambio_nombres),
-  cambio_nombres[colnames(datosCadizResultados2022)],
-  colnames(datosCadizResultados2022)  # mantener las no mapeadas
-)
-
-colnames(datosCadizResultados2021) <- ifelse(
-  colnames(datosCadizResultados2021) %in% names(cambio_nombres),
-  cambio_nombres[colnames(datosCadizResultados2021)],
-  colnames(datosCadizResultados2021)  # mantener las no mapeadas
-)
-
-colnames(datosCadizResultados2020) <- ifelse(
-  colnames(datosCadizResultados2020) %in% names(cambio_nombres),
-  cambio_nombres[colnames(datosCadizResultados2020)],
-  colnames(datosCadizResultados2020)  # mantener las no mapeadas
-)
 
 top_goleadores <- datosTirosJugador %>%
   arrange(desc(Goles)) %>%
@@ -317,6 +277,7 @@ server <- function(input, output, session) {
         modeBarButtonsToAdd = list("toImage")
       )
   })
+  
   
   
   output$detalle_grafico <- renderUI({
