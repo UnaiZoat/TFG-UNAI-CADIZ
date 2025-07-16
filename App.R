@@ -88,6 +88,15 @@ ui <- navbarPage(
                uiOutput("selector_grafico"),
                checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
                conditionalPanel(
+                 condition = "input.usar_temporada_anterior == false",
+                 helpText(
+                   tags$span(
+                     "¡Marca la casilla si quieres ver como le fue al equipo en temporadas anteriores!",
+                     style = "color: #0033a0; text-align: left; display: block;"
+                   )
+                 )
+               ),
+               conditionalPanel(
                  condition = "input.usar_temporada_anterior == true",
                  selectInput("anio_temporada", "Selecciona la temporada:", 
                              choices = c("2022", "2021", "2020"), 
