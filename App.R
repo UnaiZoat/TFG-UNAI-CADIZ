@@ -190,6 +190,7 @@ server <- function(input, output, session) {
     
     # Construir el nombre del dataset dinámicamente
     datosResultados <- if (isTRUE(input$usar_temporada_anterior)) {
+      
       req(input$anio_temporada)
       nombre_dataset <- paste0("datosCadiz", sufijo_categoria, input$anio_temporada)
       
@@ -381,63 +382,158 @@ server <- function(input, output, session) {
     req(input$grafico_seleccionado)
     
     explicacion <- switch(input$grafico_seleccionado,
-                          "Resultados en Casa vs Fuera" = "Aquí podemos ver la diferencia de resultados (Victoria, Empate o Derrota) en los partidos jugados como local o visitante",
-                          "Posesión según Resultado" = "Aquí podemos ver los distintos porcentajes de posesión en cada partido y si han contribuido a una victoria, un empate o derrota",
-                          "Relación entre Posesión y Goles Marcados" = "Una relación entra la posesión y los goles marcados, para comprobar la efectividad de esta. Contiene además información sobre las victorias, empates y derrotas en cada caso",
-                          "Relación entre Posesión y Goles en Contra" = "Similar al gráfico anterior pero teniendo en cuenta los goles en contra, lo que indica si cuando se ha cedido posesión se han concedido más goles o no",
-                          "Comparación entre xG y Goles Marcados" = "Comparación entre los goles esperados y los goles realmente marcados, para ver si se ha cumplido la efectividad esperada o no",
-                          "Relación entre Disparos y Goles" = "Una comparativa entre los disparos y los goles marcados, para ver si la selección de tiro ha sido buena",
-                          "Comparación de xG con y sin penaltis" = "Una comparativa para ver si los penaltis han influido mucho en los goles esperados",
-                          "Relación entre Disparos Recibidos y Goles en Contra" = "Un análisis de todos los disparos en contra recibidos para ver cuántos se han traducido en un gol para el rival, comprobando así la efectividad de portero y defensas",
-                          "Comparación xG concedido vs Goles recibidos" ="Relación entre los goles esperados en contra (xG) y los goles realmente encajados por el equipo en cada partido. El xG en contra refleja la calidad de las ocasiones que el rival ha generado, 
-                          mientras que los goles recibidos son los que efectivamente terminaron en la red.",
-                          "Distancia media tiros en contra" = "Distancia medio respecto a la portería de todos los tiros recibidos en contra en cada partido",
-                          "Goles por disparo vs Goles por disparo a puerta" = "Comprobación de la efectividad de los mayores goleadores, teniendo en cuenta sus disparos en general y sus disparos a puerta",
-                          "Relacion entre Disparos cada 90min y Goles" = "Efectividad de los mayores goleadores teniendo en cuenta cuántos disparos realizan cada 90min y cuántos de esos se traducen en goles",
-                          "Comparacion de Goles vs xG" = "Comparación de los goles esperados y los goles marcados de los máximos goleadores",
-                          "Efectividad por edad" = "La edad de los máximos goleadores y cómo de efectivos son teniendo en cuenta los goles por disparos a puerta",
-                          "Goles en Casa vs Fuera" = "Una comparativa entre los goles conseguidos de local vs los goles conseguidos de visitante",
-                          "Goles con cada parte del cuerpo" = "Un análisis de los goles según la parte del cuerpo con la que se ha rematado",
-                          "Distribución goles por minuto" = "Cantidad de goles que se han marcado en cada minuto de juego, para comprobar si la efectividad es mayor al inicio o al final del encuentro",
-                          "Distancia de los Goles" = "Comparación entre la distancia de los distintos goles logrados, viendo así si se es más efectivo disparando cerca o lejos de la portería rival"
+                          "Resultados en Casa vs Fuera" = "Este gráfico compara los resultados obtenidos cuando el equipo juega como local frente a cuando juega como visitante.",
+                          "Posesión según Resultado" = "Se analiza el porcentaje de posesión del balón en cada partido y su relación con el resultado final.",
+                          "Relación entre Posesión y Goles Marcados" = "Explora si tener más el balón está vinculado a marcar más goles.",
+                          "Relación entre Posesión y Goles en Contra" = "Evalúa si ceder el balón al rival incrementa el riesgo de encajar goles.",
+                          "Comparación entre xG y Goles Marcados" = "Compara los goles esperados (xG) con los goles realmente marcados en cada partido.",
+                          "Relación entre Disparos y Goles" = "Mide la efectividad del equipo a la hora de transformar tiros en goles.",
+                          "Comparación de xG con y sin penaltis" = "Muestra cuánto influyen los penaltis en los goles esperados.",
+                          "Relación entre Disparos Recibidos y Goles en Contra" = "Compara la cantidad de disparos que recibe el equipo con los goles que termina encajando.",
+                          "Comparación xG concedido vs Goles recibidos" = "Compara los goles que el rival debería haber marcado (xG en contra) con los que realmente ha marcado.",
+                          "Distancia media tiros en contra" = "Analiza desde qué distancia promedio recibe tiros el equipo en cada partido.",
+                          "Goles por disparo vs Goles por disparo a puerta" = "Mide la efectividad de los jugadores al convertir sus disparos, en general y a portería.",
+                          "Relacion entre Disparos cada 90min y Goles" = "Relaciona la frecuencia de disparos de los jugadores con su capacidad goleadora.",
+                          "Comparacion de Goles vs xG" = "Compara goles marcados y esperados por jugador para ver quién rinde por encima o por debajo.",
+                          "Efectividad por edad" = "Analiza si hay relación entre la edad de los jugadores y su eficiencia goleadora.",
+                          "Goles en Casa vs Fuera" = "Compara los goles que el equipo marca como local y como visitante.",
+                          "Goles con cada parte del cuerpo" = "Muestra con qué parte del cuerpo se marcan más goles: cabeza, pie dominante o no dominante.",
+                          "Distribución goles por minuto" = "Muestra en qué minutos del partido el equipo suele marcar sus goles.",
+                          "Distancia de los Goles" = "Analiza desde qué distancia se marcan los goles, indicando si son fruto de jugadas cercanas o tiros lejanos."
     )
     
     interpretacion <- switch(input$grafico_seleccionado,
-                             "Resultados en Casa vs Fuera" = "Este gráfico muestra si el equipo obtiene mejores resultados jugando en casa o fuera. Si las victorias se concentran en casa, podría indicar que el equipo se hace fuerte en su estadio.",
-                             "Posesión según Resultado" = "Permite observar si tener más el balón se relaciona con ganar partidos. Una posesión alta en victorias podría indicar un estilo de juego dominante.",
-                             "Relación entre Posesión y Goles Marcados" = "Una relación positiva indicaría que el equipo marca más goles cuando domina la posesión, lo que sugiere que se beneficia de controlar el juego.",
-                             "Relación entre Posesión y Goles en Contra" = "Una tendencia negativa podría sugerir que ceder la posesión al rival lleva a encajar más goles.",
-                             "Comparación entre xG y Goles Marcados" = "Si los goles superan al xG, los delanteros están siendo muy efectivos. Si es al revés, falta efectividad.",
-                             "Relación entre Disparos y Goles" = "Una correlación fuerte indica que generar muchos disparos se traduce en goles, mostrando un buen nivel ofensivo.",
-                             "Comparación de xG con y sin penaltis" = "Una gran diferencia sugiere que los penaltis tienen un peso importante en la producción ofensiva del equipo.",
-                             "Relación entre Disparos Recibidos y Goles en Contra" = "Evalúa la solidez defensiva: si se encajan muchos goles con pocos tiros recibidos, puede haber problemas de portero o defensa.",
-                             "Comparación xG concedido vs Goles recibidos" = "Si el equipo encaja más goles que los esperados (puntos por encima de la línea), puede indicar problemas defensivos o bajo rendimiento del portero.",
-                             "Distancia media tiros en contra" = "Una mayor distancia indica que se han recibido más tiros lejanos, mientras que una menor distancia indica que el rival
-                             está llegando al área y disparando con facilidad. Hay que tener en cuenta que el punto de penalti está a 11 metros de distancia y el borde del 
-                             área está a 16.5 metros de distancia desde la línea de meta.",
-                             "Goles por disparo vs Goles por disparo a puerta" = "Identifica a los delanteros más certeros. Cuanto más alto estén, más efectivos son en aprovechar sus oportunidades.",
-                             "Relacion entre Disparos cada 90min y Goles" = "Evalúa la relación entre la frecuencia de disparos y los goles marcados, útil para detectar delanteros eficientes.",
-                             "Comparacion de Goles vs xG" = "Permite detectar jugadores que superan las expectativas (goles > xG) o que están por debajo del rendimiento esperado.",
-                             "Efectividad por edad" = "Muestra si hay relación entre edad y rendimiento, útil para tomar decisiones sobre jóvenes promesas o jugadores veteranos.",
-                             "Goles en Casa vs Fuera" = "Ayuda a identificar si el equipo se comporta de forma similar como local y visitante, o si existe dependencia del entorno.",
-                             "Goles con cada parte del cuerpo" = "Muestra si el equipo domina el juego aéreo, usa bien ambas piernas, o si hay carencias técnicas.",
-                             "Distribución goles por minuto" = "Permite ver si el equipo tiende a marcar en ciertas fases del partido: inicio, medio o final.",
-                             "Distancia de los Goles" = "Indica si se prefieren tiros lejanos o cercanos, lo que sugiere el estilo de juego (más directo o más elaborado)."
+                             "Resultados en Casa vs Fuera" = "📍 Si las victorias se concentran como local, puede indicar fortaleza en casa. Un rendimiento parejo refleja regularidad.",
+                             "Posesión según Resultado" = "📊 Si las victorias se asocian con mayor posesión, sugiere que controlar el balón es clave para el equipo.",
+                             "Relación entre Posesión y Goles Marcados" = "⚽ Una tendencia positiva revela que dominar el balón genera más ocasiones y goles.",
+                             "Relación entre Posesión y Goles en Contra" = "🛡️ Si se reciben más goles al tener menos posesión, puede sugerir fragilidad sin balón.",
+                             "Comparación entre xG y Goles Marcados" = "🎯 Si se marcan más goles que los esperados, el equipo está siendo muy efectivo. Si no, falta acierto.",
+                             "Relación entre Disparos y Goles" = "📈 Si hay una relación fuerte, crear ocasiones genera rédito. Si no, puede haber fallos en la definición.",
+                             "Comparación de xG con y sin penaltis" = "⚖️ Un alto xG por penaltis sugiere dependencia de jugadas a balón parado.",
+                             "Relación entre Disparos Recibidos y Goles en Contra" = "🧤 Pocos tiros pero muchos goles indican debilidad defensiva o fallos del portero.",
+                             "Comparación xG concedido vs Goles recibidos" = "🔍 Si se encajan más goles que los xG en contra, algo falla en la defensa o la portería.",
+                             "Distancia media tiros en contra" = "📏 Si los tiros rivales son cercanos, la defensa está permitiendo ocasiones muy peligrosas.",
+                             "Goles por disparo vs Goles por disparo a puerta" = "🧠 Este gráfico muestra qué jugadores aprovechan mejor sus oportunidades.",
+                             "Relacion entre Disparos cada 90min y Goles" = "🔥 Jugadores con pocos disparos pero muchos goles son especialmente eficientes.",
+                             "Comparacion de Goles vs xG" = "📌 Si un jugador marca más de lo esperado, está en gran forma. Si no, podría estar rindiendo por debajo.",
+                             "Efectividad por edad" = "📅 Puede mostrar si los jóvenes están listos para rendir o si la experiencia pesa en la efectividad.",
+                             "Goles en Casa vs Fuera" = "🧭 Si el rendimiento varía mucho, puede que el entorno influya en el equipo.",
+                             "Goles con cada parte del cuerpo" = "🦶⚽ Una alta proporción con la cabeza podría mostrar dominio aéreo; muchos con la izquierda o derecha indican buena técnica.",
+                             "Distribución goles por minuto" = "⏱️ Si los goles llegan tarde, el equipo puede destacar en momentos decisivos. Si llegan al principio, puede ser clave el arranque.",
+                             "Distancia de los Goles" = "🚀 Si predominan los goles lejanos, el equipo puede tener jugadores con buen disparo o recurrir al tiro exterior."
     )
     
+    if (is.null(explicacion) || is.null(interpretacion)) {
+      return(HTML("<em>No hay información disponible para este gráfico.</em>"))
+    }
+    
     HTML(paste0(
-      "<div style='background-color:#f3f3f3; padding:12px; border-radius:6px; border-left:4px solid #0033a0;'>",
       
-      "<h5 style='color:#0033a0; font-weight:bold;'>Explicación del gráfico</h5>",
-      "<p style='text-align:justify;'>", explicacion, "</p>",
+      "<div style='background-color:#f8f9fa; padding:15px; border-radius:8px; border-left:5px solid #0033a0; margin-top:10px;'>",
       
-      "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué conclusiones puedo sacar?</h5>",
-      "<p style='text-align:justify;'>", interpretacion, "</p>",
+      "<h4 style='color:#0033a0; font-weight:bold; margin-bottom:8px;'>📊 ¿Qué muestra este gráfico?</h4>",
+      "<p style='text-align:justify; font-size:15px;'>", explicacion, "</p>",
+      
+      "<h4 style='color:#0033a0; font-weight:bold; margin-top:15px;'>🔎 ¿Qué conclusiones puedo sacar?</h4>",
+      "<p style='text-align:justify; font-size:15px;'>", interpretacion, "</p>",
+      resumen_visual <- switch(input$grafico_seleccionado,
+                               
+                               "Resultados en Casa vs Fuera" = "
+    <strong>🟢 Bueno:</strong> Rendimiento equilibrado o mejor fuera de casa.<br>
+    <strong>🟡 Normal:</strong> Mejor rendimiento en casa, pero no exagerado.<br>
+    <strong>🔴 Preocupante:</strong> Gran diferencia de rendimiento entre casa y fuera.",
+                               
+                               "Posesión según Resultado" = "
+    <strong>🟢 Bueno:</strong> Altos porcentajes de posesión en victorias.<br>
+    <strong>🟡 Normal:</strong> Sin patrón claro.<br>
+    <strong>🔴 Preocupante:</strong> Alta posesión asociada a derrotas o baja posesión en victorias.",
+                               
+                               "Relación entre Posesión y Goles Marcados" = "
+    <strong>🟢 Bueno:</strong> Más posesión, más goles.<br>
+    <strong>🟡 Normal:</strong> Relación neutra o débil.<br>
+    <strong>🔴 Preocupante:</strong> Mucha posesión, pocos goles.",
+                               
+                               "Relación entre Posesión y Goles en Contra" = "
+    <strong>🟢 Bueno:</strong> Más posesión, menos goles en contra.<br>
+    <strong>🟡 Normal:</strong> Sin patrón definido.<br>
+    <strong>🔴 Preocupante:</strong> Más posesión y aún así encajar goles.",
+                               
+                               "Comparación entre xG y Goles Marcados" = "
+    <strong>🟢 Bueno:</strong> Goles marcados por encima del xG.<br>
+    <strong>🟡 Normal:</strong> Goles cercanos al xG.<br>
+    <strong>🔴 Preocupante:</strong> Goles marcados por debajo del xG.",
+                               
+                               "Relación entre Disparos y Goles" = "
+    <strong>🟢 Bueno:</strong> Alta efectividad con pocos disparos.<br>
+    <strong>🟡 Normal:</strong> Relación equilibrada.<br>
+    <strong>🔴 Preocupante:</strong> Muchos disparos, pocos goles.",
+                               
+                               "Comparación de xG con y sin penaltis" = "
+    <strong>🟢 Bueno:</strong> Buena producción de xG sin penaltis.<br>
+    <strong>🟡 Normal:</strong> Dependencia moderada del penalti.<br>
+    <strong>🔴 Preocupante:</strong> Gran parte del xG depende de penaltis.",
+                               
+                               "Relación entre Disparos Recibidos y Goles en Contra" = "
+    <strong>🟢 Bueno:</strong> Muchos disparos en contra y pocos goles encajados.<br>
+    <strong>🟡 Normal:</strong> Relación directa y proporcional.<br>
+    <strong>🔴 Preocupante:</strong> Se encajan muchos goles con pocos disparos recibidos.",
+                               
+                               "Comparación xG concedido vs Goles recibidos" = "
+    <strong>🟢 Bueno:</strong> Se encajan menos goles de los esperados.<br>
+    <strong>🟡 Normal:</strong> Goles recibidos similares al xG concedido.<br>
+    <strong>🔴 Preocupante:</strong> Se encajan más goles de los esperados.",
+                               
+                               "Distancia media tiros en contra" = "
+    <strong>🟢 Bueno:</strong> Mayoría de tiros recibidos desde lejos.<br>
+    <strong>🟡 Normal:</strong> Distancia media aceptable.<br>
+    <strong>🔴 Preocupante:</strong> Muchos tiros desde dentro del área.",
+                               
+                               "Goles por disparo vs Goles por disparo a puerta" = "
+    <strong>🟢 Bueno:</strong> Alta eficiencia en ambos ratios.<br>
+    <strong>🟡 Normal:</strong> Relación lógica y progresiva.<br>
+    <strong>🔴 Preocupante:</strong> Muy baja conversión incluso cuando se tira a puerta.",
+                               
+                               "Relacion entre Disparos cada 90min y Goles" = "
+    <strong>🟢 Bueno:</strong> Pocos disparos, muchos goles (máxima eficiencia).<br>
+    <strong>🟡 Normal:</strong> Relación proporcional.<br>
+    <strong>🔴 Preocupante:</strong> Muchos disparos cada 90’ y pocos goles.",
+                               
+                               "Comparacion de Goles vs xG" = "
+    <strong>🟢 Bueno:</strong> Jugadores con más goles que xG.<br>
+    <strong>🟡 Normal:</strong> Goles similares al xG.<br>
+    <strong>🔴 Preocupante:</strong> Jugadores que no alcanzan su xG.",
+                               
+                               "Efectividad por edad" = "
+    <strong>🟢 Bueno:</strong> Jugadores jóvenes y veteranos efectivos.<br>
+    <strong>🟡 Normal:</strong> Efectividad constante en todas las edades.<br>
+    <strong>🔴 Preocupante:</strong> Baja efectividad en jugadores clave por edad.",
+                               
+                               "Goles en Casa vs Fuera" = "
+    <strong>🟢 Bueno:</strong> Producción ofensiva estable en ambas condiciones.<br>
+    <strong>🟡 Normal:</strong> Algo más de goles en casa.<br>
+    <strong>🔴 Preocupante:</strong> Muchos más goles en casa que fuera o viceversa.",
+                               
+                               "Goles con cada parte del cuerpo" = "
+    <strong>🟢 Bueno:</strong> Diversidad de formas de anotar (pie, cabeza...).<br>
+    <strong>🟡 Normal:</strong> Predominio claro de una parte.<br>
+    <strong>🔴 Preocupante:</strong> Dependencia extrema de una sola forma de rematar.",
+                               
+                               "Distribución goles por minuto" = "
+    <strong>🟢 Bueno:</strong> Más goles en momentos clave (inicio y final).<br>
+    <strong>🟡 Normal:</strong> Goles repartidos sin patrón.<br>
+    <strong>🔴 Preocupante:</strong> Ausencia de goles en tramos clave.",
+                               
+                               "Distancia de los Goles" = "
+    <strong>🟢 Bueno:</strong> Goles desde varias distancias, incluidos lejanos.<br>
+    <strong>🟡 Normal:</strong> Mayoría desde zonas comunes (dentro del área).<br>
+    <strong>🔴 Preocupante:</strong> Todos los goles desde posiciones muy cercanas.",
+                               
+                               NULL
+      ),
       
       "</div>"
     ))
   })
-
   
 }
 
