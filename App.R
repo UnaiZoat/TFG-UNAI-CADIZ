@@ -70,6 +70,8 @@ ui <- navbarPage(
                actionButton("go_analisis", "Empieza el análisis", 
              style="color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px;"),
                "</p>",
+             
+             
                
                "</div>"
              )),
@@ -86,7 +88,9 @@ ui <- navbarPage(
                selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
                            choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
                uiOutput("selector_grafico"),
+               
                checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
+               
                conditionalPanel(
                  condition = "input.usar_temporada_anterior == false",
                  helpText(
@@ -96,31 +100,101 @@ ui <- navbarPage(
                    )
                  )
                ),
+               
                conditionalPanel(
                  condition = "input.usar_temporada_anterior == true",
                  selectInput("anio_temporada", "Selecciona la temporada:", 
                              choices = c("2022", "2021", "2020"), 
                              selected = "2022")
                ),
+               
                br(),
+               helpText(
+                 tags$span(
+                   "¿Algo que no entiendas?",
+                   style = "color: #0033a0; text-align: center; display: block;"
+                 )
+               ),
+               
+               actionButton("go_glosario", "Ve al glosario", 
+                            style = "color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px; display: block; margin: 0 auto;"),
+               
+               br(),
+               
                tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
              ),
              
              mainPanel(
                helpText(
                  tags$span(
-                   "💡 Puedes interactuar con el gráfico: Descargalo como PNG,muevete por el gráfico, haz zoom o vuelve al zoom original",
+                   "💡 Puedes interactuar con el gráfico: Descárgalo como PNG, muévete por el gráfico, haz zoom o vuelve al zoom original",
                    style = "color: blue; text-align: right; display: block;"
                  )
                ),
-               plotlyOutput("grafico", height= "450px"),
+               plotlyOutput("grafico", height = "450px"),
                br(),
                uiOutput("detalle_grafico"),
                br()
              )
            )
   ),
-
+  
+  tabPanel("Glosario",
+           fluidPage(
+             titlePanel("📚 Glosario de Términos - Análisis de Datos en Fútbol"),
+             br(),
+             
+             # Métricas de Rendimiento
+             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
+             h4("📈 Métricas de Rendimiento"),
+             tags$ul(
+               tags$li(strong("xG (Goles Esperados):"), " Probabilidad de que un disparo termine en gol según características como ángulo, distancia, tipo de pase previo, etc."),
+               tags$li(strong("xGA (Goles Esperados en Contra):"), " xG que el equipo ha concedido. Ayuda a evaluar el rendimiento defensivo más allá de los goles reales encajados."),
+               tags$li(strong("xG sin penaltis:"), " Goles esperados excluyendo los penaltis. Útil para medir la calidad ofensiva sin jugadas 'fáciles'."),
+               tags$li(strong("Disparos cada 90 minutos:"), " Número promedio de disparos realizados por un jugador por cada 90 minutos jugados."),
+               tags$li(strong("Goles/Disparo:"), " Eficiencia de un jugador: qué porcentaje de sus disparos se convierten en gol."),
+               tags$li(strong("Goles/Disparo a Puerta:"), " Ratio de goles marcados sobre los tiros que fueron a portería."),
+               tags$li(strong("Posesión (%):"), " Porcentaje de tiempo que el equipo controla el balón en un partido.")
+             ),
+             HTML("</div><br>"),
+             
+             # Técnicas de Análisis
+             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
+             h4("📊 Técnicas y Conceptos de Análisis"),
+             tags$ul(
+               tags$li(strong("Regresión Lineal:"), " Técnica estadística que intenta predecir una variable (por ejemplo, goles) a partir de otra (por ejemplo, disparos)."),
+               tags$li(strong("Tendencia:"), " Dirección general del comportamiento de los datos en un gráfico (creciente, decreciente...)."),
+               tags$li(strong("Correlación:"), " Grado en que dos variables están relacionadas. Ej: Más disparos suele correlacionar con más goles."),
+               tags$li(strong("Outliers (Valores atípicos):"), " Datos que se alejan mucho de los valores normales y pueden distorsionar el análisis.")
+             ),
+             HTML("</div><br>"),
+             
+             # Big Data Deportiva
+             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
+             h4("🧠 Conceptos de Big Data Deportiva"),
+             tags$ul(
+               tags$li(strong("Machine Learning (Aprendizaje Automático):"), " Algoritmos que aprenden de los datos para hacer predicciones, como anticipar el rendimiento de un jugador."),
+               tags$li(strong("Modelo predictivo:"), " Modelo matemático que utiliza datos pasados para predecir un resultado futuro."),
+               tags$li(strong("Feature Engineering:"), " Proceso de seleccionar y transformar variables para que los modelos predictivos sean más precisos."),
+               tags$li(strong("Data Cleaning (Limpieza de Datos):"), " Proceso de corregir o eliminar datos erróneos, incompletos o irrelevantes.")
+             ),
+             HTML("</div><br>"),
+             
+             # Términos del Juego
+             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
+             h4("⚽️ Términos del Juego Relacionados con Datos"),
+             tags$ul(
+               tags$li(strong("Disparo a Puerta:"), " Tiro que va dentro de los tres palos y que necesita intervención del portero o acaba en gol."),
+               tags$li(strong("Zona de peligro (Danger Zone):"), " Área cercana al área pequeña desde donde los tiros tienen mayor probabilidad de gol."),
+               tags$li(strong("Asistencias esperadas (xA):"), " Estimación de la probabilidad de que un pase se convierta en asistencia."),
+               tags$li(strong("Heatmap (Mapa de calor):"), " Representación visual que muestra las zonas del campo más ocupadas por un jugador o equipo.")
+             ),
+             HTML("</div><br><br>"),
+             
+             # Imagen del escudo
+             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
+           )
+  )
 
 )
 
@@ -161,6 +235,10 @@ server <- function(input, output, session) {
   
   observeEvent(input$go_analisis, {
     updateNavbarPage(session, inputId = "navbar", selected = "Análisis")
+  })
+  
+  observeEvent(input$go_glosario, {
+    updateNavbarPage(session, inputId = "navbar", selected = "Glosario")
   })
   
   output$grafico <- renderPlotly({
