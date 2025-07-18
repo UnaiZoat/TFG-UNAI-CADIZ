@@ -88,18 +88,22 @@ ui <- navbarPage(
                selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
                            choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
                uiOutput("selector_grafico"),
-               
-               checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
-               
-               conditionalPanel(
-                 condition = "input.usar_temporada_anterior == false",
-                 helpText(
-                   tags$span(
-                     "¡Marca la casilla si quieres ver como le fue al equipo en temporadas anteriores!",
-                     style = "color: #0033a0; text-align: left; display: block;"
+               br(),
+               div(
+                 style = "border: 1px dashed #0033a0; padding: 10px; background-color: #f0f8ff; border-radius: 5px;",
+                 checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
+                 conditionalPanel(
+                   condition = "input.usar_temporada_anterior == false",
+                   helpText(
+                     tags$span(
+                       "¡Marca la casilla si quieres ver como le fue al equipo en temporadas anteriores!",
+                       style = "color: #0033a0; text-align: left; display: block;"
+                     )
                    )
-                 )
+                 ),
                ),
+               
+               
                
                conditionalPanel(
                  condition = "input.usar_temporada_anterior == true",
