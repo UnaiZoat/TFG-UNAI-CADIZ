@@ -3,9 +3,9 @@ if (!require("writexl")) install.packages("writexl")
 library(rvest)
 library(writexl)
 
-año <- 2023
+año <- 2020
 temporada <- paste0(año, "-", año + 1)
-url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/matchlogs/c12/shooting/Cadiz-Match-Logs-La-Liga")
+url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/goallogs/c12/Cadiz-Goal-Logs-La-Liga")
 
 # Diccionario de cambio de nombres
 cambio_nombres <- c(
@@ -38,7 +38,8 @@ cambio_nombres <- c(
   "SoT%" = "% DisparosPuerta",
   "G/Sh" = "Goles/Disparo",
   "G/SoT" = "Goles/DisparoPuerta",
-  "Dist" = "Distancia"
+  "Dist" = "Distancia",
+  "Dist(yds)" = "Distancia"
 )
 
 # Leer la página web
@@ -85,7 +86,7 @@ tryCatch({
   }
   
   # Guardar archivo
-  nombre_archivo <- paste0("cadizresultados", año, ".csv")
+  nombre_archivo <- paste0("cadizgolesafavor", año, ".csv")
   write.csv(df, nombre_archivo, row.names = FALSE)
   
   message(paste("✅ Archivo generado:", nombre_archivo))

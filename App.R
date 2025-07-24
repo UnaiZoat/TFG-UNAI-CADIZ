@@ -20,7 +20,7 @@ datosCadizTopGoleadores2023 <- read.csv("TirosJugadorLimpios.csv",header= TRUE, 
 datosCadizTopGoleadores2022 <- read.csv("cadiztopgoleadores2022.csv",header= TRUE, sep= ",")
 datosCadizTopGoleadores2021 <- read.csv("cadiztopgoleadores2021.csv",header= TRUE, sep= ",")
 datosCadizTopGoleadores2020 <- read.csv("cadiztopgoleadores2020.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor2023 <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2023 <- read.csv("cadizgolesafavor2023.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
@@ -329,12 +329,16 @@ server <- function(input, output, session) {
                  "Relación entre Disparos y Goles" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   scale_x_continuous(limits = c(0, 25)) +  # Ajusta a tu rango real
+                   scale_y_continuous(limits = c(0, 10)) +  # Idem para GF
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
                    mi_tema_cadiz(),
                  
                  "Comparación de xG con y sin penaltis" = ggplot(datosResultados, aes(x=xG, y=xG...nopenalty)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
+                   scale_x_continuous(limits = c(0, 3)) + 
+                   scale_y_continuous(limits = c(0, 3)) +
                    labs(title="Comparación de xG con y sin penaltis", x="xG", y="xG sin penaltis") +
                    mi_tema_cadiz(),
                  
@@ -391,14 +395,19 @@ server <- function(input, output, session) {
                         x="Edad",y="Goles por disparo a puerta")+
                    mi_tema_cadiz(),
                  
-                 "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Sedes, fill = Sedes))+
+                 "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
                    geom_bar() +
-                   labs(title = "Goles en Casa vs Fuera", x="Sede", y="Goles")+
+                   labs(title = "Goles en Casa vs Fuera", x="Local.Visitante", y="Goles")+
                    mi_tema_cadiz(),
                  
-                 "Goles con cada parte del cuerpo" = ggplot(datosResultados, aes(x=Parte.del.cuerpo, fill = Parte.del.cuerpo))+
+                 "Goles con cada parte del cuerpo" = ggplot(
+                   datosResultados %>%
+                     mutate(Body.Part = trimws(tolower(Body.Part))) %>%
+                     filter(!Body.Part %in% c("trace", "unknown", "na", "")),
+                   aes(x = Body.Part, fill = Body.Part)
+                 ) +
                    geom_bar() +
-                   labs(title = "Goles con cada parte del cuerpo", x="Parte del cuerpo", y="Goles")+
+                   labs(title = "Goles con cada parte del cuerpo", x = "Parte del cuerpo", y = "Goles") +
                    mi_tema_cadiz(),
                  
                  "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
@@ -406,7 +415,7 @@ server <- function(input, output, session) {
                    labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
                    mi_tema_cadiz(),
                  
-                 "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distance))+
+                 "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distancia))+
                    geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
                    mi_tema_cadiz()
