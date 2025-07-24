@@ -88,18 +88,23 @@ ui <- navbarPage(
                div(
                  style = "border: 1px dashed #0033a0; padding: 10px; background-color: #f0f8ff; border-radius: 5px;",
                  selectInput("temporadas_seleccionadas", 
-                             "¿Quieres usar datos de temporadas anteriores?  
-                             Selecciona una o varias temporadas para analizar:",
+                             HTML("¿Quieres usar datos de temporadas anteriores?<br>
+                                    <span style='font-size: 13px;'>Selecciona una o varias temporadas para analizar:</span>"),
                              choices = c("2023","2022", "2021", "2020"),
                              selected = "2023",
                              multiple = TRUE),
+                
+                 
+                 
                  helpText(
                    tags$span(
-                     "Puedes comparar una o varias temporadas a la vez.",
-                     style = "color: #0033a0; font-size: 13px;"
+                    "Para eliminar una temporada seleccionada, haz clic en ella y pulsa la tecla delete o suprimir de tu teclado.",
+                     style = "font-size: 13px; color: #0033a0;"
                    )
                  )
                ),
+               
+               
                
                br(),
                helpText(
@@ -108,6 +113,8 @@ ui <- navbarPage(
                    style = "color: #0033a0; text-align: center; display: block;"
                  )
                ),
+               
+               
                
                actionButton("go_glosario", "Ve al glosario", 
                             style = "color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px; display: block; margin: 0 auto;"),
