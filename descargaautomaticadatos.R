@@ -3,9 +3,9 @@ if (!require("writexl")) install.packages("writexl")
 library(rvest)
 library(writexl)
 
-año <- 2020
+año <- 2023
 temporada <- paste0(año, "-", año + 1)
-url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/goallogs/c12/Cadiz-Goal-Logs-La-Liga")
+url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/Cadiz-Stats#all_stats_standard")
 
 # Diccionario de cambio de nombres
 cambio_nombres <- c(
@@ -52,7 +52,7 @@ tryCatch({
     stop("No se encontraron tablas en la página")
   }
   
-  df <- tables[[1]]
+  df <- tables[[2]]
   
   # Mostrar las columnas originales para diagnóstico
   cat("Columnas originales encontradas:\n")
@@ -86,7 +86,7 @@ tryCatch({
   }
   
   # Guardar archivo
-  nombre_archivo <- paste0("cadizgolesafavor", año, ".csv")
+  nombre_archivo <- paste0("cadizresultados", año, ".csv")
   write.csv(df, nombre_archivo, row.names = FALSE)
   
   message(paste("✅ Archivo generado:", nombre_archivo))

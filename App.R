@@ -4,7 +4,7 @@ library(dplyr)
 library(plotly)
 library(bslib)
 
-datosCadizResultados2023 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
+datosCadizResultados2023 <- read.csv("cadizresultados2023.csv", header = TRUE, sep = ",")
 datosCadizResultados2022 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
 datosCadizResultados2021 <- read.csv("cadizresultados2021.csv", header = TRUE, sep = ",")
 datosCadizResultados2020 <- read.csv("cadizresultados2020.csv", header = TRUE, sep = ",")
@@ -262,13 +262,26 @@ server <- function(input, output, session) {
       
       lista_temporadas <- input$temporadas_seleccionadas
       
-      
       datos_combinados <- purrr::map_dfr(lista_temporadas, function(anio) {
         nombre_dataset <- paste0("datosCadiz", sufijo_categoria, anio)
         
         if (exists(nombre_dataset)) {
           datos <- get(nombre_dataset)
-          datos$Temporada <- anio  
+          datos$Temporada <- anio
+          
+         
+          if ("Asistencia" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(Asistencia = as.numeric(Asistencia))
+          }
+          
+          if ("GF" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(GF = as.numeric(GF))
+          }
+          
+          if ("GC" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(GC = as.numeric(GC))
+          }
+          
           return(datos)
         } else {
           showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
@@ -276,17 +289,15 @@ server <- function(input, output, session) {
         }
       })
       
-      
       if (sufijo_categoria == "TopGoleadores") {
         if ("Goles" %in% colnames(datos_combinados)) {
           datos_combinados <- datos_combinados %>%
             arrange(desc(Goles)) %>%
-            head(8)
+            head(12)
         } else {
           datos_combinados <- head(datos_combinados, 8)
         }
       }
-      
       
       if (nrow(datos_combinados) == 0) {
         showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
