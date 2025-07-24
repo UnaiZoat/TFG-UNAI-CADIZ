@@ -363,36 +363,60 @@ server <- function(input, output, session) {
                    labs(title="Distancia de los Tiros en Contra", x="Distancia (metros)", y="Número de Tiros") +
                    mi_tema_cadiz(),
                  
-                 "Goles por disparo vs Goles por disparo a puerta" = ggplot(datosResultados, aes(x=Goles.Disparo, y=Goles.DisparoPuerta, color=Nombre, label=Nombre))+
-                   geom_point(size=3)+
-                   geom_smooth(method = "lm",se=FALSE,color="#ffff00")+
-                   geom_text(hjust=0.5,vjust=-1,size=3)+
-                   labs(title = "Goles por disparo vs Goles por disparo a puerta",
-                        x="Goles/Disparo", y="Goles/DisparoPuerta")+
+                 "Goles por disparo vs Goles por disparo a puerta" = ggplot(
+                   datosResultados %>%
+                     filter(!Nombre %in% c("Squad Total", "Opponent Total")),
+                   aes(x = Goles.Disparo, y = Goles.DisparoPuerta, color = Nombre, label = Nombre)
+                 ) +
+                   geom_point(size = 3) +
+                   geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
+                   geom_text(hjust = 0.5, vjust = -1, size = 3) +
+                   labs(
+                     title = "Goles por disparo vs Goles por disparo a puerta",
+                     x = "Goles/Disparo", y = "Goles/DisparoPuerta"
+                   ) +
                    mi_tema_cadiz(),
                  
-                 "Relacion entre Disparos cada 90min y Goles" = ggplot(datosResultados, aes(x=Disparos.cada.90min, y=Goles, color=Nombre,label=Nombre))+
-                   geom_point(size=2)+
-                   geom_smooth(method="lm",se=FALSE,color="#ffff00")+
-                   geom_text(hjust=0.5,vjust=-1,size=3)+
-                   labs(title="Relacion entre Disparos cada 90min y Goles",
-                        x="Disparos cada 90min", y="Goles")+
+                 "Relacion entre Disparos cada 90min y Goles" = ggplot(
+                   datosResultados %>%
+                     filter(!Nombre %in% c("Squad Total", "Opponent Total")),
+                   aes(x = Disparos.cada.90min, y = Goles, color = Nombre, label = Nombre)
+                 ) +
+                   geom_point(size = 2) +
+                   geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
+                   geom_text(hjust = 0.5, vjust = -1, size = 3) +
+                   labs(
+                     title = "Relación entre Disparos cada 90min y Goles",
+                     x = "Disparos cada 90min", y = "Goles"
+                   ) +
                    mi_tema_cadiz(),
                  
-                 "Comparacion de Goles vs xG" = ggplot(datosResultados,aes(x=xG,y=Goles,color=Nombre,label=Nombre))+
-                   geom_point(size=3)+
-                   geom_abline(slope = 1,intercept = 0,linetype="dashed",color="#ffff00")+
-                   geom_text(hjust=0.5,vjust=1,size=3)+
-                   labs(title = "Comparacion de Goles vs xG",
-                        x="xG",y="Goles")+
+                 "Comparacion de Goles vs xG" = ggplot(
+                   datosResultados %>%
+                     filter(!Nombre %in% c("Squad Total", "Opponent Total")),
+                   aes(x = xG, y = Goles, color = Nombre, label = Nombre)
+                 ) +
+                   geom_point(size = 3) +
+                   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "#ffff00") +
+                   geom_text(hjust = 0.5, vjust = 1, size = 3) +
+                   labs(
+                     title = "Comparación de Goles vs xG",
+                     x = "xG", y = "Goles"
+                   ) +
                    mi_tema_cadiz(),
                  
-                 "Efectividad por edad" = ggplot(datosResultados,aes(x=Edad, y=Goles.DisparoPuerta,color=Nombre,label=Nombre))+
-                   geom_point(size=3)+
-                   geom_smooth(method="lm",se=FALSE,color="#ffff00")+
-                   geom_text(hjust=0.5,vjust=-1,size=3)+
-                   labs(title = "Efectividad por edad",
-                        x="Edad",y="Goles por disparo a puerta")+
+                 "Efectividad por edad" = ggplot(
+                   datosResultados %>%
+                     filter(!Nombre %in% c("Squad Total", "Opponent Total")),
+                   aes(x = Edad, y = Goles.DisparoPuerta, color = Nombre, label = Nombre)
+                 ) +
+                   geom_point(size = 3) +
+                   geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
+                   geom_text(hjust = 0.5, vjust = -1, size = 3) +
+                   labs(
+                     title = "Efectividad por edad",
+                     x = "Edad", y = "Goles por disparo a puerta"
+                   ) +
                    mi_tema_cadiz(),
                  
                  "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
