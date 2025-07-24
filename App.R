@@ -4,35 +4,30 @@ library(dplyr)
 library(plotly)
 library(bslib)
 
-datosCadizResultados <- read.csv("Cadizcf_resultados_partidos_limpios.csv", header = TRUE, sep = ",")
+datosCadizResultados2023 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
 datosCadizResultados2022 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
 datosCadizResultados2021 <- read.csv("cadizresultados2021.csv", header = TRUE, sep = ",")
 datosCadizResultados2020 <- read.csv("cadizresultados2020.csv", header = TRUE, sep = ",")
-datosCadizTiros <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
+datosCadizTiros2023 <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
 datosCadizTiros2022 <- read.csv("cadiztiros2022.csv", header = TRUE, sep = ",")
 datosCadizTiros2021 <- read.csv("cadiztiros2021.csv", header = TRUE, sep = ",")
 datosCadizTiros2020 <- read.csv("cadiztiros2020.csv", header = TRUE, sep = ",")
-datosCadizTirosEnContra <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2023 <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
 datosCadizTirosEnContra2022 <- read.csv("cadiztirosencontra2022.csv", header = TRUE, sep = ",")
 datosCadizTirosEnContra2021 <- read.csv("cadiztirosencontra2021.csv", header = TRUE, sep = ",")
 datosCadizTirosEnContra2020 <- read.csv("cadiztirosencontra2020.csv", header = TRUE, sep = ",")
-datosCadizTopGoleadores <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2023 <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
 datosCadizTopGoleadores2022 <- read.csv("cadiztopgoleadores2022.csv",header= TRUE, sep= ",")
 datosCadizTopGoleadores2021 <- read.csv("cadiztopgoleadores2021.csv",header= TRUE, sep= ",")
 datosCadizTopGoleadores2020 <- read.csv("cadiztopgoleadores2020.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2023 <- read.csv("golesafavorCadizcfLimpio.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
 
-datosCadizTiros <- datosCadizTiros[-nrow(datosCadizTiros),]
-datosTirosEnContra <- datosTirosEnContra[-nrow(datosTirosEnContra),]
-datosGolesafavor$Minute <- as.numeric(datosGolesafavor$Minute)
 
 
-top_goleadores <- datosCadizTopGoleadores %>%
-  arrange(desc(Goles)) %>%
-  slice_head(n=8)
+
 
 
 
@@ -81,7 +76,6 @@ ui <- navbarPage(
   ),
   
   
-  
   tabPanel("Análisis",
            sidebarLayout(
              sidebarPanel(
@@ -89,27 +83,22 @@ ui <- navbarPage(
                            choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
                uiOutput("selector_grafico"),
                br(),
+               
+               
                div(
                  style = "border: 1px dashed #0033a0; padding: 10px; background-color: #f0f8ff; border-radius: 5px;",
-                 checkboxInput("usar_temporada_anterior", "¿Quieres ver una temporada anterior?", value = FALSE),
-                 conditionalPanel(
-                   condition = "input.usar_temporada_anterior == false",
-                   helpText(
-                     tags$span(
-                       "¡Marca la casilla si quieres ver como le fue al equipo en temporadas anteriores!",
-                       style = "color: #0033a0; text-align: left; display: block;"
-                     )
+                 selectInput("temporadas_seleccionadas", 
+                             "¿Quieres usar datos de temporadas anteriores?  
+                             Selecciona una o varias temporadas para analizar:",
+                             choices = c("2023","2022", "2021", "2020"),
+                             selected = "2023",
+                             multiple = TRUE),
+                 helpText(
+                   tags$span(
+                     "Puedes comparar una o varias temporadas a la vez.",
+                     style = "color: #0033a0; font-size: 13px;"
                    )
-                 ),
-               ),
-               
-               
-               
-               conditionalPanel(
-                 condition = "input.usar_temporada_anterior == true",
-                 selectInput("anio_temporada", "Selecciona la temporada:", 
-                             choices = c("2022", "2021", "2020"), 
-                             selected = "2022")
+                 )
                ),
                
                br(),
@@ -190,9 +179,7 @@ ui <- navbarPage(
              tags$ul(
                tags$li(strong("Disparo a Puerta:"), " Tiro que va dentro de los tres palos y que necesita intervención del portero o acaba en gol."),
                tags$li(strong("Zona de peligro (Danger Zone):"), " Área cercana al área pequeña desde donde los tiros tienen mayor probabilidad de gol."),
-               tags$li(strong("Asistencias esperadas (xA):"), " Estimación de la probabilidad de que un pase se convierta en asistencia."),
-               tags$li(strong("Heatmap (Mapa de calor):"), " Representación visual que muestra las zonas del campo más ocupadas por un jugador o equipo.")
-             ),
+               ),
              HTML("</div><br><br>"),
              
              # Imagen del escudo
@@ -270,63 +257,43 @@ server <- function(input, output, session) {
                                "Resultados" # Valor por defecto
     )
     
-    # Construir el nombre del dataset dinámicamente
-    datosResultados <- if (isTRUE(input$usar_temporada_anterior)) {
+    datosResultados <- {
+      req(input$temporadas_seleccionadas)
       
-      req(input$anio_temporada)
-      nombre_dataset <- paste0("datosCadiz", sufijo_categoria, input$anio_temporada)
+      lista_temporadas <- input$temporadas_seleccionadas
       
-      if (exists(nombre_dataset)) {
-        datos <- get(nombre_dataset)
+      
+      datos_combinados <- purrr::map_dfr(lista_temporadas, function(anio) {
+        nombre_dataset <- paste0("datosCadiz", sufijo_categoria, anio)
         
-        # Filtrar solo los primeros 8 goleadores si es la categoría TopGoleadores
-        if (sufijo_categoria == "TopGoleadores") {
-          # Asumiendo que hay una columna 'Goles' para ordenar
-          if ("Goles" %in% colnames(datos)) {
-            datos <- datos %>%
-              arrange(desc(Goles)) %>%
-              head(8)
-          } else {
-            # Si no hay columna 'Goles', tomar los primeros 8 registros
-            datos <- datos %>% head(8)
-          }
+        if (exists(nombre_dataset)) {
+          datos <- get(nombre_dataset)
+          datos$Temporada <- anio  
+          return(datos)
+        } else {
+          showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
+          return(NULL)
         }
-        
-        datos
-      } else {
-        showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
+      })
+      
+      
+      if (sufijo_categoria == "TopGoleadores") {
+        if ("Goles" %in% colnames(datos_combinados)) {
+          datos_combinados <- datos_combinados %>%
+            arrange(desc(Goles)) %>%
+            head(8)
+        } else {
+          datos_combinados <- head(datos_combinados, 8)
+        }
+      }
+      
+      
+      if (nrow(datos_combinados) == 0) {
+        showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
         return(NULL)
       }
-    } else {
-      nombre_dataset <- paste0("datosCadiz", sufijo_categoria)
       
-      if (exists(nombre_dataset)) {
-        datos <- get(nombre_dataset)
-        
-        # Filtrar solo los primeros 8 goleadores si es la categoría TopGoleadores
-        if (sufijo_categoria == "TopGoleadores") {
-          # Asumiendo que hay una columna 'Goles' para ordenar
-          if ("Goles" %in% colnames(datos)) {
-            datos <- datos %>%
-              arrange(desc(Goles)) %>%
-              head(8)
-          } else {
-            # Si no hay columna 'Goles', tomar los primeros 8 registros
-            datos <- datos %>% head(8)
-          }
-        }
-        
-        datos
-      } else {
-        showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
-        return(NULL)
-      }
-    }
-    
-    # Validar que los datos existen
-    if (is.null(datosResultados) || nrow(datosResultados) == 0) {
-      showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
-      return(NULL)
+      datos_combinados
     }
     
     gg <- switch(input$grafico_seleccionado,
