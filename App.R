@@ -142,7 +142,78 @@ ui <- navbarPage(
   ),
   
   tabPanel("Predicción",
-  
+           sidebarLayout(
+             sidebarPanel(
+               selectInput("tipo_prediccion", "Selecciona el elemento a predecir:",
+                           choices = c("Resultados", "Tiros")),
+               uiOutput("selector_prediccion"),
+               br(),
+               
+               div(
+                 style = "border: 1px dashed #0033a0; padding: 10px; background-color: #f0f8ff; border-radius: 5px;",
+                 selectInput("temporadas_prediccion", 
+                             HTML("Selecciona temporadas para entrenar el modelo:<br>
+                           <span style='font-size: 13px;'>Los datos de estas temporadas se usarán para hacer predicciones:</span>"),
+                             choices = c("2023","2022", "2021", "2020"),
+                             selected = c("2023", "2022"),
+                             multiple = TRUE),
+                 
+                 helpText(
+                   tags$span(
+                     "Para eliminar una temporada seleccionada, haz clic en ella y pulsa la tecla delete o suprimir de tu teclado.",
+                     style = "font-size: 13px; color: #0033a0;"
+                   )
+                 )
+               ),
+               
+               br(),
+               
+               
+               div(
+                 style = "border: 1px solid #28a745; padding: 10px; background-color: #f8fff8; border-radius: 5px;",
+                 h5("Configuración de Predicción", style = "color: #28a745; font-weight: bold;"),
+                 
+               
+                 
+                 selectInput("metodo_prediccion",
+                             "Método de predicción:",
+                             choices = c("Regresión Lineal" = "lm"),
+                             selected = "lm")
+               ),
+               
+               br(),
+               helpText(
+                 tags$span(
+                   "¿Algo que no entiendas?",
+                   style = "color: #0033a0; text-align: center; display: block;"
+                 )
+               ),
+               
+               actionButton("go_glosario_pred", "Ve al glosario", 
+                            style = "color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px; display: block; margin: 0 auto;"),
+               
+               br(),
+               
+               tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
+             ),
+             
+             mainPanel(
+               helpText(
+                 tags$span(
+                   "🔮 Predicciones basadas en datos históricos: Descárgalo como PNG, muévete por el gráfico, haz zoom o vuelve al zoom original",
+                   style = "color: green; text-align: right; display: block;"
+                 )
+               ),
+               plotlyOutput("grafico_prediccion", height = "450px"),
+               br(),
+               
+              
+               
+               br(),
+               uiOutput("detalle_prediccion"),
+               br()
+             )
+           )
   ),
   
   tabPanel("Glosario",
@@ -267,7 +338,7 @@ server <- function(input, output, session) {
                                "Goles con cada parte del cuerpo" = "GolesAFavor",
                                "Distribución goles por minuto" = "GolesAFavor",
                                "Distancia de los Goles" = "GolesAFavor",
-                               "Resultados" # Valor por defecto
+                               "Resultados" 
     )
     
     datosResultados <- {
@@ -639,6 +710,189 @@ server <- function(input, output, session) {
       
       "</div>"
     ))
+  })
+  
+  output$selector_prediccion <- renderUI({
+    opciones <- switch(input$tipo_prediccion,
+                       "Resultados" = c("Predicción de Resultados según Posesión",
+                                        "Predicción de Goles por xG"
+                                        ),
+                       
+                       "Tiros" = c("Predicción de Goles por Disparos"
+                                   ))
+    
+    selectInput("prediccion_seleccionada", "Selecciona una predicción:", choices = opciones)
+  })
+  
+  output$grafico_prediccion <- renderPlotly({
+    req(input$prediccion_seleccionada, input$temporadas_prediccion)
+    
+    # Determinar el sufijo de categoría
+    sufijo_categoria <- switch(input$prediccion_seleccionada,
+                               "Predicción de Resultados según Posesión" = "Resultados",
+                               "Predicción de Goles por xG" = "Resultados", 
+                               "Predicción de Rendimiento Casa vs Fuera" = "Resultados",
+                               "Predicción de Goles según Posesión" = "Resultados",
+                               "Predicción de Goles por Disparos" = "Tiros",
+                               "Predicción de xG vs Disparos" = "Tiros",
+                               "Predicción de Efectividad de Tiro" = "Tiros",
+                               "Predicción de Goles Concedidos" = "TirosEnContra",
+                               "Predicción de xG Concedido" = "TirosEnContra",
+                               "Predicción de Disparos Recibidos" = "TirosEnContra",
+                               "Predicción de Goles por Jugador" = "TopGoleadores",
+                               "Predicción de xG Individual" = "TopGoleadores",
+                               "Predicción de Efectividad por Edad" = "TopGoleadores",
+                               "Predicción de Rendimiento Futuro" = "TopGoleadores",
+                               "Predicción de Goles por Ubicación" = "GolesAFavor",
+                               "Predicción de Goles por Minuto" = "GolesAFavor",
+                               "Predicción de Goles por Distancia" = "GolesAFavor",
+                               "Predicción de Métodos de Gol" = "GolesAFavor",
+                               "Resultados" 
+    )
+    
+    # Combinar datos de todas las temporadas seleccionadas
+    datos_combinados <- {
+      lista_temporadas <- input$temporadas_prediccion
+      
+      datos_totales <- purrr::map_dfr(lista_temporadas, function(anio) {
+        nombre_dataset <- paste0("datosCadiz", sufijo_categoria, anio)
+        
+        if (exists(nombre_dataset)) {
+          datos <- get(nombre_dataset)
+          datos$Temporada <- anio
+          
+          # Conversión de tipos
+          if ("Asistencia" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(Asistencia = as.numeric(Asistencia))
+          }
+          if ("GF" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(GF = as.numeric(GF))
+          }
+          if ("GC" %in% colnames(datos)) {
+            datos <- datos %>% dplyr::mutate(GC = as.numeric(GC))
+          }
+          
+          return(datos)
+        } else {
+          showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
+          return(NULL)
+        }
+      })
+      
+      if (sufijo_categoria == "TopGoleadores") {
+        if ("Goles" %in% colnames(datos_totales)) {
+          datos_totales <- datos_totales %>%
+            arrange(desc(Goles)) %>%
+            head(20)  # Más datos para mejor predicción
+        } else {
+          datos_totales <- head(datos_totales, 15)
+        }
+      }
+      
+      if (nrow(datos_totales) == 0) {
+        showNotification("No hay datos disponibles para la predicción seleccionada", type = "warning")
+        return(NULL)
+      }
+      
+      datos_totales
+    }
+    
+    # Crear gráficos de predicción
+    gg <- switch(input$prediccion_seleccionada,
+                 
+                 "Predicción de Resultados según Posesión" = {
+                   modelo <- switch(input$metodo_prediccion,
+                                    "lm" = lm(GF ~ Posesión, data = datos_combinados),
+                                    "poly" = lm(GF ~ poly(Posesión, 2), data = datos_combinados),
+                                    "glm" = glm(GF ~ Posesión, data = datos_combinados, family = poisson))
+                   
+                   pred_data <- data.frame(Posesión = seq(min(datos_combinados$Posesión, na.rm = TRUE), 
+                                                          max(datos_combinados$Posesión, na.rm = TRUE), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_combinados, aes(x = Posesión, y = GF)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Posesión, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Predicción de Goles según Posesión", 
+                          x = "Posesión (%)", y = "Goles Predichos") +
+                     mi_tema_cadiz()
+                 },
+                 
+                 "Predicción de Goles por xG" = {
+                   modelo <- switch(input$metodo_prediccion,
+                                    "lm" = lm(GF ~ xG, data = datos_combinados)
+                                    )
+                   
+                   pred_data <- data.frame(xG = seq(min(datos_combinados$xG, na.rm = TRUE), 
+                                                    max(datos_combinados$xG, na.rm = TRUE), 
+                                                    length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_combinados, aes(x = xG, y = GF)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = xG, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red", alpha = 0.5) +
+                     labs(title = "Predicción de Goles por xG", 
+                          x = "xG (Goles Esperados)", y = "Goles Predichos") +
+                     mi_tema_cadiz()
+                 },
+                 
+                 "Predicción de Goles por Disparos" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
+                   
+                   modelo <- switch(input$metodo_prediccion,
+                                    "lm" = lm(GF ~ Disparos, data = datos_filtrados),
+                                    "poly" = lm(GF ~ poly(Disparos, 2), data = datos_filtrados),
+                                    "glm" = glm(GF ~ Disparos, data = datos_filtrados, family = poisson))
+                   
+                   pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos), 
+                                                          max(datos_filtrados$Disparos), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Disparos, y = GF)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     scale_x_continuous(limits = c(0, max(pred_data$Disparos)), breaks = seq(0, max(pred_data$Disparos), by = 5)) +
+                     labs(title = "Predicción de Goles por Disparos", 
+                          x = "Disparos", y = "Goles Predichos") +
+                     mi_tema_cadiz()
+                 }
+                 
+    )
+    
+    ggplotly(gg) %>%
+      config(
+        displayModeBar = TRUE,
+        displaylogo = FALSE,
+        modeBarButtonsToRemove = list(
+          "zoom2d","select2d", "lasso2d", 
+          "autoScale2d", "hoverCompareCartesian", "hoverClosestCartesian"
+        ),
+        modeBarButtonsToAdd = list("toImage")
+      )
+  })
+  
+  
+  output$detalle_prediccion <- renderUI({
+    req(input$prediccion_seleccionada)
+    
+    div(
+      style = "border: 1px solid #6c757d; padding: 15px; background-color: #f8f9fa; border-radius: 5px;",
+      h4("Interpretación de la Predicción", style = "color: #495057; font-weight: bold;"),
+      
+      switch(input$prediccion_seleccionada,
+             "Predicción de Resultados según Posesión" = p("Este modelo predice los goles basándose en el porcentaje de posesión. Los puntos amarillos muestran la tendencia predicha, mientras que los puntos de colores representan los datos reales de cada temporada."),
+             "Predicción de Goles por xG" = p("La línea amarilla muestra la relación predicha entre xG y goles reales. La línea roja discontinua representa la relación perfecta (1:1). Las desviaciones indican sobre/sub-rendimiento."),
+             "Predicción de Goles por Disparos" = p("Este modelo estima cuántos goles se pueden esperar según el número de disparos realizados, basándose en patrones históricos."),
+             p("Predicción basada en datos históricos del Cádiz CF.")
+      )
+    )
   })
   
 }
