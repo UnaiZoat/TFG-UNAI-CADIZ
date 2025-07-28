@@ -50,7 +50,9 @@ ui <- navbarPage(
                "<div style='background-color:#f3f3f3; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:800px; margin:auto;'>",
                
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
-               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada, incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'</p>",
+               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada,
+               incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br>  Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
+               e incluso combinarlas para apreciar la evolución del equipo</p>",
                
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué es el Big Data?</h5>",
                "<p style='text-align:justify; font-size:15px;'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
@@ -139,12 +141,16 @@ ui <- navbarPage(
            )
   ),
   
+  tabPanel("Predicción",
+  
+  ),
+  
   tabPanel("Glosario",
            fluidPage(
              titlePanel("📚 Glosario de Términos - Análisis de Datos en Fútbol"),
              br(),
              
-             # Métricas de Rendimiento
+             
              HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
              h4("📈 Métricas de Rendimiento"),
              tags$ul(
@@ -158,7 +164,7 @@ ui <- navbarPage(
              ),
              HTML("</div><br>"),
              
-             # Técnicas de Análisis
+            
              HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
              h4("📊 Técnicas y Conceptos de Análisis"),
              tags$ul(
@@ -169,7 +175,7 @@ ui <- navbarPage(
              ),
              HTML("</div><br>"),
              
-             # Big Data Deportiva
+            
              HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
              h4("🧠 Conceptos de Big Data Deportiva"),
              tags$ul(
@@ -180,7 +186,7 @@ ui <- navbarPage(
              ),
              HTML("</div><br>"),
              
-             # Términos del Juego
+            
              HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
              h4("⚽️ Términos del Juego Relacionados con Datos"),
              tags$ul(
@@ -189,7 +195,7 @@ ui <- navbarPage(
                ),
              HTML("</div><br><br>"),
              
-             # Imagen del escudo
+            
              tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
            )
   )
