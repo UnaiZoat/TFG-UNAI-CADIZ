@@ -388,6 +388,36 @@ server <- function(input, output, session) {
         }
       }
       
+      if (sufijo_categoria == "Resultados"){
+        datos_combinados <- datos_combinados %>%
+          mutate(Resultado = case_when(
+            Resultado == "W" ~ "Victoria",
+            Resultado == "D" ~ "Empate",
+            Resultado == "L" ~ "Derrota",
+            TRUE ~ Resultado
+          ))
+      }
+      
+      if (sufijo_categoria == "GolesAFavor") {
+        datos_combinados <- datos_combinados %>%
+          mutate(
+            Local.Visitante = case_when(
+              Local.Visitante == "Away" ~ "Visitante",
+              Local.Visitante == "Home" ~ "Local",
+              TRUE ~ Local.Visitante
+            )
+          ) %>%
+          mutate(
+            Body.Part = case_when(
+              Body.Part == "Body.Part" ~ "Parte del cuerpo",
+              Body.Part == "Head" ~ "Cabeza",
+              Body.Part == "Left Foot" ~ "Pie Izquierdo",
+              Body.Part == "Right Foot" ~ "Pie Derecho",
+              TRUE ~ Body.Part
+            )
+          )
+      }
+      
       if (nrow(datos_combinados) == 0) {
         showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
         return(NULL)
@@ -531,7 +561,12 @@ server <- function(input, output, session) {
                    aes(x = Body.Part, fill = Body.Part)
                  ) +
                    geom_bar() +
-                   labs(title = "Goles con cada parte del cuerpo", x = "Parte del cuerpo", y = "Goles") +
+                   labs(
+                     title = "Goles con cada parte del cuerpo",
+                     x = "Parte del cuerpo",
+                     y = "Goles",
+                     fill = "Parte del cuerpo"  
+                   ) +
                    mi_tema_cadiz(),
                  
                  "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
