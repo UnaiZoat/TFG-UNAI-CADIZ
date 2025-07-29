@@ -189,7 +189,7 @@ ui <- navbarPage(
                  )
                ),
                
-               actionButton("go_glosario_pred", "Ve al glosario", 
+               actionButton("go_glosario", "Ve al glosario", 
                             style = "color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px; display: block; margin: 0 auto;"),
                
                br(),
@@ -264,6 +264,14 @@ ui <- navbarPage(
                tags$li(strong("Disparo a Puerta:"), " Tiro que va dentro de los tres palos y que necesita intervención del portero o acaba en gol."),
                tags$li(strong("Zona de peligro (Danger Zone):"), " Área cercana al área pequeña desde donde los tiros tienen mayor probabilidad de gol."),
                ),
+             HTML("</div><br><br>"),
+             
+             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
+             h4("📈Predicción"),
+             tags$ul(
+               tags$li(strong("Regresión lineal:"), " Es como trazar una línea recta que intenta predecir una cosa a partir de otra. Por ejemplo: si cuanto más dispara un jugador, más goles marca, la regresión lineal muestra esa relación y permite estimar cuántos goles marcará si dispara X veces."),
+               tags$li(strong("Modelo predictivo:"),  " Usa datos del pasado para anticipar lo que podría pasar en el futuro. Por ejemplo, predecir cuántos goles marcará el equipo según su rendimiento anterior."),
+             ),
              HTML("</div><br><br>"),
              
             
