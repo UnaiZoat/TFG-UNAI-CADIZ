@@ -171,14 +171,11 @@ ui <- navbarPage(
                
                div(
                  style = "border: 1px solid #28a745; padding: 10px; background-color: #f8fff8; border-radius: 5px;",
-                 h5("Configuración de Predicción", style = "color: #28a745; font-weight: bold;"),
+                 h5("Información de Predicción", style = "color: #28a745; font-weight: bold;"),
                  
-               
-                 
-                 selectInput("metodo_prediccion",
-                             "Método de predicción:",
-                             choices = c("Regresión Lineal" = "lm"),
-                             selected = "lm")
+                 tags$p("Método utilizado: ", 
+                        tags$strong("Regresión Lineal"), 
+                        style = "margin-top: 5px; color: #155724;")
                ),
                
                br(),
@@ -796,10 +793,7 @@ server <- function(input, output, session) {
     gg <- switch(input$prediccion_seleccionada,
                  
                  "Predicción de Resultados según Posesión" = {
-                   modelo <- switch(input$metodo_prediccion,
-                                    "lm" = lm(GF ~ Posesión, data = datos_combinados),
-                                    "poly" = lm(GF ~ poly(Posesión, 2), data = datos_combinados),
-                                    "glm" = glm(GF ~ Posesión, data = datos_combinados, family = poisson))
+                   modelo <- lm(GF ~ Posesión, data = datos_combinados)
                    
                    pred_data <- data.frame(Posesión = seq(min(datos_combinados$Posesión, na.rm = TRUE), 
                                                           max(datos_combinados$Posesión, na.rm = TRUE), 
@@ -816,9 +810,7 @@ server <- function(input, output, session) {
                  },
                  
                  "Predicción de Goles por xG" = {
-                   modelo <- switch(input$metodo_prediccion,
-                                    "lm" = lm(GF ~ xG, data = datos_combinados)
-                                    )
+                   modelo <- lm(GF ~ xG, data = datos_combinados)
                    
                    pred_data <- data.frame(xG = seq(min(datos_combinados$xG, na.rm = TRUE), 
                                                     max(datos_combinados$xG, na.rm = TRUE), 
@@ -839,10 +831,7 @@ server <- function(input, output, session) {
                    datos_filtrados <- datos_combinados %>%
                      filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
                    
-                   modelo <- switch(input$metodo_prediccion,
-                                    "lm" = lm(GF ~ Disparos, data = datos_filtrados),
-                                    "poly" = lm(GF ~ poly(Disparos, 2), data = datos_filtrados),
-                                    "glm" = glm(GF ~ Disparos, data = datos_filtrados, family = poisson))
+                   modelo <- lm(GF ~ Disparos, data = datos_filtrados)
                    
                    pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos), 
                                                           max(datos_filtrados$Disparos), 
@@ -864,10 +853,7 @@ server <- function(input, output, session) {
                      filter(!is.na(Disparos), !is.na(GF)) %>%
                      filter(Disparos <= quantile(Disparos, 0.95))  
                    
-                   modelo <- switch(input$metodo_prediccion,
-                                    "lm" = lm(GF ~ Disparos, data = datos_filtrados),
-                                    "poly" = lm(GC ~ poly(Disparos, 2), data = datos_filtrados),
-                                    "glm" = glm(GC ~ Disparos, data = datos_filtrados, family = poisson))
+                   modelo <- lm(GF ~ Disparos, data = datos_filtrados)
                    
                    pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos), 
                                                           max(datos_filtrados$Disparos), 
