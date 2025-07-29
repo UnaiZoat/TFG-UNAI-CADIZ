@@ -145,7 +145,7 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                selectInput("tipo_prediccion", "Selecciona el elemento a predecir:",
-                           choices = c("Resultados", "Tiros")),
+                           choices = c("Resultados", "Tiros", "Tiros en Contra")),
                uiOutput("selector_prediccion"),
                br(),
                
@@ -424,8 +424,8 @@ server <- function(input, output, session) {
                  "Relación entre Disparos y Goles" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
-                   scale_x_continuous(limits = c(0, 25)) +  # Ajusta a tu rango real
-                   scale_y_continuous(limits = c(0, 10)) +  # Idem para GF
+                   scale_x_continuous(limits = c(0, 25)) +  
+                   scale_y_continuous(limits = c(0, 10)) +  
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
                    mi_tema_cadiz(),
                  
@@ -719,7 +719,8 @@ server <- function(input, output, session) {
                                         ),
                        
                        "Tiros" = c("Predicción de Goles por Disparos"
-                                   ))
+                                   ),
+                       "Tiros en Contra" = c("Predicción de Goles Encajados según Tiros Recibidos"))
     
     selectInput("prediccion_seleccionada", "Selecciona una predicción:", choices = opciones)
   })
@@ -727,30 +728,16 @@ server <- function(input, output, session) {
   output$grafico_prediccion <- renderPlotly({
     req(input$prediccion_seleccionada, input$temporadas_prediccion)
     
-    # Determinar el sufijo de categoría
+    
     sufijo_categoria <- switch(input$prediccion_seleccionada,
                                "Predicción de Resultados según Posesión" = "Resultados",
                                "Predicción de Goles por xG" = "Resultados", 
-                               "Predicción de Rendimiento Casa vs Fuera" = "Resultados",
-                               "Predicción de Goles según Posesión" = "Resultados",
                                "Predicción de Goles por Disparos" = "Tiros",
-                               "Predicción de xG vs Disparos" = "Tiros",
-                               "Predicción de Efectividad de Tiro" = "Tiros",
-                               "Predicción de Goles Concedidos" = "TirosEnContra",
-                               "Predicción de xG Concedido" = "TirosEnContra",
-                               "Predicción de Disparos Recibidos" = "TirosEnContra",
-                               "Predicción de Goles por Jugador" = "TopGoleadores",
-                               "Predicción de xG Individual" = "TopGoleadores",
-                               "Predicción de Efectividad por Edad" = "TopGoleadores",
-                               "Predicción de Rendimiento Futuro" = "TopGoleadores",
-                               "Predicción de Goles por Ubicación" = "GolesAFavor",
-                               "Predicción de Goles por Minuto" = "GolesAFavor",
-                               "Predicción de Goles por Distancia" = "GolesAFavor",
-                               "Predicción de Métodos de Gol" = "GolesAFavor",
-                               "Resultados" 
+                               "Predicción de Goles Encajados según Tiros Recibidos" = "TirosEnContra"
+                               
     )
     
-    # Combinar datos de todas las temporadas seleccionadas
+    
     datos_combinados <- {
       lista_temporadas <- input$temporadas_prediccion
       
@@ -761,7 +748,7 @@ server <- function(input, output, session) {
           datos <- get(nombre_dataset)
           datos$Temporada <- anio
           
-          # Conversión de tipos
+          
           if ("Asistencia" %in% colnames(datos)) {
             datos <- datos %>% dplyr::mutate(Asistencia = as.numeric(Asistencia))
           }
@@ -783,7 +770,7 @@ server <- function(input, output, session) {
         if ("Goles" %in% colnames(datos_totales)) {
           datos_totales <- datos_totales %>%
             arrange(desc(Goles)) %>%
-            head(20)  # Más datos para mejor predicción
+            head(20)  
         } else {
           datos_totales <- head(datos_totales, 15)
         }
@@ -797,7 +784,7 @@ server <- function(input, output, session) {
       datos_totales
     }
     
-    # Crear gráficos de predicción
+    
     gg <- switch(input$prediccion_seleccionada,
                  
                  "Predicción de Resultados según Posesión" = {
@@ -862,6 +849,31 @@ server <- function(input, output, session) {
                      labs(title = "Predicción de Goles por Disparos", 
                           x = "Disparos", y = "Goles Predichos") +
                      mi_tema_cadiz()
+                 },
+                 
+                 "Predicción de Goles Encajados según Tiros Recibidos" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Disparos), !is.na(GF)) %>%
+                     filter(Disparos <= quantile(Disparos, 0.95))  
+                   
+                   modelo <- switch(input$metodo_prediccion,
+                                    "lm" = lm(GF ~ Disparos, data = datos_filtrados),
+                                    "poly" = lm(GC ~ poly(Disparos, 2), data = datos_filtrados),
+                                    "glm" = glm(GC ~ Disparos, data = datos_filtrados, family = poisson))
+                   
+                   pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos), 
+                                                          max(datos_filtrados$Disparos), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Disparos, y = GF)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     scale_x_continuous(limits = c(0, max(pred_data$Disparos)), breaks = seq(0, max(pred_data$Disparos), by = 5)) +
+                     labs(title = "Predicción de Goles Encajados según Tiros Recibidos", 
+                          x = "Tiros Recibidos", y = "Goles Encajados Predichos") +
+                     mi_tema_cadiz()
                  }
                  
     )
@@ -890,7 +902,9 @@ server <- function(input, output, session) {
              "Predicción de Resultados según Posesión" = p("Este modelo predice los goles basándose en el porcentaje de posesión. Los puntos amarillos muestran la tendencia predicha, mientras que los puntos de colores representan los datos reales de cada temporada."),
              "Predicción de Goles por xG" = p("La línea amarilla muestra la relación predicha entre xG y goles reales. La línea roja discontinua representa la relación perfecta (1:1). Las desviaciones indican sobre/sub-rendimiento."),
              "Predicción de Goles por Disparos" = p("Este modelo estima cuántos goles se pueden esperar según el número de disparos realizados, basándose en patrones históricos."),
-             p("Predicción basada en datos históricos del Cádiz CF.")
+             "Predicción de Goles Encajados según Tiros Recibidos" = p("Este modelo predice los goles encajados a partir de los tiros que recibe el equipo.Una línea ascendente indica que más disparos recibidos tienden a traducirse en más goles en contra."),
+             
+             
       )
     )
   })
