@@ -1,0 +1,45 @@
+"Fecha","Hora","Competición","Jornada","Día","Local.Visitante","Resultado","GF","GC","Rival","Posesión","Asistencia","Capitán","Formación","Formación Rival","Árbitro","Informe","Notas"
+"2024-08-16","21:30","La Liga 2","Matchweek 1","Fri","Home","L",0,4,"Zaragoza",61,"16,970","Álex Fernández","4-4-2","4-4-2","Dámaso Arcediano","Match Report",NA
+"2024-08-24","19:00","La Liga 2","Matchweek 2","Sat","Away","D",1,1,"Levante",56,"14,228","David Gil","4-3-3","4-2-3-1","Rubén Ávalos","Match Report",NA
+"2024-08-31","19:00","La Liga 2","Matchweek 3","Sat","Home","D",2,2,"Tenerife",68,"16,518","David Gil","4-1-4-1","4-4-2","Salvador Lax","Match Report",NA
+"2024-09-09","21:00","La Liga 2","Matchweek 4","Mon","Away","W",3,1,"Castellón",31,"13,218","David Gil","4-1-4-1","3-5-2","Miguel Sesma","Match Report",NA
+"2024-09-15","18:30","La Liga 2","Matchweek 5","Sun","Home","D",0,0,"Racing Ferrol",48,"16,868","David Gil","4-3-3","4-4-2","Jon González","Match Report",NA
+"2024-09-22","16:15","La Liga 2","Matchweek 6","Sun","Away","W",2,1,"Cartagena",53,"7,771","David Gil","4-3-3","4-3-3","Andrés Fuentes","Match Report",NA
+"2024-09-28","16:15","La Liga 2","Matchweek 7","Sat","Home","L",1,2,"Eldense",55,"15,315","David Gil","4-3-3","4-4-2","Oliver De La Fuente","Match Report",NA
+"2024-10-04","20:30","La Liga 2","Matchweek 8","Fri","Away","L",1,3,"Huesca",65,"5,949","Álex Fernández","4-3-3","5-4-1","Manuel Pérez","Match Report",NA
+"2024-10-12","18:30","La Liga 2","Matchweek 9","Sat","Home","D",2,2,"Málaga",41,"11,507","David Gil","4-2-3-1","4-2-3-1","Álvaro Moreno","Match Report",NA
+"2024-10-20","14:00","La Liga 2","Matchweek 10","Sun","Home","L",0,1,"Racing Sant",44,"15,545","David Gil","4-4-2","4-2-3-1","Dámaso Arcediano","Match Report",NA
+"2024-10-23","19:00","La Liga 2","Matchweek 11","Wed","Away","L",0,1,"Eibar",51,"5,100","Iván Alejo","4-4-2","4-2-3-1","Salvador Lax","Match Report",NA
+"2024-10-26","16:15","La Liga 2","Matchweek 12","Sat","Home","W",2,0,"Oviedo",47,"14","David Gil","4-4-2","4-4-2","Iosu Galech","Match Report",NA
+"2024-10-29","21:00","Copa del Rey","First round","Tue","Away","W",3,0,"Real Jaén",55,"7,469","Fali","4-2-3-1","4-4-2","Saúl Ais","Match Report",NA
+"2024-11-02","16:15","La Liga 2","Matchweek 13","Sat","Away","L",0,2,"Sporting Gijón",60,"22,250","David Gil","4-4-2","4-3-3","Eder Mallo","Match Report",NA
+"2024-11-09","16:15","La Liga 2","Matchweek 14","Sat","Away","D",2,2,"CD Mirandés",62,"3,241","David Gil","4-3-3","5-3-2","Carlos Muñiz Muñoz","Match Report",NA
+"2024-11-17","16:15","La Liga 2","Matchweek 15","Sun","Home","W",2,0,"Córdoba",43,"16,006","David Gil","4-4-2","4-2-3-1","Andrés Fuentes","Match Report",NA
+"2024-11-23","16:15","La Liga 2","Matchweek 16","Sat","Away","D",0,0,"Granada",45,"17,704","David Gil","4-4-2","4-4-2","Dámaso Arcediano","Match Report",NA
+"2024-11-30","18:30","La Liga 2","Matchweek 17","Sat","Home","L",2,4,"La Coruña",53,"14,972","David Gil","4-4-2","4-4-2","Salvador Lax","Match Report",NA
+"2024-12-04","20:00","Copa del Rey","Second round","Wed","Home","L",0,1,"Eldense",55,"7,700","Álex Fernández","4-3-1-2","4-4-2","Álvaro Moreno","Match Report",NA
+"2024-12-07","14:00","La Liga 2","Matchweek 18","Sat","Away","L",1,2,"Elche",21,"15,019","Álex Fernández","4-4-2","4-3-3","Miguel Sesma","Match Report",NA
+"2024-12-14","16:15","La Liga 2","Matchweek 19","Sat","Home","W",1,0,"Albacete",50,"12,847","Álex Fernández","4-2-3-1","4-4-1-1","Eder Mallo","Match Report",NA
+"2024-12-19","19:00","La Liga 2","Matchweek 20","Thu","Home","D",1,1,"Burgos",52,"13,200","David Gil","4-4-2","4-4-2","Carlos Muñiz Muñoz","Match Report",NA
+"2024-12-22","18:30","La Liga 2","Matchweek 21","Sun","Away","D",1,1,"Almería",36,"13,548","Álex Fernández","4-2-3-1","4-2-3-1","Germán Cid Camacho","Match Report",NA
+"2025-01-12","16:15","La Liga 2","Matchweek 22","Sun","Home","D",0,0,"Levante",44,"15,096","Álex Fernández","4-4-2","4-2-3-1","Rubén Ávalos","Match Report",NA
+"2025-01-18","16:15","La Liga 2","Matchweek 23","Sat","Away","W",4,1,"Eldense",45,"4,045","David Gil","4-2-3-1","4-4-2","Manuel Pérez","Match Report",NA
+"2025-01-27","20:30","La Liga 2","Matchweek 24","Mon","Home","W",3,1,"CD Mirandés",36,"12,023","David Gil","4-4-2","3-5-2","Miguel Sesma","Match Report",NA
+"2025-02-02","18:30","La Liga 2","Matchweek 25","Sun","Away","D",0,0,"Zaragoza",37,"19,555","David Gil","4-4-2","3-5-2","Jon González","Match Report",NA
+"2025-02-09","18:30","La Liga 2","Matchweek 26","Sun","Home","W",5,2,"Cartagena",56,"15,612","Álex Fernández","4-2-3-1","4-2-3-1","Carlos Muñiz Muñoz","Match Report",NA
+"2025-02-15","18:30","La Liga 2","Matchweek 27","Sat","Away","W",3,2,"Racing Sant",32,"21,894","Álex Fernández","4-4-1-1","4-2-3-1","Álvaro Moreno","Match Report",NA
+"2025-02-23","21:00","La Liga 2","Matchweek 28","Sun","Home","D",0,0,"Castellón",45,"14,989","Álex Fernández","4-2-3-1","3-1-4-2","Rafael Sánchez","Match Report",NA
+"2025-03-02","18:30","La Liga 2","Matchweek 29","Sun","Away","L",0,3,"Albacete",50,"6,923","Álex Fernández","4-2-3-1","4-2-3-1","Andrés Fuentes","Match Report",NA
+"2025-03-09","16:15","La Liga 2","Matchweek 30","Sun","Away","W",2,0,"Málaga",48,"20,857","David Gil","4-4-2","4-2-3-1","Dámaso Arcediano","Match Report",NA
+"2025-03-16","18:30","La Liga 2","Matchweek 31","Sun","Home","W",1,0,"Granada",47,"14,450","David Gil","4-4-2","4-4-2","Eder Mallo","Match Report",NA
+"2025-03-23","17:30","La Liga 2","Matchweek 32","Sun","Away","L",1,2,"Tenerife",59,"12,133","David Gil","4-4-2","4-4-2","Miguel Sesma","Match Report",NA
+"2025-03-31","20:30","La Liga 2","Matchweek 33","Mon","Home","D",0,0,"Eibar",54,"13,817","David Gil","4-4-2","4-2-3-1","Salvador Lax","Match Report",NA
+"2025-04-06","21:00","La Liga 2","Matchweek 34","Sun","Away","L",0,1,"La Coruña",50,"19,867","David Gil","4-4-2","4-2-3-1","Rubén Ávalos","Match Report",NA
+"2025-04-12","18:30","La Liga 2","Matchweek 35","Sat","Home","L",0,1,"Elche",41,"14,153","Álex Fernández","4-2-3-1","4-2-3-1","Jon González","Match Report",NA
+"2025-04-19","21:00","La Liga 2","Matchweek 36","Sat","Away","D",2,2,"Burgos",57,"9,246","Álex Fernández","4-4-2","4-4-2","Iosu Galech","Match Report",NA
+"2025-04-25","20:30","La Liga 2","Matchweek 37","Fri","Home","W",1,0,"Sporting Gijón",40,"13,225","Álex Fernández","4-4-2","4-2-3-1","Rubén Ávalos","Match Report",NA
+"2025-05-02","20:30","La Liga 2","Matchweek 38","Fri","Away","L",2,4,"Córdoba",33,"16,891","Álex Fernández","4-4-2","4-3-3","Oliver De La Fuente","Match Report",NA
+"2025-05-09","20:30","La Liga 2","Matchweek 39","Fri","Home","W",2,1,"Almería",64,"13,148","Álex Fernández","4-4-2","4-2-3-1","Daniel Palencia","Match Report",NA
+"2025-05-18","14:00","La Liga 2","Matchweek 40","Sun","Away","L",0,1,"Racing Ferrol",55,"3,067","Álex Fernández","4-4-2","4-2-3-1","Andrés Fuentes","Match Report",NA
+"2025-05-25","18:30","La Liga 2","Matchweek 41","Sun","Home","W",4,0,"Huesca",45,"11,337","Álex Fernández","3-4-3","5-3-2","Sergiu Claudiu Mureşan","Match Report",NA
+"2025-06-01","18:30","La Liga 2","Matchweek 42","Sun","Away","L",1,2,"Oviedo",48,"29,418","Álex Fernández","3-4-1-2","4-2-3-1","Iosu Galech","Match Report",NA

@@ -3,7 +3,9 @@ if (!require("writexl")) install.packages("writexl")
 library(rvest)
 library(writexl)
 
-año <- 2023
+if (!exists("año")) {
+  año <- 2023  # valor por defecto solo si no se define antes
+}
 temporada <- paste0(año, "-", año + 1)
 url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/goallogs/c12/Cadiz-Goal-Logs-La-Liga")
 
