@@ -57,14 +57,14 @@ tryCatch({
   fila_encabezados <- which(df[,1] == "Date")[1]
   
   if (!is.na(fila_encabezados)) {
-   
+    
     colnames(df) <- as.character(df[fila_encabezados, ])
     
-   
+    
     df <- df[(fila_encabezados + 1):nrow(df), ]
   }
   
- 
+  
   df <- df[df[,1] != "", ]
   
   cat("Columnas originales encontradas:\n")

@@ -49,23 +49,23 @@ tryCatch({
   tables <- read_html(url) %>%
     html_table(header = TRUE)
   
-
+  
   if (length(tables) == 0) {
     stop("No se encontraron tablas en la página")
   }
   
   df <- tables[[2]]
   
- 
+  
   cat("Columnas originales encontradas:\n")
   print(colnames(df))
   cat("\n")
   
-
+  
   nombres_actuales <- colnames(df)
   nombres_nuevos <- nombres_actuales
   
-
+  
   for (i in seq_along(nombres_actuales)) {
     if (nombres_actuales[i] %in% names(cambio_nombres)) {
       nombres_nuevos[i] <- cambio_nombres[nombres_actuales[i]]
@@ -87,7 +87,7 @@ tryCatch({
     cat("\n")
   }
   
- 
+  
   nombre_archivo <- paste0("equiporesultados", año, ".csv")
   write.csv(df, nombre_archivo, row.names = FALSE)
   
