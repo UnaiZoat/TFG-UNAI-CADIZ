@@ -5,9 +5,8 @@ library(writexl)
 
 año <- 2023
 temporada <- paste0(año, "-", año + 1)
-url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/Cadiz-Stats#all_stats_standard")
+url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/matchlogs/c12/shooting/Cadiz-Match-Logs-La-Liga")
 
-# Diccionario de cambio de nombres
 cambio_nombres <- c(
   "Date" = "Fecha",
   "Time" = "Hora",
@@ -42,28 +41,37 @@ cambio_nombres <- c(
   "Dist(yds)" = "Distancia"
 )
 
-# Leer la página web
 tryCatch({
   tables <- read_html(url) %>%
-    html_table(header = TRUE)
+    html_table(header = FALSE)  
   
-  # Verificar que hay tablas
   if (length(tables) == 0) {
     stop("No se encontraron tablas en la página")
   }
   
-  df <- tables[[2]]
+  df <- tables[[1]]
   
-  # Mostrar las columnas originales para diagnóstico
+  
+  fila_encabezados <- which(df[,1] == "Date")[1]
+  
+  if (!is.na(fila_encabezados)) {
+   
+    colnames(df) <- as.character(df[fila_encabezados, ])
+    
+   
+    df <- df[(fila_encabezados + 1):nrow(df), ]
+  }
+  
+ 
+  df <- df[df[,1] != "", ]
+  
   cat("Columnas originales encontradas:\n")
   print(colnames(df))
   cat("\n")
   
-  # Cambiar solo los nombres de columnas que existen
   nombres_actuales <- colnames(df)
   nombres_nuevos <- nombres_actuales
   
-  # Cambiar nombres solo para las columnas que existen en ambos lugares
   for (i in seq_along(nombres_actuales)) {
     if (nombres_actuales[i] %in% names(cambio_nombres)) {
       nombres_nuevos[i] <- cambio_nombres[nombres_actuales[i]]
@@ -72,12 +80,10 @@ tryCatch({
   
   colnames(df) <- nombres_nuevos
   
-  # Mostrar las columnas después del cambio
   cat("Columnas después del cambio:\n")
   print(colnames(df))
   cat("\n")
   
-  # Mostrar columnas que no se encontraron
   columnas_no_encontradas <- names(cambio_nombres)[!names(cambio_nombres) %in% nombres_actuales]
   if (length(columnas_no_encontradas) > 0) {
     cat("Columnas del diccionario que no se encontraron en la tabla:\n")
@@ -85,8 +91,7 @@ tryCatch({
     cat("\n")
   }
   
-  # Guardar archivo
-  nombre_archivo <- paste0("cadizresultados", año, ".csv")
+  nombre_archivo <- paste0("equipotiros", año, ".csv")
   write.csv(df, nombre_archivo, row.names = FALSE)
   
   message(paste("✅ Archivo generado:", nombre_archivo))

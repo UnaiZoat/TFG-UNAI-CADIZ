@@ -52,7 +52,9 @@ ui <- navbarPage(
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
                "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada,
                incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br>  Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
-               e incluso combinarlas para apreciar la evolución del equipo</p>",
+               e incluso combinarlas para apreciar la evolución del equipo. También podras usar los datos de todas estas temporadas
+               para calcular el futuro esperado en la pestaña Predicción, recuerda que el fútbol es inesperado y no es una ciencia cierta, pero
+               gracias al Big Data podrás saber cuál es el futuro más posible.</p>",
                
                "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué es el Big Data?</h5>",
                "<p style='text-align:justify; font-size:15px;'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
@@ -173,8 +175,8 @@ ui <- navbarPage(
                  style = "border: 1px solid #28a745; padding: 10px; background-color: #f8fff8; border-radius: 5px;",
                  h5("Información de Predicción", style = "color: #28a745; font-weight: bold;"),
                  
-                 tags$p("Método utilizado: ", 
-                        tags$strong("Regresión Lineal"), 
+                 tags$p("Se ha utilizado el método de ", 
+                        tags$strong("Regresión Lineal."), 
                         style = "margin-top: 5px; color: #155724;")
                ),
                
@@ -267,7 +269,8 @@ ui <- navbarPage(
              h4("📈Predicción"),
              tags$ul(
                tags$li(strong("Regresión lineal:"), " Es como trazar una línea recta que intenta predecir una cosa a partir de otra. Por ejemplo: si cuanto más dispara un jugador, más goles marca, la regresión lineal muestra esa relación y permite estimar cuántos goles marcará si dispara X veces."),
-               tags$li(strong("Modelo predictivo:"),  " Usa datos del pasado para anticipar lo que podría pasar en el futuro. Por ejemplo, predecir cuántos goles marcará el equipo según su rendimiento anterior."),
+               tags$li(strong("Modelo predictivo:"), " Usa datos del pasado para anticipar lo que podría pasar en el futuro. Por ejemplo, predecir cuántos goles marcará el equipo según su rendimiento anterior."),
+               tags$li(strong("Entrenar el modelo:"), "Entrenamos el modelo eligiendo que datos tener en cuenta, cuántas mas temporadas elijamos más fiable será la predicción."),
              ),
              HTML("</div><br><br>"),
              
