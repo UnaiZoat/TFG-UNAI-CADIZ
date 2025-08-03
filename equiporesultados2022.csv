@@ -1,40 +1,46 @@
 "Fecha","Hora","Competición","Jornada","Día","Local.Visitante","Resultado","GF","GC","Rival","xG","xGA","Posesión","Asistencia","Capitán","Formación","Formación Rival","Árbitro","Informe","Notas"
-"2022-08-14","17:30","La Liga","Matchweek 1","Sun","Home","L",0,1,"Real Sociedad",0.2,1.7,41,"16,570","José Mari","4-4-2","4-1-2-1-2","Isidro Díaz de Mera","Match Report",NA
-"2022-08-20","17:30","La Liga","Matchweek 2","Sat","Away","L",0,2,"Osasuna",1,2.7,45,"18,587","Alfonso Espino","4-4-2","4-4-2","Antonio Matéu Lahoz","Match Report",NA
-"2022-08-29","20:00","La Liga","Matchweek 3","Mon","Home","L",0,4,"Athletic Club",0.4,2.4,38,"17,029","José Mari","4-4-2","4-2-3-1","Miguel Ángel Ortiz Arias","Match Report",NA
-"2022-09-02","21:00","La Liga","Matchweek 4","Fri","Away","L",0,3,"Celta Vigo",0.3,0.7,42,"14,510","Alfonso Espino","4-1-4-1","4-1-3-2","Juan Pulido","Match Report",NA
-"2022-09-10","18:30","La Liga","Matchweek 5","Sat","Home","L",0,4,"Barcelona",0.4,3.4,30,"19,530","Álex Fernández","4-2-3-1","4-3-3","Carlos del Cerro","Match Report",NA
-"2022-09-16","21:00","La Liga","Matchweek 6","Fri","Away","W",1,0,"Valladolid",0.3,1.5,43,"20,295","Álex Fernández","4-2-3-1","4-3-3","José Sánchez","Match Report",NA
-"2022-10-01","14:00","La Liga","Matchweek 7","Sat","Home","D",0,0,"Villarreal",0.7,1.6,40,"15,516","Alfonso Espino","4-4-2","4-4-2","Javier Villanueva","Match Report",NA
-"2022-10-09","16:15","La Liga","Matchweek 8","Sun","Home","D",2,2,"Espanyol",1.3,1.3,54,"16,572","Alfonso Espino","4-4-2","4-2-3-1","Alejandro Hernández","Match Report",NA
-"2022-10-15","14:00","La Liga","Matchweek 9","Sat","Away","D",1,1,"Girona",1.1,2.3,35,"9,927","Álex Fernández","4-4-2","5-3-2","Ricardo de Burgos","Match Report",NA
-"2022-10-19","19:00","La Liga","Matchweek 10","Wed","Home","D",0,0,"Betis",0.9,0.9,41,"18,505","Álex Fernández","4-4-2","4-2-3-1","Antonio Matéu Lahoz","Match Report",NA
-"2022-10-22","14:00","La Liga","Matchweek 11","Sat","Away","L",1,5,"Rayo Vallecano",0.2,3.7,38,"12,975","Álex Fernández","4-4-2","4-4-2","Alejandro Muñíz","Match Report",NA
-"2022-10-29","16:15","La Liga","Matchweek 12","Sat","Home","W",3,2,"Atlético Madrid",1.1,1.3,41,"18,183","Álex Fernández","4-4-2","3-5-2","José Sánchez","Match Report",NA
-"2022-11-05","14:00","La Liga","Matchweek 13","Sat","Away","D",0,0,"Getafe",1.4,0.6,47,"10,554","Álex Fernández","4-4-2","5-3-2","Alejandro Hernández","Match Report",NA
-"2022-11-10","21:30","La Liga","Matchweek 14","Thu","Away","L",1,2,"Real Madrid",0.9,2,34,"53,190","Álex Fernández","4-4-2","4-3-3","César Soto","Match Report",NA
-"2022-11-13","18:30","Copa del Rey","First round","Sun","Away","L",2,3,"Real Unión",NA,NA,60,"3,000","José Mari","4-4-2","4-3-3","Miguel Ángel Ortiz Arias","Match Report",NA
-"2022-12-30","19:15","La Liga","Matchweek 15","Fri","Home","D",1,1,"Almería",1.3,2.3,49,"17,345","Álex Fernández","4-4-2","4-1-4-1","Juan Martínez","Match Report",NA
-"2023-01-06","21:00","La Liga","Matchweek 16","Fri","Away","W",1,0,"Valencia",0.4,0.4,27,"39,003","Álex Fernández","4-2-3-1","4-3-3","Pablo González","Match Report",NA
-"2023-01-16","21:00","La Liga","Matchweek 17","Mon","Home","D",1,1,"Elche",1.6,0.6,50,"17,389","Álex Fernández","4-4-1-1","3-4-3","Carlos del Cerro","Match Report",NA
-"2023-01-21","21:00","La Liga","Matchweek 18","Sat","Away","L",0,1,"Sevilla",0.1,1.7,25,"37,400","Álex Fernández","4-4-2","3-4-3","Alejandro Hernández","Match Report",NA
-"2023-01-28","14:00","La Liga","Matchweek 19","Sat","Home","W",2,0,"Mallorca",1.9,0.4,43,"16,117","Álex Fernández","4-4-2","5-4-1","Ricardo de Burgos","Match Report",NA
-"2023-02-03","21:00","La Liga","Matchweek 20","Fri","Away","L",1,4,"Athletic Club",1.6,1.7,58,"42,916","Álex Fernández","4-1-4-1","4-1-4-1","Valentín Pizarro","Match Report",NA
-"2023-02-10","21:00","La Liga","Matchweek 21","Fri","Home","W",2,0,"Girona",0.7,0.2,43,"14,873","Alfonso Espino","4-4-2","4-4-2","Juan Pulido","Match Report",NA
-"2023-02-19","21:00","La Liga","Matchweek 22","Sun","Away","L",0,2,"Barcelona",1,2.2,36,"72,010","Álex Fernández","4-2-3-1","4-3-3","Pablo González","Match Report",NA
-"2023-02-25","16:15","La Liga","Matchweek 23","Sat","Home","W",1,0,"Rayo Vallecano",0.8,0.6,42,"16,703","Alfonso Espino","4-4-2","4-4-2","Alejandro Muñíz","Match Report",NA
-"2023-03-03","21:00","La Liga","Matchweek 24","Fri","Away","D",0,0,"Real Sociedad",0.6,1.2,29,"28,733","Álex Fernández","4-2-3-1","4-1-3-2","Antonio Matéu","Match Report",NA
-"2023-03-10","21:00","La Liga","Matchweek 25","Fri","Home","D",2,2,"Getafe",1.7,2.7,51,"18,414","Alfonso Espino","4-4-2","3-4-3","Alejandro Hernández","Match Report",NA
-"2023-03-18","14:00","La Liga","Matchweek 26","Sat","Away","D",1,1,"Almería",1.4,2.4,34,"12,183","Alfonso Espino","4-4-2","4-2-3-1","Carlos del Cerro","Match Report",NA
-"2023-04-01","18:30","La Liga","Matchweek 27","Sat","Home","L",0,2,"Sevilla",1.1,1.1,51,"19,181","Alfonso Espino","4-4-2","4-2-3-1","César Soto","Match Report",NA
-"2023-04-09","16:15","La Liga","Matchweek 28","Sun","Away","W",2,0,"Betis",2.9,1.2,53,"51,555","Alfonso Espino","4-4-2","4-2-3-1","Guillermo Cuadra","Match Report",NA
-"2023-04-15","21:00","La Liga","Matchweek 29","Sat","Home","L",0,2,"Real Madrid",0.7,3.5,31,"19,833","Alfonso Espino","4-4-2","4-3-3","Jesús Gil","Match Report",NA
-"2023-04-21","21:00","La Liga","Matchweek 30","Fri","Away","D",0,0,"Espanyol",1.4,1.3,44,"28,512","Alfonso Espino","4-4-2","5-3-2","Juan Martínez","Match Report",NA
-"2023-04-25","19:30","La Liga","Matchweek 31","Tue","Home","L",0,1,"Osasuna",1.4,1,56,"18,008","Alfonso Espino","4-4-2","4-1-4-1","Carlos del Cerro","Match Report",NA
-"2023-04-30","14:00","La Liga","Matchweek 32","Sun","Home","W",2,1,"Valencia",1.8,1.3,39,"18,650","Alfonso Espino","4-4-2","5-4-1","Ricardo de Burgos","Match Report",NA
-"2023-05-03","22:00","La Liga","Matchweek 33","Wed","Away","L",1,5,"Atlético Madrid",0,3,39,"42,023","Álex Fernández","4-1-4-1","5-3-2","César Soto","Match Report",NA
-"2023-05-12","21:00","La Liga","Matchweek 34","Fri","Away","L",0,1,"Mallorca",0.7,1.2,57,"15,377","Alfonso Espino","4-4-2","3-4-3","José Sánchez","Match Report",NA
-"2023-05-19","21:00","La Liga","Matchweek 35","Fri","Home","W",2,0,"Valladolid",2.2,0.7,47,"18,938","Alfonso Espino","4-2-3-1","3-5-2","Juan Martínez","Match Report",NA
-"2023-05-24","19:30","La Liga","Matchweek 36","Wed","Away","L",0,2,"Villarreal",1.7,2.4,36,"15,099","Alfonso Espino","4-4-2","4-2-3-1","Juan Pulido","Match Report",NA
-"2023-05-28","19:00","La Liga","Matchweek 37","Sun","Home","W",1,0,"Celta Vigo",1.7,0.6,49,"19,725","Alfonso Espino","4-4-2","4-3-3","Ricardo de Burgos","Match Report",NA
-"2023-06-04","21:00","La Liga","Matchweek 38","Sun","Away","D",1,1,"Elche",2.5,1.6,34,"16,585","Alfonso Espino","4-4-2","4-1-4-1","Jesús Gil","Match Report",NA
+"2022-08-15","17:30","La Liga","Matchweek 1","Mon","Home","D",0,0,"Mallorca",1.6,0.4,64,"39,747","Iker Muniain","4-3-3","5-4-1","Javier Villanueva","Match Report",""
+"2022-08-21","17:30","La Liga","Matchweek 2","Sun","Home","W",1,0,"Valencia",1,0.7,38,"43,333","Iker Muniain","4-2-3-1","4-3-3","César Soto","Match Report",""
+"2022-08-29","20:00","La Liga","Matchweek 3","Mon","Away","W",4,0,"Cádiz",2.4,0.4,62,"17,029","Iker Muniain","4-2-3-1","4-4-2","Miguel Ángel Ortiz Arias","Match Report",""
+"2022-09-04","16:15","La Liga","Matchweek 4","Sun","Home","L",0,1,"Espanyol",1.2,0.6,66,"41,574","Iker Muniain","4-2-3-1","4-3-3","Juan Martínez","Match Report",""
+"2022-09-11","16:15","La Liga","Matchweek 5","Sun","Away","W",4,1,"Elche",2.7,0.9,53,"24,176","Iker Muniain","4-2-3-1","4-2-3-1","Mario Melero","Match Report",""
+"2022-09-17","21:00","La Liga","Matchweek 6","Sat","Home","W",3,2,"Rayo Vallecano",1.9,0.7,39,"43,484","Iker Muniain","4-2-3-1","4-2-3-1","Antonio Matéu Lahoz","Match Report",""
+"2022-09-30","21:00","La Liga","Matchweek 7","Fri","Home","W",4,0,"Almería",2.1,0.7,58,"42,110","Iker Muniain","4-2-3-1","5-3-2","Juan Pulido","Match Report",""
+"2022-10-08","18:30","La Liga","Matchweek 8","Sat","Away","D",1,1,"Sevilla",1.7,1,55,"36,502","Iker Muniain","4-2-3-1","4-2-3-1","Jesús Gil","Match Report",""
+"2022-10-15","21:00","La Liga","Matchweek 9","Sat","Home","L",0,1,"Atlético Madrid",1.2,0.3,60,"48,391","Iker Muniain","4-2-3-1","4-4-2","Jorge Figueroa","Match Report",""
+"2022-10-18","20:00","La Liga","Matchweek 10","Tue","Away","D",2,2,"Getafe",1,0.8,59,"11,395","Iker Muniain","4-2-3-1","5-3-2","José Luis Munuera","Match Report",""
+"2022-10-23","21:00","La Liga","Matchweek 11","Sun","Away","L",0,4,"Barcelona",0.5,1.4,35,"84,817","Óscar de Marcos","4-2-3-1","4-3-3","Juan Martínez","Match Report",""
+"2022-10-30","18:30","La Liga","Matchweek 12","Sun","Home","W",1,0,"Villarreal",1.7,0.3,43,"46,081","Óscar de Marcos","4-2-3-1","4-3-3","Miguel Ángel Ortiz Arias","Match Report",""
+"2022-11-04","21:00","La Liga","Matchweek 13","Fri","Away","L",1,2,"Girona",0.7,1,58,"11,420","Iñaki Williams","4-2-3-1","4-1-4-1","Valentín Pizarro","Match Report",""
+"2022-11-08","20:00","La Liga","Matchweek 14","Tue","Home","W",3,0,"Valladolid",2.1,0.5,43,"40,072","Óscar de Marcos","4-1-4-1","4-4-2","Isidro Díaz de Mera","Match Report",""
+"2022-11-13","21:00","Copa del Rey","First round","Sun","Away","W",2,0,"UD Alzira",NA,NA,61,"4,500","Raúl García","4-2-3-1","4-2-3-1","Guillermo Cuadra","Match Report",""
+"2022-12-20","21:00","Copa del Rey","Second round","Tue","Away","W",1,0,"Sestao",NA,NA,58,"5,000","Óscar de Marcos","4-2-3-1","4-4-2","Javier Villanueva","Match Report",""
+"2022-12-29","19:15","La Liga","Matchweek 15","Thu","Away","D",0,0,"Betis",0.4,0.5,47,"53,565","Óscar de Marcos","4-2-3-1","4-2-3-1","Alejandro Hernández","Match Report",""
+"2023-01-05","21:00","Copa del Rey","Round of 32","Thu","Away","W",6,1,"Eldense",NA,NA,59,"5,700","Iker Muniain","4-2-3-1","4-4-2","Alberola Rojas","Match Report",""
+"2023-01-09","21:00","La Liga","Matchweek 16","Mon","Home","D",0,0,"Osasuna",1,0.4,59,"39,216","Óscar de Marcos","4-2-3-1","4-3-3","Mario Melero","Match Report",""
+"2023-01-14","21:00","La Liga","Matchweek 17","Sat","Away","L",1,3,"Real Sociedad",0.3,2,43,"38,296","Óscar de Marcos","4-2-3-1","4-1-3-2","Guillermo Cuadra","Match Report",""
+"2023-01-18","20:00","Copa del Rey","Round of 16","Wed","Home","W",1,0,"Espanyol",NA,NA,63,"37,564","Óscar de Marcos","4-2-3-1","5-4-1","Juan Pulido","Match Report",""
+"2023-01-22","21:00","La Liga","Matchweek 18","Sun","Home","L",0,2,"Real Madrid",1.1,1.1,51,"49,316","Óscar de Marcos","4-2-3-1","4-3-3","José Sánchez","Match Report",""
+"2023-01-26","20:00","Copa del Rey","Quarter-finals","Thu","Away","W",3,1,"Valencia",NA,NA,47,"45,040","Iker Muniain","4-2-3-1","4-3-3","Carlos del Cerro","Match Report",""
+"2023-01-29","18:30","La Liga","Matchweek 19","Sun","Away","L",0,1,"Celta Vigo",0.4,0.7,51,"14,754","Iker Muniain","4-2-3-1","4-4-2","Isidro Díaz de Mera","Match Report",""
+"2023-02-03","21:00","La Liga","Matchweek 20","Fri","Home","W",4,1,"Cádiz",1.7,1.6,42,"42,916","Iker Muniain","4-1-4-1","4-1-4-1","Valentín Pizarro","Match Report",""
+"2023-02-11","21:00","La Liga","Matchweek 21","Sat","Away","W",2,1,"Valencia",1.5,1.6,51,"36,688","Iker Muniain","4-2-3-1","4-3-3","César Soto","Match Report",""
+"2023-02-19","18:30","La Liga","Matchweek 22","Sun","Away","L",0,1,"Atlético Madrid",0.8,1.2,43,"61,617","Iker Muniain","4-2-3-1","4-4-2","Juan Martínez","Match Report",""
+"2023-02-26","14:00","La Liga","Matchweek 23","Sun","Home","L",2,3,"Girona",1.6,1.1,60,"42,816","Iker Muniain","4-2-3-1","4-1-4-1","Isidro Díaz de Mera","Match Report",""
+"2023-03-01","21:00","Copa del Rey","Semi-finals","Wed","Away","L",0,1,"Osasuna",NA,NA,55,"23,026","Iker Muniain","4-2-3-1","4-3-3","Jesús Gil","Match Report","Leg 1 of 2"
+"2023-03-05","18:30","La Liga","Matchweek 24","Sun","Away","D",0,0,"Rayo Vallecano",1.3,1.1,45,"12,979","Iñigo Lekue","4-2-3-1","4-2-3-1","Mario Melero","Match Report",""
+"2023-03-12","21:00","La Liga","Matchweek 25","Sun","Home","L",0,1,"Barcelona",0.9,0.9,38,"49,741","Óscar de Marcos","4-2-3-1","4-3-3","Jesús Gil","Match Report",""
+"2023-03-17","21:00","La Liga","Matchweek 26","Fri","Away","W",3,1,"Valladolid",2.6,1.1,52,"21,707","Óscar de Marcos","4-2-3-1","4-2-3-1","Alberola Rojas","Match Report",""
+"2023-04-01","16:15","La Liga","Matchweek 27","Sat","Home","D",0,0,"Getafe",0.9,0.8,65,"43,782","Iker Muniain","4-3-3","5-3-2","Javier Villanueva","Match Report",""
+"2023-04-04","21:00","Copa del Rey","Semi-finals","Tue","Home","D",1,1,"Osasuna",NA,NA,62,"51,544","Iker Muniain","4-1-4-1","4-2-3-1","Carlos del Cerro","Match Report","Leg 2 of 2; Osasuna won; Required Extra Time"
+"2023-04-08","16:15","La Liga","Matchweek 28","Sat","Away","W",2,1,"Espanyol",2.3,0.9,51,"24,903","Óscar de Marcos","4-2-3-1","4-2-3-1","José Luis Munuera","Match Report",""
+"2023-04-15","16:15","La Liga","Matchweek 29","Sat","Home","W",2,0,"Real Sociedad",0.8,1.4,51,"49,287","Iñaki Williams","4-2-3-1","4-1-3-2","César Soto","Match Report",""
+"2023-04-22","16:15","La Liga","Matchweek 30","Sat","Away","W",2,1,"Almería",1.7,0.8,47,"13,271","Óscar de Marcos","4-2-3-1","4-2-3-1","Valentín Pizarro","Match Report",""
+"2023-04-27","22:00","La Liga","Matchweek 31","Thu","Home","L",0,1,"Sevilla",0.3,1,54,"42,716","Óscar de Marcos","4-2-3-1","4-2-3-1","Alejandro Hernández","Match Report",""
+"2023-05-01","19:00","La Liga","Matchweek 32","Mon","Away","D",1,1,"Mallorca",1.7,0.9,70,"16,807","Iñaki Williams","4-2-3-1","5-3-2","Jorge Figueroa","Match Report",""
+"2023-05-04","22:00","La Liga","Matchweek 33","Thu","Home","L",0,1,"Betis",1.6,1.2,63,"43,116","Óscar de Marcos","4-2-3-1","4-2-3-1","Miguel Ángel Ortiz Arias","Match Report",""
+"2023-05-13","18:30","La Liga","Matchweek 34","Sat","Away","L",1,5,"Villarreal",3.1,3.2,44,"16,871","Iñaki Williams","4-2-3-1","4-3-3","Carlos del Cerro","Match Report",""
+"2023-05-20","16:15","La Liga","Matchweek 35","Sat","Home","W",2,1,"Celta Vigo",1,0.5,49,"40,759","Iker Muniain","4-1-4-1","4-2-2-2","Mario Melero","Match Report",""
+"2023-05-25","21:30","La Liga","Matchweek 36","Thu","Away","L",0,2,"Osasuna",0.8,0.8,51,"19,830","Iker Muniain","4-2-3-1","4-2-3-1","Alejandro Muñíz","Match Report",""
+"2023-05-28","19:00","La Liga","Matchweek 37","Sun","Home","L",0,1,"Elche",2.4,0.9,64,"37,807","Iker Muniain","4-2-3-1","5-3-2","Valentín Pizarro","Match Report",""
+"2023-06-04","18:30","La Liga","Matchweek 38","Sun","Away","D",1,1,"Real Madrid",2.3,1.8,36,"60,781","Óscar de Marcos","4-2-3-1","4-3-3","Isidro Díaz de Mera","Match Report",""

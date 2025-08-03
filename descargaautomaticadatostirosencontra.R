@@ -4,10 +4,12 @@ library(rvest)
 library(writexl)
 
 if (!exists("año")) {
-  año <- 2023  # valor por defecto solo si no se define antes
+  año <- 2023  
 }
 temporada <- paste0(año, "-", año + 1)
-url <- paste0("https://fbref.com/en/squads/ee7c297c/", temporada, "/matchlogs/c12/shooting/Cadiz-Match-Logs-La-Liga")
+if (!exists("codigo_equipo")) codigo_equipo <- "ee7c297c"
+
+url <- paste0("https://fbref.com/en/squads/",codigo_equipo, "/", temporada,"/matchlogs/c12/shooting/Cadiz-Match-Logs-La-Liga")
 
 cambio_nombres <- c(
   "Date" = "Fecha",
