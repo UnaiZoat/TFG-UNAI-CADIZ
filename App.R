@@ -759,11 +759,17 @@ server <- function(input, output, session) {
     opciones <- switch(input$tipo_prediccion,
                        "Resultados" = c("Predicción de Resultados según Posesión",
                                         "Predicción de Goles por xG"
-                                        ),
+                       ),
                        
-                       "Tiros" = c("Predicción de Goles por Disparos"
-                                   ),
-                       "Tiros en Contra" = c("Predicción de Goles Encajados según Tiros Recibidos"))
+                       "Tiros" = c("Predicción de Goles por Disparos",
+                                   "Predicción de xG por Disparos",
+                                   "Predicción de Eficiencia de Tiro"
+                       ),
+                       
+                       "Tiros en Contra" = c("Predicción de Goles Encajados según Tiros Recibidos",
+                                             "Predicción de xGA por Tiros Recibidos"
+                       )
+    )
     
     selectInput("prediccion_seleccionada", "Selecciona una predicción:", choices = opciones)
   })
@@ -771,15 +777,19 @@ server <- function(input, output, session) {
   output$grafico_prediccion <- renderPlotly({
     req(input$prediccion_seleccionada, input$temporadas_prediccion)
     
-    
     sufijo_categoria <- switch(input$prediccion_seleccionada,
                                "Predicción de Resultados según Posesión" = "Resultados",
                                "Predicción de Goles por xG" = "Resultados", 
-                               "Predicción de Goles por Disparos" = "Tiros",
-                               "Predicción de Goles Encajados según Tiros Recibidos" = "TirosEnContra"
                                
+                               "Predicción de Goles por Disparos" = "Tiros",
+                               "Predicción de xG por Disparos" = "Tiros",
+                               "Predicción de Eficiencia de Tiro" = "Tiros",
+                               
+                               "Predicción de Goles Encajados según Tiros Recibidos" = "TirosEnContra",
+                               "Predicción de xGA por Tiros Recibidos" = "TirosEnContra"
+                               
+
     )
-    
     
     datos_combinados <- {
       lista_temporadas <- input$temporadas_prediccion
@@ -791,15 +801,28 @@ server <- function(input, output, session) {
           datos <- get(nombre_dataset)
           datos$Temporada <- anio
           
+         
+          numeric_cols <- c("Asistencia", "GF", "GC", "Puntos", "Victorias", "xG", "xGA", 
+                            "Disparos", "Tarjetas", "Faltas", "Corners", "Interceptaciones", 
+                            "PasesClaves", "Ocasiones", "PosesionFinal", "Ataques", "Posesión")
           
-          if ("Asistencia" %in% colnames(datos)) {
-            datos <- datos %>% dplyr::mutate(Asistencia = as.numeric(Asistencia))
+          for(col in numeric_cols) {
+            if(col %in% colnames(datos)) {
+              datos[[col]] <- as.numeric(datos[[col]])
+            }
           }
-          if ("GF" %in% colnames(datos)) {
-            datos <- datos %>% dplyr::mutate(GF = as.numeric(GF))
+          
+          
+          if("GF" %in% colnames(datos) && "Disparos" %in% colnames(datos) && !("EficienciaTiro" %in% colnames(datos))) {
+            datos$EficienciaTiro <- ifelse(datos$Disparos > 0, datos$GF / datos$Disparos * 100, 0)
           }
-          if ("GC" %in% colnames(datos)) {
-            datos <- datos %>% dplyr::mutate(GC = as.numeric(GC))
+          
+          if("GC" %in% colnames(datos) && !("PorteriaCero" %in% colnames(datos))) {
+            datos$PorteriaCero <- ifelse(datos$GC == 0, 1, 0)
+          }
+          
+          if("Posesión" %in% colnames(datos) && !("PosesionRival" %in% colnames(datos))) {
+            datos$PosesionRival <- 100 - datos$Posesión
           }
           
           return(datos)
@@ -809,17 +832,7 @@ server <- function(input, output, session) {
         }
       })
       
-      if (sufijo_categoria == "TopGoleadores") {
-        if ("Goles" %in% colnames(datos_totales)) {
-          datos_totales <- datos_totales %>%
-            arrange(desc(Goles)) %>%
-            head(20)  
-        } else {
-          datos_totales <- head(datos_totales, 15)
-        }
-      }
-      
-      if (nrow(datos_totales) == 0) {
+      if (is.null(datos_totales) || nrow(datos_totales) == 0) {
         showNotification("No hay datos disponibles para la predicción seleccionada", type = "warning")
         return(NULL)
       }
@@ -827,8 +840,12 @@ server <- function(input, output, session) {
       datos_totales
     }
     
+    if (is.null(datos_combinados)) {
+      return(NULL)
+    }
     
     gg <- switch(input$prediccion_seleccionada,
+                 
                  
                  "Predicción de Resultados según Posesión" = {
                    modelo <- lm(GF ~ Posesión, data = datos_combinados)
@@ -865,6 +882,7 @@ server <- function(input, output, session) {
                      mi_tema_cadiz()
                  },
                  
+
                  "Predicción de Goles por Disparos" = {
                    datos_filtrados <- datos_combinados %>%
                      filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
@@ -880,33 +898,92 @@ server <- function(input, output, session) {
                      geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
                      geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
                                color = "#ffff00", size = 2) +
-                     scale_x_continuous(limits = c(0, max(pred_data$Disparos)), breaks = seq(0, max(pred_data$Disparos), by = 5)) +
                      labs(title = "Predicción de Goles por Disparos", 
                           x = "Disparos", y = "Goles Predichos") +
                      mi_tema_cadiz()
                  },
                  
+                 "Predicción de xG por Disparos" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
+                   
+                   modelo <- lm(xG ~ Disparos, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          max(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Disparos, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Predicción de xG por Disparos", 
+                          x = "Disparos", y = "xG Predicho") +
+                     mi_tema_cadiz()
+                 },
+                 
+                 "Predicción de Eficiencia de Tiro" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
+                   
+                   modelo <- lm(EficienciaTiro ~ Disparos, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          max(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Disparos, y = EficienciaTiro)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Predicción de Eficiencia de Tiro", 
+                          x = "Disparos", y = "Eficiencia de Tiro (%)") +
+                     mi_tema_cadiz()
+                 },
+                 
+                
                  "Predicción de Goles Encajados según Tiros Recibidos" = {
                    datos_filtrados <- datos_combinados %>%
-                     filter(!is.na(Disparos), !is.na(GF)) %>%
-                     filter(Disparos <= quantile(Disparos, 0.95))  
+                     filter(!is.na(Disparos), !is.na(GC)) %>%
+                     filter(Disparos <= quantile(Disparos, 0.95, na.rm = TRUE))
                    
-                   modelo <- lm(GF ~ Disparos, data = datos_filtrados)
+                   modelo <- lm(GC ~ Disparos, data = datos_filtrados)
                    
                    pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos), 
                                                           max(datos_filtrados$Disparos), 
                                                           length.out = 100))
                    pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
                    
-                   ggplot(datos_filtrados, aes(x = Disparos, y = GF)) +
+                   ggplot(datos_filtrados, aes(x = Disparos, y = GC)) +
                      geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
                      geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
                                color = "#ffff00", size = 2) +
-                     scale_x_continuous(limits = c(0, max(pred_data$Disparos)), breaks = seq(0, max(pred_data$Disparos), by = 5)) +
                      labs(title = "Predicción de Goles Encajados según Tiros Recibidos", 
                           x = "Tiros Recibidos", y = "Goles Encajados Predichos") +
                      mi_tema_cadiz()
-                 }
+                 },
+                 
+                 "Predicción de xGA por Tiros Recibidos" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Disparos), !is.na(GF), Disparos <= quantile(Disparos, 0.95))
+                   
+                   modelo <- lm(xG ~ Disparos, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Disparos = seq(min(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          max(datos_filtrados$Disparos, na.rm = TRUE), 
+                                                          length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Disparos, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Predicción de xGA por Tiros Recibidos", 
+                          x = "Tiros Recibidos", y = "xGA Predicho") +
+                     mi_tema_cadiz()
+                 },
                  
     )
     
@@ -922,7 +999,6 @@ server <- function(input, output, session) {
       )
   })
   
-  
   output$detalle_prediccion <- renderUI({
     req(input$prediccion_seleccionada)
     
@@ -931,18 +1007,25 @@ server <- function(input, output, session) {
       h4("Interpretación de la Predicción", style = "color: #495057; font-weight: bold;"),
       
       switch(input$prediccion_seleccionada,
+             # RESULTADOS
              "Predicción de Resultados según Posesión" = p("Este modelo predice los goles basándose en el porcentaje de posesión. Los puntos amarillos muestran la tendencia predicha, mientras que los puntos de colores representan los datos reales de cada temporada."),
              "Predicción de Goles por xG" = p("La línea amarilla muestra la relación predicha entre xG y goles reales. La línea roja discontinua representa la relación perfecta (1:1). Las desviaciones indican sobre/sub-rendimiento."),
+             
+             
+             # TIROS
              "Predicción de Goles por Disparos" = p("Este modelo estima cuántos goles se pueden esperar según el número de disparos realizados, basándose en patrones históricos."),
-             "Predicción de Goles Encajados según Tiros Recibidos" = p("Este modelo predice los goles encajados a partir de los tiros que recibe el equipo.Una línea ascendente indica que más disparos recibidos tienden a traducirse en más goles en contra."),
+             "Predicción de xG por Disparos" = p("Predice los goles esperados (xG) según el volumen de disparos. Útil para evaluar la calidad ofensiva independientemente de los goles reales."),
+             "Predicción de Eficiencia de Tiro" = p("Calcula el porcentaje de conversión de disparos en goles. Una eficiencia alta indica mejor finalización o mejores ocasiones de gol."),
              
+             # TIROS EN CONTRA
+             "Predicción de Goles Encajados según Tiros Recibidos" = p("Este modelo predice los goles encajados a partir de los tiros que recibe el equipo. Una línea ascendente indica que más disparos recibidos tienden a traducirse en más goles en contra."),
+             "Predicción de xGA por Tiros Recibidos" = p("Predice los goles esperados en contra (xGA) según los disparos recibidos. Ayuda a evaluar la calidad defensiva del equipo."),
              
-      )
+            )
     )
   })
-  
-}
 
+}
 mi_tema_cadiz <- function(){
   theme_minimal() +
     theme(
