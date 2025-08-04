@@ -29,7 +29,11 @@ datosCadizGolesEnContra2022 <- read.csv("cadizgolesencontra2022.csv",header= TRU
 datosCadizGolesEnContra2021 <- read.csv("cadizgolesencontra2021.csv",header= TRUE, sep= ",")
 datosCadizGolesEnContra2020 <- read.csv("cadizgolesencontra2020.csv",header= TRUE, sep= ",")
 
-equipo <- "cadiz"
+equipo <- "cadiz"  
+
+if (file.exists("equipo_actual.txt")) {
+  equipo <- readLines("equipo_actual.txt", warn = FALSE)[1]
+}
 
 
 

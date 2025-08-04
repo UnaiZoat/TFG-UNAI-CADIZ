@@ -26,3 +26,6 @@ for (año in años) {
     Sys.sleep(2)  
   }
 }
+
+nombre_equipo <- if (codigo_equipo == "ee7c297c") "cadiz" else "otro"
+writeLines(nombre_equipo, "equipo_actual.txt")
