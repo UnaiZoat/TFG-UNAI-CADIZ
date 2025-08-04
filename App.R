@@ -36,49 +36,101 @@ if (file.exists("equipo_actual.txt")) {
 }
 
 
+tema_equipo_colores <- if (tolower(equipo) == "cadiz") {
+  list(
+    tema = bs_theme(
+      bootswatch = "flatly",
+      bg = "#ffff00",         
+      fg = "#0033a0",         
+      primary = "#0033a0"     
+    ),
+    bg = "#ffff00",
+    texto = "#0033a0",
+    borde = "#0033a0",
+    boton_bg = "#0033a0",
+    boton_fg = "#ffff00"
+  )
+} else {
+  list(
+    tema = bs_theme(
+      bootswatch = "flatly",
+      bg = "white",
+      fg = "black",
+      primary = "#0033a0"
+    ),
+    bg = "white",
+    texto = "black",
+    borde = "#0033a0",
+    boton_bg = "#0033a0",
+    boton_fg = "white"
+  )
+}
 
 
 
 ui <- navbarPage(
   id = "navbar",
-  title = div("Análisis del Cádiz CF", style="color: #0033a0; font-weight: bold; font-size: 25px;"),
-  theme = bs_theme(
-    bootswatch = "flatly",
-    bg = "#ffff00",         
-    fg = "#0033a0",         
-    primary = "#0033a0"
+  title = div(paste("Análisis del", toupper(equipo)),
+              style = paste0("color:#0033a0;; font-weight: bold; font-size: 25px;")),
+  
+  theme = tema_equipo_colores$tema,
+  tags$style(HTML(paste0("
+  body, .container-fluid {
+    background-color: ", tema_equipo_colores$bg, " !important;
+  }
+"))),
+  
+  header = tags$head(
+    tags$style(HTML(paste0("
+      .navbar-nav > li > a {
+        color: ", tema_equipo_colores$texto, " !important;
+      }
+
+      .navbar-nav > .active > a,
+      .navbar-nav > .active > a:focus,
+      .navbar-nav > .active > a:hover {
+        color: ", tema_equipo_colores$bg, " !important;
+        background-color: ", tema_equipo_colores$texto, " !important;
+      }
+
+      .navbar-nav > li > a:hover {
+        background-color: ", tema_equipo_colores$borde, " !important;
+        color: ", tema_equipo_colores$bg, " !important;
+      }
+    ")))
   ),
   
   tabPanel("Inicio",
            fluidPage(
-             titlePanel(h1("Bienvenido al Análisis del Cádiz CF", align = "center")),
-             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;"),
+             titlePanel(h1(paste("Bienvenido al Análisis del", toupper(equipo)), align = "center",
+                           style = paste0("color:", tema_equipo_colores$texto))),
+             if (equipo == "cadiz"){
+             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")},
              br(),
+             
              HTML(paste0(
-               "<div style='background-color:#f3f3f3; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:800px; margin:auto;'>",
+               "<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ", tema_equipo_colores$borde, "; max-width:800px; margin:auto;'>",
                
-               "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
-               "<p style='text-align:justify; font-size:15px;'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada,
-               incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br>  Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
-               e incluso combinarlas para apreciar la evolución del equipo. También podras usar los datos de todas estas temporadas
-               para calcular el futuro esperado en la pestaña Predicción, recuerda que el fútbol es inesperado y no es una ciencia cierta, pero
-               gracias al Big Data podrás saber cuál es el futuro más posible.</p>",
+               "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
+               "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada,
+               incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br> Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
+               e incluso combinarlas para apreciar la evolución del equipo. También podrás usar los datos de todas estas temporadas
+               para calcular el futuro esperado en la pestaña Predicción. Recuerda que el fútbol es inesperado y no es una ciencia exacta, pero
+               gracias al Big Data podrás saber cuál es el futuro más probable.</p>",
                
-               "<h5 style='color:#0033a0; font-weight:bold;'>¿Qué es el Big Data?</h5>",
-               "<p style='text-align:justify; font-size:15px;'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
+               "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Qué es el Big Data?</h5>",
+               "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
                datos relacionados con todos los aspectos del juego.</p>",
                
-               "<h5 style='color:#0033a0; font-weight:bold;'>¿Por qué el Big Data es importante para mi equipo?</h5>",
-               "<p style='text-align:justify; font-size:15px;'>El análisis de estos datos nos aporta mucha información interesante que puede servirnos para ayudar a mejorar el rendimiento, tomar decisiones
-               sobre alineaciones y fichajes, decidir que estilo de juego funciona mejor con nuestra plantilla, etc....
-               En esta Web tu también podrás aprender a visualizar y analizar estos datos</p>",
+               "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Por qué el Big Data es importante para mi equipo?</h5>",
+               "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>El análisis de estos datos nos aporta mucha información interesante que puede servirnos para ayudar a mejorar el rendimiento, tomar decisiones
+               sobre alineaciones y fichajes, decidir qué estilo de juego funciona mejor con nuestra plantilla, etc.
+               En esta Web tú también podrás aprender a visualizar y analizar estos datos.</p>",
                
                "<p style='text-align:center; margin-top:20px;'>",
                actionButton("go_analisis", "Empieza el análisis", 
-             style="color:white; background-color:#0033a0; padding:10px 15px; border-radius:5px;"),
+                            style = paste0("color:white; background-color:", tema_equipo_colores$boton_bg, "; padding:10px 15px; border-radius:5px;")),
                "</p>",
-             
-             
                
                "</div>"
              )),
@@ -86,6 +138,7 @@ ui <- navbarPage(
              br(), br()
            )
   ),
+
   
   
   tabPanel("Análisis",
@@ -133,8 +186,8 @@ ui <- navbarPage(
                
                br(),
                
-               tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
-             ),
+               if (equipo == "cadiz"){
+                 tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")}),
              
              mainPanel(
                helpText(
@@ -201,8 +254,8 @@ ui <- navbarPage(
                
                br(),
                
-               tags$img(src = "escudo.png", height = "130px", style = "display: block; margin-left: auto; margin-right: auto;")
-             ),
+               if (equipo == "cadiz"){
+                 tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")}),
              
              mainPanel(
                helpText(
@@ -225,66 +278,88 @@ ui <- navbarPage(
   
   tabPanel("Glosario",
            fluidPage(
-             titlePanel("📚 Glosario de Términos - Análisis de Datos en Fútbol"),
+             titlePanel(
+               div("📚 Glosario de Términos - Análisis de Datos en Fútbol",
+                   style = paste0("color: ", tema_equipo_colores$texto, "; font-weight: bold;"))
+             ),
              br(),
              
              
-             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
-             h4("📈 Métricas de Rendimiento"),
+             HTML(paste0("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ",
+                         tema_equipo_colores$borde, "; max-width:850px; margin:auto;'>")),
+             h4(style = paste0("color:", tema_equipo_colores$texto), "📈 Métricas de Rendimiento"),
              tags$ul(
-               tags$li(strong("xG (Goles Esperados):"), " Probabilidad de que un disparo termine en gol según características como ángulo, distancia, tipo de pase previo, etc."),
-               tags$li(strong("xGA (Goles Esperados en Contra):"), " xG que el equipo ha concedido. Ayuda a evaluar el rendimiento defensivo más allá de los goles reales encajados."),
-               tags$li(strong("xG sin penaltis:"), " Goles esperados excluyendo los penaltis. Útil para medir la calidad ofensiva sin jugadas 'fáciles'."),
-               tags$li(strong("Disparos cada 90 minutos:"), " Número promedio de disparos realizados por un jugador por cada 90 minutos jugados."),
-               tags$li(strong("Goles/Disparo:"), " Eficiencia de un jugador: qué porcentaje de sus disparos se convierten en gol."),
-               tags$li(strong("Goles/Disparo a Puerta:"), " Ratio de goles marcados sobre los tiros que fueron a portería."),
-               tags$li(strong("Posesión (%):"), " Porcentaje de tiempo que el equipo controla el balón en un partido.")
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "xG (Goles Esperados): Probabilidad de que un disparo termine en gol según características como ángulo, distancia, tipo de pase previo, etc.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "xGA (Goles Esperados en Contra): xG que el equipo ha concedido. Ayuda a evaluar el rendimiento defensivo más allá de los goles reales encajados.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "xG sin penaltis: Goles esperados excluyendo los penaltis. Útil para medir la calidad ofensiva sin jugadas 'fáciles'.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Disparos cada 90 minutos: Número promedio de disparos realizados por un jugador por cada 90 minutos jugados.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Goles/Disparo: Eficiencia de un jugador: qué porcentaje de sus disparos se convierten en gol.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Goles/Disparo a Puerta: Ratio de goles marcados sobre los tiros que fueron a portería.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Posesión (%): Porcentaje de tiempo que el equipo controla el balón en un partido."))
              ),
              HTML("</div><br>"),
              
-            
-             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
-             h4("📊 Técnicas y Conceptos de Análisis"),
+             
+             HTML(paste0("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ",
+                         tema_equipo_colores$borde, "; max-width:850px; margin:auto;'>")),
+             h4(style = paste0("color:", tema_equipo_colores$texto), "📊 Técnicas y Conceptos de Análisis"),
              tags$ul(
-               tags$li(strong("Regresión Lineal:"), " Técnica estadística que intenta predecir una variable (por ejemplo, goles) a partir de otra (por ejemplo, disparos)."),
-               tags$li(strong("Tendencia:"), " Dirección general del comportamiento de los datos en un gráfico (creciente, decreciente...)."),
-               tags$li(strong("Correlación:"), " Grado en que dos variables están relacionadas. Ej: Más disparos suele correlacionar con más goles."),
-               tags$li(strong("Outliers (Valores atípicos):"), " Datos que se alejan mucho de los valores normales y pueden distorsionar el análisis.")
-             ),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Regresión Lineal: Técnica estadística que intenta predecir una variable (por ejemplo, goles) a partir de otra (por ejemplo, disparos).")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Tendencia: Dirección general del comportamiento de los datos en un gráfico (creciente, decreciente...).")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Correlación: Grado en que dos variables están relacionadas. Ej: Más disparos suele correlacionar con más goles.")),
+                ),
              HTML("</div><br>"),
              
             
-             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
-             h4("🧠 Conceptos de Big Data Deportiva"),
+             HTML(paste0("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ",
+                         tema_equipo_colores$borde, "; max-width:850px; margin:auto;'>")),
+             h4(style = paste0("color:", tema_equipo_colores$texto), "🧠 Conceptos de Big Data Deportiva"),
              tags$ul(
-               tags$li(strong("Machine Learning (Aprendizaje Automático):"), " Algoritmos que aprenden de los datos para hacer predicciones, como anticipar el rendimiento de un jugador."),
-               tags$li(strong("Modelo predictivo:"), " Modelo matemático que utiliza datos pasados para predecir un resultado futuro."),
-               tags$li(strong("Feature Engineering:"), " Proceso de seleccionar y transformar variables para que los modelos predictivos sean más precisos."),
-               tags$li(strong("Data Cleaning (Limpieza de Datos):"), " Proceso de corregir o eliminar datos erróneos, incompletos o irrelevantes.")
-             ),
-             HTML("</div><br>"),
-             
-            
-             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
-             h4("⚽️ Términos del Juego Relacionados con Datos"),
-             tags$ul(
-               tags$li(strong("Disparo a Puerta:"), " Tiro que va dentro de los tres palos y que necesita intervención del portero o acaba en gol."),
-               tags$li(strong("Zona de peligro (Danger Zone):"), " Área cercana al área pequeña desde donde los tiros tienen mayor probabilidad de gol."),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Machine Learning (Aprendizaje Automático): Algoritmos que aprenden de los datos para hacer predicciones, como anticipar el rendimiento de un jugador.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Modelo predictivo: Modelo matemático que utiliza datos pasados para predecir un resultado futuro.")),
                ),
-             HTML("</div><br><br>"),
+             HTML("</div><br>"),
              
-             HTML("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid #0033a0; max-width:850px; margin:auto;'>"),
-             h4("📈Predicción"),
+             
+             HTML(paste0("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ",
+                         tema_equipo_colores$borde, "; max-width:850px; margin:auto;'>")),
+             h4(style = paste0("color:", tema_equipo_colores$texto), "⚽️ Términos del Juego Relacionados con Datos"),
              tags$ul(
-               tags$li(strong("Regresión lineal:"), " Es como trazar una línea recta que intenta predecir una cosa a partir de otra. Por ejemplo: si cuanto más dispara un jugador, más goles marca, la regresión lineal muestra esa relación y permite estimar cuántos goles marcará si dispara X veces."),
-               tags$li(strong("Modelo predictivo:"), " Usa datos del pasado para anticipar lo que podría pasar en el futuro. Por ejemplo, predecir cuántos goles marcará el equipo según su rendimiento anterior."),
-               tags$li(strong("Entrenar el modelo:"), "Entrenamos el modelo eligiendo que datos tener en cuenta, cuántas mas temporadas elijamos más fiable será la predicción."),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Disparo a Puerta: Tiro que va dentro de los tres palos y que necesita intervención del portero o acaba en gol.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Zona de peligro (Danger Zone): Área cercana al área pequeña desde donde los tiros tienen mayor probabilidad de gol."))
+             ),
+             HTML("</div><br>"),
+             
+             
+             HTML(paste0("<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ",
+                         tema_equipo_colores$borde, "; max-width:850px; margin:auto;'>")),
+             h4(style = paste0("color:", tema_equipo_colores$texto), "📈 Predicción"),
+             tags$ul(
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Regresión lineal: Es como trazar una línea recta que intenta predecir una cosa a partir de otra. Por ejemplo: si cuanto más dispara un jugador, más goles marca, la regresión lineal muestra esa relación y permite estimar cuántos goles marcará si dispara X veces.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Modelo predictivo: Usa datos del pasado para anticipar lo que podría pasar en el futuro. Por ejemplo, predecir cuántos goles marcará el equipo según su rendimiento anterior.")),
+               tags$li(strong(style = paste0("color:", tema_equipo_colores$texto),
+                              "Entrenar el modelo: Entrenamos el modelo eligiendo qué datos tener en cuenta; cuantas más temporadas elijamos, más fiable será la predicción."))
              ),
              HTML("</div><br><br>"),
-             
             
-             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
-           )
+             if (equipo == "cadiz"){
+               tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")})
   )
 
 )

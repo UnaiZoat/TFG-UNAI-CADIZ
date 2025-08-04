@@ -27,5 +27,5 @@ for (año in años) {
   }
 }
 
-nombre_equipo <- if (codigo_equipo == "ee7c297c") "cadiz" else "otro"
+nombre_equipo <- if (codigo_equipo == "ee7c297c") "cadiz" else "equipo"
 writeLines(nombre_equipo, "equipo_actual.txt")
