@@ -22,5 +22,6 @@ for (año in años) {
   for (script in scripts) {
     cat(paste0("▶️ Ejecutando ", script, " para ", año, "\n"))
     source(script, local = TRUE)
+    Sys.sleep(2)  
   }
 }

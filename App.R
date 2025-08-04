@@ -25,7 +25,7 @@ datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, s
 datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
 
-
+equipo <- "cadiz"
 
 
 
@@ -434,30 +434,30 @@ server <- function(input, output, session) {
                  "Resultados en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill=Resultado)) +
                    geom_bar(position = "dodge") +
                    labs(title = "Resultados en Casa vs Fuera", x= "Condición", y= "Cantidad de Partidos") +
-                   mi_tema_cadiz(), 
+                   mi_tema_cadiz(equipo), 
                  
                  "Posesión según Resultado" = ggplot(datosResultados, aes(x=Posesión, fill=Resultado)) +
                    geom_histogram(binwidth = 5, position= "dodge", color="black") +
                    labs(title= "Posesión según Resultado", x="Posesión(%)", y= "Cantidad de Partidos") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Relación entre Posesión y Goles Marcados" = ggplot(datosResultados, aes(x=Posesión, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles Marcados", x="Posesión(%)", y= "Goles") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Relación entre Posesión y Goles en Contra" = ggplot(datosResultados, aes(x=Posesión, y=GC, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
                    labs(title= "Relación entre Posesión y Goles en Contra", x="Posesión(%)", y= "Goles") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Comparación entre xG y Goles Marcados" = ggplot(datosResultados, aes(x=xG, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title = "Comparación entre xG y Goles Marcados", x="xG (Goles Esperados)", y = "Goles Marcados") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Relación entre Disparos y Goles" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
@@ -465,7 +465,7 @@ server <- function(input, output, session) {
                    scale_x_continuous(limits = c(0, 25)) +  
                    scale_y_continuous(limits = c(0, 10)) +  
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Comparación de xG con y sin penaltis" = ggplot(datosResultados, aes(x=xG, y=xG...nopenalty)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
@@ -473,7 +473,7 @@ server <- function(input, output, session) {
                    scale_x_continuous(limits = c(0, 3)) + 
                    scale_y_continuous(limits = c(0, 3)) +
                    labs(title="Comparación de xG con y sin penaltis", x="xG", y="xG sin penaltis") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=as.numeric(Disparos), y=as.numeric(GF))) + 
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
@@ -481,7 +481,7 @@ server <- function(input, output, session) {
                    scale_x_continuous(limits=c(0, 25)) +  
                    scale_y_continuous(limits=c(0, 5)) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Comparación xG concedido vs Goles recibidos" = ggplot(datosResultados, aes(x=as.numeric(xG), y=as.numeric(GF))) +
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
@@ -489,12 +489,12 @@ server <- function(input, output, session) {
                    scale_x_continuous(limits=c(0, 4)) +  
                    scale_y_continuous(limits=c(0, 5)) +
                    labs(title="xG en Contra vs Goles Recibidos", x="xG Concedido", y="Goles Concedidos") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Distancia media tiros en contra" = ggplot(datosResultados, aes(x=Distancia)) +
                    geom_histogram(binwidth=1, fill="#ffff00", color="black") +
                    labs(title="Distancia de los Tiros en Contra", x="Distancia (metros)", y="Número de Tiros") +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Goles por disparo vs Goles por disparo a puerta" = ggplot(
                    datosResultados %>%
@@ -508,7 +508,7 @@ server <- function(input, output, session) {
                      title = "Goles por disparo vs Goles por disparo a puerta",
                      x = "Goles/Disparo", y = "Goles/DisparoPuerta"
                    ) +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Relacion entre Disparos cada 90min y Goles" = ggplot(
                    datosResultados %>%
@@ -522,7 +522,7 @@ server <- function(input, output, session) {
                      title = "Relación entre Disparos cada 90min y Goles",
                      x = "Disparos cada 90min", y = "Goles"
                    ) +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Comparacion de Goles vs xG" = ggplot(
                    datosResultados %>%
@@ -536,7 +536,7 @@ server <- function(input, output, session) {
                      title = "Comparación de Goles vs xG",
                      x = "xG", y = "Goles"
                    ) +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Efectividad por edad" = ggplot(
                    datosResultados %>%
@@ -550,12 +550,12 @@ server <- function(input, output, session) {
                      title = "Efectividad por edad",
                      x = "Edad", y = "Goles por disparo a puerta"
                    ) +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
                    geom_bar() +
                    labs(title = "Goles en Casa vs Fuera", x="Local.Visitante", y="Goles")+
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Goles con cada parte del cuerpo" = ggplot(
                    datosResultados %>%
@@ -570,17 +570,17 @@ server <- function(input, output, session) {
                      y = "Goles",
                      fill = "Parte del cuerpo"  
                    ) +
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
                    geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
                    labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
-                   mi_tema_cadiz(),
+                   mi_tema_cadiz(equipo),
                  
                  "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distancia))+
                    geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
-                   mi_tema_cadiz()
+                   mi_tema_cadiz(equipo)
                  
     )
     
@@ -861,7 +861,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de Goles según Posesión", 
                           x = "Posesión (%)", y = "Goles Predichos") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
                  "Predicción de Goles por xG" = {
@@ -879,7 +879,7 @@ server <- function(input, output, session) {
                      geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red", alpha = 0.5) +
                      labs(title = "Predicción de Goles por xG", 
                           x = "xG (Goles Esperados)", y = "Goles Predichos") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
 
@@ -900,7 +900,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de Goles por Disparos", 
                           x = "Disparos", y = "Goles Predichos") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
                  "Predicción de xG por Disparos" = {
@@ -920,7 +920,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de xG por Disparos", 
                           x = "Disparos", y = "xG Predicho") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
                  "Predicción de Eficiencia de Tiro" = {
@@ -940,7 +940,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de Eficiencia de Tiro", 
                           x = "Disparos", y = "Eficiencia de Tiro (%)") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
                 
@@ -962,7 +962,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de Goles Encajados según Tiros Recibidos", 
                           x = "Tiros Recibidos", y = "Goles Encajados Predichos") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
                  "Predicción de xGA por Tiros Recibidos" = {
@@ -982,7 +982,7 @@ server <- function(input, output, session) {
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de xGA por Tiros Recibidos", 
                           x = "Tiros Recibidos", y = "xGA Predicho") +
-                     mi_tema_cadiz()
+                     mi_tema_cadiz(equipo)
                  },
                  
     )
@@ -1026,21 +1026,36 @@ server <- function(input, output, session) {
   })
 
 }
-mi_tema_cadiz <- function(){
-  theme_minimal() +
-    theme(
-      panel.background = element_rect(fill= "#0033a0"),
-      plot.background = element_rect(fill = "#0033a0"),
-      panel.grid.major = element_line(color = "gray80"),
-      panel.grid.minor = element_line(color = "gray80"),
-      text = element_text(family = "Arial", size = 15, color = "#ffff00"),
-      plot.title = element_text(face = "bold",hjust=0.5,size=20,color= "#ffff00"),
-      axis.title = element_text(face = "bold"),
-      axis.text = element_text(color = "white"),
-      legend.position = "bottom",
-      legend.title = element_blank()
-      
-    )
+mi_tema_cadiz <- function(equipo) {
+  if (tolower(equipo) == "cadiz") {
+    theme_minimal() +
+      theme(
+        panel.background = element_rect(fill = "#0033a0"),
+        plot.background = element_rect(fill = "#0033a0"),
+        panel.grid.major = element_line(color = "gray80"),
+        panel.grid.minor = element_line(color = "gray80"),
+        text = element_text(family = "Arial", size = 15, color = "#ffff00"),
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 20, color = "#ffff00"),
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(color = "white"),
+        legend.position = "bottom",
+        legend.title = element_blank()
+      )
+  } else {
+    theme_minimal() +
+      theme(
+        panel.background = element_rect(fill = "white"),
+        plot.background = element_rect(fill = "white"),
+        panel.grid.major = element_line(color = "gray80"),
+        panel.grid.minor = element_line(color = "gray90"),
+        text = element_text(family = "Arial", size = 15, color = "black"),
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 20, color = "black"),
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(color = "black"),
+        legend.position = "right",
+        legend.title = element_text(face = "bold")
+      )
+  }
 }
 
 shinyApp(ui = ui, server = server)

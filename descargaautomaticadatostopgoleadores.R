@@ -90,7 +90,7 @@ tryCatch({
     cat("\n")
   }
   
-  nombre_archivo <- paste0("equiportopgoleadores", año, ".csv")
+  nombre_archivo <- paste0("equipotopgoleadores", año, ".csv")
   write.csv(df, nombre_archivo, row.names = FALSE)
   
   message(paste("✅ Archivo generado:", nombre_archivo))

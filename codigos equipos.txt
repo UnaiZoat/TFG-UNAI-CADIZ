@@ -2,4 +2,5 @@ athletic -> 2b390eca
 cadiz -> ee7c297c
 
 
-Llamar a script: Rscript descarga_datos_annio.R 2b390eca 2022 2023
+Llamar a script: Rscript descarga_datos_annio.R ee7c297c
+ 2022 2023
