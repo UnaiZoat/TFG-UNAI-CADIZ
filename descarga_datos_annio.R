@@ -14,7 +14,8 @@ scripts <- c("descargaautomaticadatosresultados.R",
              "descargaautomaticadatostiros.R",
              "descargaautomaticadatostirosencontra.R",
              "descargaautomaticadatosgolesafavor.R",
-             "descargaautomaticadatostopgoleadores.R")
+             "descargaautomaticadatostopgoleadores.R",
+             "descargaautomaticadatosgolesencontra.R")
 
 
 for (año in años) {

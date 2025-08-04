@@ -24,6 +24,10 @@ datosCadizGolesAFavor2023 <- read.csv("cadizgolesafavor2023.csv",header= TRUE, s
 datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
 datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2023 <- read.csv("cadizgolesencontra2023.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2022 <- read.csv("cadizgolesencontra2022.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2021 <- read.csv("cadizgolesencontra2021.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2020 <- read.csv("cadizgolesencontra2020.csv",header= TRUE, sep= ",")
 
 equipo <- "cadiz"
 
@@ -84,7 +88,7 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                selectInput("tipo_analisis", "Selecciona el elemento a analizar:",
-                           choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor")),
+                           choices = c("Resultados", "Tiros", "Tiros en Contra", "Tiros Jugadores", "Goles a favor","Goles en contra")),
                uiOutput("selector_grafico"),
                br(),
                
@@ -308,7 +312,12 @@ server <- function(input, output, session) {
                         "Goles a favor" =c("Goles en Casa vs Fuera",
                                            "Goles con cada parte del cuerpo",
                                            "Distribución goles por minuto",
-                                           "Distancia de los Goles"))
+                                           "Distancia de los Goles"),
+                  
+                       "Goles en contra" = c("Goles en contra Casa vs Fuera",
+                                             "Goles en contra con cada parte del cuerpo",
+                                             "Distribución goles en contra por minuto",
+                                             "Distancia de los Goles en contra"))
     
     selectInput("grafico_seleccionado", "Selecciona un gráfico de análisis:", choices = opciones)
     
@@ -346,6 +355,10 @@ server <- function(input, output, session) {
                                "Goles con cada parte del cuerpo" = "GolesAFavor",
                                "Distribución goles por minuto" = "GolesAFavor",
                                "Distancia de los Goles" = "GolesAFavor",
+                               "Goles en contra Casa vs Fuera" = "GolesEnContra",
+                               "Goles en contra con cada parte del cuerpo" = "GolesEnContra",
+                               "Distribución goles en contra por minuto" = "GolesEnContra",
+                               "Distancia de los Goles en contra" = "GolesEnContra",
                                "Resultados" 
     )
     
@@ -402,6 +415,26 @@ server <- function(input, output, session) {
       }
       
       if (sufijo_categoria == "GolesAFavor") {
+        datos_combinados <- datos_combinados %>%
+          mutate(
+            Local.Visitante = case_when(
+              Local.Visitante == "Away" ~ "Visitante",
+              Local.Visitante == "Home" ~ "Local",
+              TRUE ~ Local.Visitante
+            )
+          ) %>%
+          mutate(
+            Body.Part = case_when(
+              Body.Part == "Body.Part" ~ "Parte del cuerpo",
+              Body.Part == "Head" ~ "Cabeza",
+              Body.Part == "Left Foot" ~ "Pie Izquierdo",
+              Body.Part == "Right Foot" ~ "Pie Derecho",
+              TRUE ~ Body.Part
+            )
+          )
+      }
+      
+      if (sufijo_categoria == "GolesEnContra") {
         datos_combinados <- datos_combinados %>%
           mutate(
             Local.Visitante = case_when(
@@ -580,6 +613,36 @@ server <- function(input, output, session) {
                  "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distancia))+
                    geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
+                   mi_tema_cadiz(equipo),
+                 
+                 "Goles en contra Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
+                   geom_bar() +
+                   labs(title = "Goles en contra en Casa vs Fuera", x="Condición", y="Goles en contra")+
+                   mi_tema_cadiz(equipo),
+                 
+                 "Goles en contra con cada parte del cuerpo" = ggplot(
+                   datosResultados %>%
+                     mutate(Body.Part = trimws(tolower(Body.Part))) %>%
+                     filter(!Body.Part %in% c("trace", "unknown", "na", "")),
+                   aes(x = Body.Part, fill = Body.Part)
+                 ) +
+                   geom_bar() +
+                   labs(
+                     title = "Goles en contra según parte del cuerpo rival",
+                     x = "Parte del cuerpo",
+                     y = "Goles en contra",
+                     fill = "Parte del cuerpo"  
+                   ) +
+                   mi_tema_cadiz(equipo),
+                 
+                 "Distribución goles en contra por minuto" = ggplot(datosResultados, aes(x=as.numeric(Minute)))+
+                   geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
+                   labs(title = "Distribución de goles en contra por minuto", x="Minuto", y="Goles en contra")+
+                   mi_tema_cadiz(equipo),
+                 
+                 "Distancia de los Goles en contra" = ggplot(datosResultados, aes(x=Distancia))+
+                   geom_histogram(binwidth = 5, fill="#ffff00", color="black") +
+                   labs(title = "Distancia de los Goles en contra", x="Distancia (metros)", y="Goles en contra")+
                    mi_tema_cadiz(equipo)
                  
     )
@@ -619,8 +682,12 @@ server <- function(input, output, session) {
                           "Goles en Casa vs Fuera" = "Compara los goles que el equipo marca como local y como visitante.",
                           "Goles con cada parte del cuerpo" = "Muestra con qué parte del cuerpo se marcan más goles: cabeza, pie dominante o no dominante.",
                           "Distribución goles por minuto" = "Muestra en qué minutos del partido el equipo suele marcar sus goles.",
-                          "Distancia de los Goles" = "Analiza desde qué distancia se marcan los goles, indicando si son fruto de jugadas cercanas o tiros lejanos."
-    )
+                          "Distancia de los Goles" = "Analiza desde qué distancia se marcan los goles, indicando si son fruto de jugadas cercanas o tiros lejanos.",
+                          "Goles en contra Casa vs Fuera" = "Compara los goles que el equipo encaja cuando juega como local frente a cuando juega como visitante.",
+                          "Goles en contra con cada parte del cuerpo" = "Muestra con qué parte del cuerpo los rivales marcan más goles contra el equipo: cabeza, pie derecho o pie izquierdo.",
+                          "Distribución goles en contra por minuto" = "Analiza en qué momentos del partido el equipo es más vulnerable y suele encajar goles.",
+                          "Distancia de los Goles en contra" = "Estudia desde qué distancia los rivales logran marcar goles, lo que indica la efectividad defensiva en diferentes zonas.",
+)
     
     interpretacion <- switch(input$grafico_seleccionado,
                              "Resultados en Casa vs Fuera" = "📍 Si las victorias se concentran como local, puede indicar fortaleza en casa. Un rendimiento parejo refleja regularidad.",
@@ -640,7 +707,12 @@ server <- function(input, output, session) {
                              "Goles en Casa vs Fuera" = "🧭 Si el rendimiento varía mucho, puede que el entorno influya en el equipo.",
                              "Goles con cada parte del cuerpo" = "🦶⚽ Una alta proporción con la cabeza podría mostrar dominio aéreo; muchos con la izquierda o derecha indican buena técnica.",
                              "Distribución goles por minuto" = "⏱️ Si los goles llegan tarde, el equipo puede destacar en momentos decisivos. Si llegan al principio, puede ser clave el arranque.",
-                             "Distancia de los Goles" = "🚀 Si predominan los goles lejanos, el equipo puede tener jugadores con buen disparo o recurrir al tiro exterior."
+                             "Distancia de los Goles" = "🚀 Si predominan los goles lejanos, el equipo puede tener jugadores con buen disparo o recurrir al tiro exterior.",
+                             "Goles en contra Casa vs Fuera" = "🏠 Si se encajan más goles fuera de casa, puede indicar problemas de adaptación. Un patrón equilibrado sugiere consistencia defensiva.",
+                             "Goles en contra con cada parte del cuerpo" = "🎯 Si los rivales marcan mucho de cabeza, puede indicar debilidad en jugadas aéreas. Muchos goles con los pies sugieren problemas en la presión defensiva.",
+                             "Distribución goles en contra por minuto" = "⌛ Si se encajan muchos goles al final, puede indicar fatiga o falta de concentración. Goles tempranos pueden sugerir arranques lentos.",
+                             "Distancia de los Goles en contra" = "🚨 Si los rivales marcan desde cerca, la defensa está permitiendo ocasiones muy claras. Goles lejanos pueden indicar falta de presión.",
+                             
     )
     
     if (is.null(explicacion) || is.null(interpretacion)) {
@@ -747,6 +819,27 @@ server <- function(input, output, session) {
     <strong>🟢 Bueno:</strong> Goles desde varias distancias, incluidos lejanos.<br>
     <strong>🟡 Normal:</strong> Mayoría desde zonas comunes (dentro del área).<br>
     <strong>🔴 Preocupante:</strong> Todos los goles desde posiciones muy cercanas.",
+                               
+      
+                               "Goles en contra Casa vs Fuera" = "
+    <strong>🟢 Bueno:</strong> Pocos goles en contra tanto en casa como fuera, o mejor defensivamente fuera.<br>
+    <strong>🟡 Normal:</strong> Ligera diferencia a favor de la defensa en casa.<br>
+    <strong>🔴 Preocupante:</strong> Muchos más goles en contra fuera de casa o defensivamente frágil en ambos sitios.",
+                               
+                               "Goles en contra con cada parte del cuerpo" = "
+    <strong>🟢 Bueno:</strong> Los rivales no dominan claramente ninguna forma de ataque.<br>
+    <strong>🟡 Normal:</strong> Predominio lógico de goles con los pies.<br>
+    <strong>🔴 Preocupante:</strong> Excesivos goles de cabeza (debilidad aérea) o desde situaciones específicas.",
+                               
+                               "Distribución goles en contra por minuto" = "
+    <strong>🟢 Bueno:</strong> Pocos goles en contra en momentos clave o repartidos uniformemente.<br>
+    <strong>🟡 Normal:</strong> Sin patrón claro de vulnerabilidad temporal.<br>
+    <strong>🔴 Preocupante:</strong> Concentración de goles en contra en tramos específicos (fatiga, desconcentración).",
+                               
+                               "Distancia de los Goles en contra" = "
+    <strong>🟢 Bueno:</strong> Los rivales solo marcan desde lejos (buena defensa cercana).<br>
+    <strong>🟡 Normal:</strong> Mayoría de goles desde el área (situación típica).<br>
+    <strong>🔴 Preocupante:</strong> Muchos goles desde muy cerca (defensa muy permisiva).",
                                
                                NULL
       ),
