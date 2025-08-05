@@ -390,7 +390,7 @@ server <- function(input, output, session) {
           br(),
           
           selectInput("selector_equipo", "Selecciona el equipo:",
-                      choices = list("Athletic Club" = "2b390eca", "Cadiz CF" = "ee7c297c"),
+                      choices = list("Athletic Club" = "2b390eca", "Cadiz CF" = "ee7c297c", "Barcelona" = "206d90db", "Real Madrid" = "53a2f082" ),
                       selected = "2b390eca",
                       width = "100%"),
           br()
