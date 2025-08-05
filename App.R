@@ -57,15 +57,15 @@ tema_equipo_colores <- if (tolower(equipo) == "cadiz") {
   list(
     tema = bs_theme(
       bootswatch = "flatly",
-      bg = "white",
+      bg = "#f4f4f4",
       fg = "black",
-      primary = "#0033a0"
+      primary = "black"
     ),
-    bg = "white",
+    bg = "#f4f4f4",
     texto = "black",
-    borde = "#0033a0",
-    boton_bg = "#0033a0",
-    boton_fg = "white"
+    borde = "black",
+    boton_bg = "black",
+    boton_fg = "#f4f4f4"
   )
 }
 
@@ -407,7 +407,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$confirmar_cambio, {
     codigo_seleccionado <- input$selector_equipo
-    años <- c(2023)
+    años <- c(2023,2022,2021)
     
     
     removeModal()
