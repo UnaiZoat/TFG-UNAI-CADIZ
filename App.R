@@ -3,31 +3,34 @@ library(ggplot2)
 library(dplyr)
 library(plotly)
 library(bslib)
+library(promises)
+library(future)
+plan(multisession)
 
-datosCadizResultados2023 <- read.csv("cadizresultados2023.csv", header = TRUE, sep = ",")
-datosCadizResultados2022 <- read.csv("cadizresultados2022.csv", header = TRUE, sep = ",")
-datosCadizResultados2021 <- read.csv("cadizresultados2021.csv", header = TRUE, sep = ",")
-datosCadizResultados2020 <- read.csv("cadizresultados2020.csv", header = TRUE, sep = ",")
-datosCadizTiros2023 <- read.csv("Cadizcf-tirosLimpios.csv", header = TRUE, sep = ",")
-datosCadizTiros2022 <- read.csv("cadiztiros2022.csv", header = TRUE, sep = ",")
-datosCadizTiros2021 <- read.csv("cadiztiros2021.csv", header = TRUE, sep = ",")
-datosCadizTiros2020 <- read.csv("cadiztiros2020.csv", header = TRUE, sep = ",")
-datosCadizTirosEnContra2023 <- read.csv("Cadizcf-tirosencontraLimpios.csv", header = TRUE, sep = ",")
-datosCadizTirosEnContra2022 <- read.csv("cadiztirosencontra2022.csv", header = TRUE, sep = ",")
-datosCadizTirosEnContra2021 <- read.csv("cadiztirosencontra2021.csv", header = TRUE, sep = ",")
-datosCadizTirosEnContra2020 <- read.csv("cadiztirosencontra2020.csv", header = TRUE, sep = ",")
-datosCadizTopGoleadores2023 <- read.csv("TirosJugadorLimpios.csv",header= TRUE, sep= ",")
-datosCadizTopGoleadores2022 <- read.csv("cadiztopgoleadores2022.csv",header= TRUE, sep= ",")
-datosCadizTopGoleadores2021 <- read.csv("cadiztopgoleadores2021.csv",header= TRUE, sep= ",")
-datosCadizTopGoleadores2020 <- read.csv("cadiztopgoleadores2020.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor2023 <- read.csv("cadizgolesafavor2023.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor2022 <- read.csv("cadizgolesafavor2022.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor2021 <- read.csv("cadizgolesafavor2021.csv",header= TRUE, sep= ",")
-datosCadizGolesAFavor2020 <- read.csv("cadizgolesafavor2020.csv",header= TRUE, sep= ",")
-datosCadizGolesEnContra2023 <- read.csv("cadizgolesencontra2023.csv",header= TRUE, sep= ",")
-datosCadizGolesEnContra2022 <- read.csv("cadizgolesencontra2022.csv",header= TRUE, sep= ",")
-datosCadizGolesEnContra2021 <- read.csv("cadizgolesencontra2021.csv",header= TRUE, sep= ",")
-datosCadizGolesEnContra2020 <- read.csv("cadizgolesencontra2020.csv",header= TRUE, sep= ",")
+datosCadizResultados2023 <- read.csv("equiporesultados2023.csv", header = TRUE, sep = ",")
+datosCadizResultados2022 <- read.csv("equiporesultados2022.csv", header = TRUE, sep = ",")
+datosCadizResultados2021 <- read.csv("equiporesultados2021.csv", header = TRUE, sep = ",")
+datosCadizResultados2020 <- read.csv("equiporesultados2020.csv", header = TRUE, sep = ",")
+datosCadizTiros2023 <- read.csv("equipotiros2023.csv", header = TRUE, sep = ",")
+datosCadizTiros2022 <- read.csv("equipotiros2022.csv", header = TRUE, sep = ",")
+datosCadizTiros2021 <- read.csv("equipotiros2021.csv", header = TRUE, sep = ",")
+datosCadizTiros2020 <- read.csv("equipotiros2020.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2023 <- read.csv("equipotirosencontra2023.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2022 <- read.csv("equipotirosencontra2022.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2021 <- read.csv("equipotirosencontra2021.csv", header = TRUE, sep = ",")
+datosCadizTirosEnContra2020 <- read.csv("equipotirosencontra2020.csv", header = TRUE, sep = ",")
+datosCadizTopGoleadores2023 <- read.csv("equipotopgoleadores2023.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2022 <- read.csv("equipotopgoleadores2022.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2021 <- read.csv("equipotopgoleadores2021.csv",header= TRUE, sep= ",")
+datosCadizTopGoleadores2020 <- read.csv("equipotopgoleadores2020.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2023 <- read.csv("equipogolesafavor2023.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2022 <- read.csv("equipogolesafavor2022.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2021 <- read.csv("equipogolesafavor2021.csv",header= TRUE, sep= ",")
+datosCadizGolesAFavor2020 <- read.csv("equipogolesafavor2020.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2023 <- read.csv("equipogolesencontra2023.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2022 <- read.csv("equipogolesencontra2022.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2021 <- read.csv("equipogolesencontra2021.csv",header= TRUE, sep= ",")
+datosCadizGolesEnContra2020 <- read.csv("equipogolesencontra2020.csv",header= TRUE, sep= ",")
 
 equipo <- "cadiz"  
 
@@ -80,6 +83,7 @@ ui <- navbarPage(
   }
 "))),
   
+  
   header = tags$head(
     tags$style(HTML(paste0("
       .navbar-nav > li > a {
@@ -104,8 +108,10 @@ ui <- navbarPage(
            fluidPage(
              titlePanel(h1(paste("Bienvenido al Análisis del", toupper(equipo)), align = "center",
                            style = paste0("color:", tema_equipo_colores$texto))),
+             
              if (equipo == "cadiz"){
-             tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")},
+               tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
+             },
              br(),
              
              HTML(paste0(
@@ -113,27 +119,34 @@ ui <- navbarPage(
                
                "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Qué encontrarás aquí?</h5>",
                "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>En esta página podrás explorar y aprender sobre las distintas estadísticas del equipo y de los jugadores durante la temporada,
-               incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br> Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
-               e incluso combinarlas para apreciar la evolución del equipo. También podrás usar los datos de todas estas temporadas
-               para calcular el futuro esperado en la pestaña Predicción. Recuerda que el fútbol es inesperado y no es una ciencia exacta, pero
-               gracias al Big Data podrás saber cuál es el futuro más probable.</p>",
+      incluyendo análisis de Resultados, Tiros, Goles, entre otros. El famoso 'Big Data'. <br> Encontrarás análisis de los datos de la temporada 2023-2024, pero podrás seleccionar temporadas anteriores
+      e incluso combinarlas para apreciar la evolución del equipo. También podrás usar los datos de todas estas temporadas
+      para calcular el futuro esperado en la pestaña Predicción. Recuerda que el fútbol es inesperado y no es una ciencia exacta, pero
+      gracias al Big Data podrás saber cuál es el futuro más probable.</p>",
                
                "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Qué es el Big Data?</h5>",
                "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>El big data en el fútbol se refiere a la recopilación, procesamiento y análisis de grandes volúmenes de 
-               datos relacionados con todos los aspectos del juego.</p>",
+      datos relacionados con todos los aspectos del juego.</p>",
                
                "<h5 style='color:", tema_equipo_colores$texto, "; font-weight:bold;'>¿Por qué el Big Data es importante para mi equipo?</h5>",
                "<p style='text-align:justify; font-size:15px; color:", tema_equipo_colores$texto, ";'>El análisis de estos datos nos aporta mucha información interesante que puede servirnos para ayudar a mejorar el rendimiento, tomar decisiones
-               sobre alineaciones y fichajes, decidir qué estilo de juego funciona mejor con nuestra plantilla, etc.
-               En esta Web tú también podrás aprender a visualizar y analizar estos datos.</p>",
+      sobre alineaciones y fichajes, decidir qué estilo de juego funciona mejor con nuestra plantilla, etc.
+      En esta Web tú también podrás aprender a visualizar y analizar estos datos.</p>",
                
                "<p style='text-align:center; margin-top:20px;'>",
                actionButton("go_analisis", "Empieza el análisis", 
                             style = paste0("color:white; background-color:", tema_equipo_colores$boton_bg, "; padding:10px 15px; border-radius:5px;")),
                "</p>",
                
+               "<p style='text-align:center; margin-top:20px;'>",
+               actionButton("cambiar_equipo_btn", "Cambiar Equipo", 
+                            style = paste0("color:white; background-color:", tema_equipo_colores$boton_bg, 
+                                           "; padding:8px 12px; border-radius:5px; border:none;")),
+               "</p>",
+               
                "</div>"
              )),
+             
              
              br(), br()
            )
@@ -367,6 +380,102 @@ ui <- navbarPage(
 
 
 server <- function(input, output, session) {
+  
+  observeEvent(input$cambiar_equipo_btn, {
+    showModal(modalDialog(
+      title = "Cambiar Equipo",
+      size = "m",
+      div(style = "text-align: center; padding: 20px;",
+          h4("¿Estás seguro de que quieres cambiar de equipo?", style = "color: #333; margin-bottom: 20px;"),
+          br(),
+          
+          selectInput("selector_equipo", "Selecciona el equipo:",
+                      choices = list("Athletic Club" = "2b390eca", "Cadiz CF" = "ee7c297c"),
+                      selected = "2b390eca",
+                      width = "100%"),
+          br()
+      ),
+      footer = tagList(
+        actionButton("confirmar_cambio", "Confirmar", 
+                     style = "background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-right: 10px;"),
+        modalButton("Cancelar")
+      ),
+      easyClose = TRUE
+    ))
+  })
+  
+  
+  observeEvent(input$confirmar_cambio, {
+    codigo_seleccionado <- input$selector_equipo
+    años <- c(2023)
+    
+    
+    removeModal()
+    
+   
+    showModal(modalDialog(
+      title = "Cambiando equipo...",
+      div(style = "text-align: center; padding: 20px;",
+          tags$div(class = "spinner-border", role = "status", style = "color: #007bff;",
+                   tags$span(class = "sr-only", "Cargando...")),
+          br(), br(),
+          h5("Por favor espera mientras se descargan los datos del nuevo equipo."),
+          p("Este proceso puede tardar unos minutos...")
+      ),
+      footer = NULL,
+      easyClose = FALSE
+    ))
+    
+    
+    future({
+      tryCatch({
+
+        system(paste("Rscript descarga_datos_annio.R", codigo_seleccionado, paste(años, collapse = " ")))
+        return("success")
+      }, error = function(e) {
+        return(paste("error:", e$message))
+      })
+    }) %...>% {
+      resultado <- .
+      
+      
+      removeModal()
+      
+      if (resultado == "success") {
+        
+        showModal(modalDialog(
+          title = "¡Cambio completado!",
+          div(style = "text-align: center; padding: 20px;",
+              tags$div(style = "color: #28a745; font-size: 48px; margin-bottom: 20px;", "✓"),
+              h4("El equipo se ha cambiado exitosamente."),
+              p("La aplicación se recargará para mostrar los nuevos datos.")
+          ),
+          footer = tagList(
+            actionButton("recargar_app", "Recargar Aplicación", 
+                         style = "background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;")
+          ),
+          easyClose = FALSE
+        ))
+      } else {
+        
+        showModal(modalDialog(
+          title = "Error",
+          div(style = "text-align: center; padding: 20px;",
+              tags$div(style = "color: #dc3545; font-size: 48px; margin-bottom: 20px;", "✗"),
+              h4("Ha ocurrido un error al cambiar el equipo."),
+              p(gsub("error: ", "", resultado))
+          ),
+          footer = modalButton("Cerrar"),
+          easyClose = TRUE
+        ))
+      }
+    }
+  })
+  
+  
+  observeEvent(input$recargar_app, {
+  session$reload()
+})
   
   output$selector_grafico <- renderUI({
     opciones <- switch(input$tipo_analisis,
