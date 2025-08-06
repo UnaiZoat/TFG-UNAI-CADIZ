@@ -407,7 +407,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$confirmar_cambio, {
     codigo_seleccionado <- input$selector_equipo
-    años <- c(2023,2022,2021)
+    años <- c(2023)
     
     
     removeModal()
@@ -442,19 +442,15 @@ server <- function(input, output, session) {
       removeModal()
       
       if (resultado == "success") {
-        
         showModal(modalDialog(
           title = "¡Cambio completado!",
           div(style = "text-align: center; padding: 20px;",
               tags$div(style = "color: #28a745; font-size: 48px; margin-bottom: 20px;", "✓"),
               h4("El equipo se ha cambiado exitosamente."),
-              p("La aplicación se recargará para mostrar los nuevos datos.")
+              p("Por favor, cierre y vuelva a abrir la aplicación para que se muestren los datos actualizados.")
           ),
-          footer = tagList(
-            actionButton("recargar_app", "Recargar Aplicación", 
-                         style = "background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;")
-          ),
-          easyClose = FALSE
+          easyClose = FALSE,
+          footer = NULL  # Esto elimina el botón "Dismiss"
         ))
       } else {
         
@@ -473,9 +469,7 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$recargar_app, {
-  session$reload()
-})
+
   
   output$selector_grafico <- renderUI({
     opciones <- switch(input$tipo_analisis,
