@@ -599,7 +599,15 @@ server <- function(input, output, session) {
             Resultado == "D" ~ "Empate",
             Resultado == "L" ~ "Derrota",
             TRUE ~ Resultado
-          ))
+          ) 
+          )%>%
+          mutate(
+            Local.Visitante = case_when(
+              Local.Visitante == "Away" ~ "Visitante",
+              Local.Visitante == "Home" ~ "Local",
+              TRUE ~ Local.Visitante
+            )
+          )
       }
       
       if (sufijo_categoria == "GolesAFavor") {

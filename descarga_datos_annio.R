@@ -18,8 +18,8 @@ for (i in seq_along(años)) {
   
   
   if (i > 1) {
-    cat("⏸️ Pausa entre años (20 segundos)...\n")
-    Sys.sleep(20)
+    cat("⏸️ Pausa entre años (15 segundos)...\n")
+    Sys.sleep(15)
   }
   
   for (j in seq_along(scripts)) {

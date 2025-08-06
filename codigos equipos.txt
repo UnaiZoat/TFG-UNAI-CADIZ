@@ -1,5 +1,7 @@
 athletic -> 2b390eca
 cadiz -> ee7c297c
+Barcelona -> 206d90db
+Real Madrid -> 53a2f082
 
 
 Llamar a script: Rscript descarga_datos_annio.R 2b390eca 2020
