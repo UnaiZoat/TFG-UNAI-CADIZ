@@ -220,7 +220,7 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                selectInput("tipo_prediccion", "Selecciona el elemento a predecir:",
-                           choices = c("Resultados", "Tiros", "Tiros en Contra")),
+                           choices = c("Resultados", "Tiros", "Tiros en Contra", "Goles a favor", "Goles en contra")),
                uiOutput("selector_prediccion"),
                br(),
                
@@ -450,7 +450,7 @@ server <- function(input, output, session) {
               p("Por favor, cierre y vuelva a abrir la aplicación para que se muestren los datos actualizados.")
           ),
           easyClose = FALSE,
-          footer = NULL  # Esto elimina el botón "Dismiss"
+          footer = NULL  
         ))
       } else {
         
@@ -1051,7 +1051,9 @@ server <- function(input, output, session) {
                        
                        "Tiros en Contra" = c("Predicción de Goles Encajados según Tiros Recibidos",
                                              "Predicción de xGA por Tiros Recibidos"
-                       )
+                       ),
+                       "Goles a favor" = c("Distancia de los goles a favor"),
+                       "Goles en contra" = c("Distancia de los goles en contra")
     )
     
     selectInput("prediccion_seleccionada", "Selecciona una predicción:", choices = opciones)
@@ -1069,7 +1071,11 @@ server <- function(input, output, session) {
                                "Predicción de Eficiencia de Tiro" = "Tiros",
                                
                                "Predicción de Goles Encajados según Tiros Recibidos" = "TirosEnContra",
-                               "Predicción de xGA por Tiros Recibidos" = "TirosEnContra"
+                               "Predicción de xGA por Tiros Recibidos" = "TirosEnContra",
+                               
+                               "Distancia de los goles a favor" = "GolesAFavor",
+                               
+                               "Distancia de los goles en contra" = "GolesEnContra"
                                
 
     )
@@ -1268,6 +1274,52 @@ server <- function(input, output, session) {
                      mi_tema_cadiz(equipo)
                  },
                  
+                 "Distancia de los goles a favor" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Distancia), !is.na(xG)) %>%
+                     mutate(Distancia = as.numeric(Distancia)) %>%
+                     filter(Distancia <= quantile(Distancia, 0.99, na.rm = TRUE))  # eliminar outliers extremos si los hay
+                   
+                   modelo <- lm(xG ~ Distancia, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Distancia = seq(min(datos_filtrados$Distancia, na.rm = TRUE),
+                                                           max(datos_filtrados$Distancia, na.rm = TRUE),
+                                                           length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Distancia, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Distancia, y = Prediccion),
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Relación entre Distancia del Gol y xG",
+                          x = "Distancia (m)", y = "xG") +
+                     mi_tema_cadiz(equipo)
+                 },
+                 
+                 "Distancia de los goles en contra" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Distancia), !is.na(xG)) %>%
+                     mutate(Distancia = as.numeric(Distancia)) %>%
+                     filter(Distancia <= quantile(Distancia, 0.99, na.rm = TRUE))  # eliminar outliers extremos si los hay
+                   
+                   modelo <- lm(xG ~ Distancia, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Distancia = seq(min(datos_filtrados$Distancia, na.rm = TRUE),
+                                                           max(datos_filtrados$Distancia, na.rm = TRUE),
+                                                           length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Distancia, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Distancia, y = Prediccion),
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Relación entre Distancia de los Goles en Contra y xG",
+                          x = "Distancia (m)", y = "xG") +
+                     mi_tema_cadiz(equipo)
+                 },
+                 
+                 
+                 
     )
     
     ggplotly(gg) %>%
@@ -1304,6 +1356,11 @@ server <- function(input, output, session) {
              "Predicción de Goles Encajados según Tiros Recibidos" = p("Este modelo predice los goles encajados a partir de los tiros que recibe el equipo. Una línea ascendente indica que más disparos recibidos tienden a traducirse en más goles en contra."),
              "Predicción de xGA por Tiros Recibidos" = p("Predice los goles esperados en contra (xGA) según los disparos recibidos. Ayuda a evaluar la calidad defensiva del equipo."),
              
+             # GOLES A FAVOR
+             "Distancia de los goles a favor" = p("Este modelo analiza la relación entre la distancia media de los disparos y los goles marcados. Una distancia menor generalmente indica mejores ocasiones de gol y mayor probabilidad de conversión."),
+             
+             # GOLES EN CONTRA
+             "Distancia de los goles en contra" = p("Predice los goles encajados según la distancia media desde la que dispara el rival. Distancias menores del rival suelen traducirse en más goles en contra, indicando problemas defensivos en zona de peligro."),
             )
     )
   })
