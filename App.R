@@ -1298,13 +1298,13 @@ server <- function(input, output, session) {
       switch(input$prediccion_seleccionada,
              # RESULTADOS
              "Predicción de Resultados según Posesión" = p("Este modelo predice los goles basándose en el porcentaje de posesión. Los puntos amarillos muestran la tendencia predicha, mientras que los puntos de colores representan los datos reales de cada temporada."),
-             "Predicción de Goles por xG" = p("La línea amarilla muestra la relación predicha entre xG y goles reales. La línea roja discontinua representa la relación perfecta (1:1). Las desviaciones indican sobre/sub-rendimiento."),
+             "Predicción de Goles por xG" = p("La línea amarilla muestra la relación predicha entre xG y goles reales. La línea roja discontinua representa la relación perfecta (1:1). Los puntos de colores pertenecen a las temporadas anteriores."),
              
              
              # TIROS
              "Predicción de Goles por Disparos" = p("Este modelo estima cuántos goles se pueden esperar según el número de disparos realizados, basándose en patrones históricos."),
              "Predicción de xG por Disparos" = p("Predice los goles esperados (xG) según el volumen de disparos. Útil para evaluar la calidad ofensiva independientemente de los goles reales."),
-             "Predicción de Eficiencia de Tiro" = p("Calcula el porcentaje de conversión de disparos en goles. Una eficiencia alta indica mejor finalización o mejores ocasiones de gol."),
+             "Predicción de Eficiencia de Tiro" = p("Calcula el porcentaje de conversión de disparos en goles. Una eficiencia alta indica mejor finalización o mejores ocasiones de gol.Es normal que a mayor cantidad de tiros menor sea la eficiencia, ya que no suelen convertirse en gol todos los tiros."),
              
              # TIROS EN CONTRA
              "Predicción de Goles Encajados según Tiros Recibidos" = p("Este modelo predice los goles encajados a partir de los tiros que recibe el equipo. Una línea ascendente indica que más disparos recibidos tienden a traducirse en más goles en contra."),
