@@ -109,11 +109,8 @@ ui <- navbarPage(
              titlePanel(h1(paste("Bienvenido al Análisis del", toupper(equipo)), align = "center",
                            style = paste0("color:", tema_equipo_colores$texto))),
              
-             if (equipo == "cadiz"){
-               tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
-             },
-             br(),
              
+             br(),
              HTML(paste0(
                "<div style='background-color:#ffffff; padding:15px; border-radius:6px; border-left:6px solid ", tema_equipo_colores$borde, "; max-width:800px; margin:auto;'>",
                
@@ -146,8 +143,10 @@ ui <- navbarPage(
                
                "</div>"
              )),
-             
-             
+             br(),
+             if (equipo == "cadiz"){
+               tags$img(src = "escudo.png", height = "150px", style = "display: block; margin: auto;")
+             },
              br(), br()
            )
   ),
@@ -390,7 +389,8 @@ server <- function(input, output, session) {
           br(),
           
           selectInput("selector_equipo", "Selecciona el equipo:",
-                      choices = list("Athletic Club" = "2b390eca", "Cadiz CF" = "ee7c297c", "Barcelona" = "206d90db", "Real Madrid" = "53a2f082" ),
+                      choices = list("Athletic Club" = "2b390eca", "Cadiz CF" = "ee7c297c", "Barcelona" = "206d90db", "Real Madrid" = "53a2f082",
+                                     "Atlético de Madrid " = "db3b9613", "Real Betis" = "fc536746", "Sevilla" = "ad2be733", "Valencia" = "dcc91a7b"),
                       selected = "2b390eca",
                       width = "100%"),
           br()

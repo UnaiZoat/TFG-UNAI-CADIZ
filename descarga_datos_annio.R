@@ -37,5 +37,7 @@ for (i in seq_along(años)) {
 }
 
 nombre_equipo <- if (codigo_equipo == "ee7c297c") "cadiz" else if (codigo_equipo == "2b390eca") "athletic" else
-  if (codigo_equipo =="206d90db") "barcelona" else if (codigo_equipo == "53a2f082") "Real Madrid"  else "equipo"
+  if (codigo_equipo =="206d90db") "barcelona" else if (codigo_equipo == "53a2f082") "Real Madrid" else 
+    if (codigo_equipo == "db3b9613") "Atlético de Madrid" else if (codigo_equipo == "fc536746") "Real Betis" else
+      if (codigo_equipo == "ad2be733") "Sevilla" else if (codigo_equipo == "dcc91a7b") "Valencia"  else "equipo"
 writeLines(nombre_equipo, "equipo_actual.txt")

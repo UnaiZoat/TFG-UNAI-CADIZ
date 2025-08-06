@@ -2,6 +2,12 @@ athletic -> 2b390eca
 cadiz -> ee7c297c
 Barcelona -> 206d90db
 Real Madrid -> 53a2f082
+Atlético de Madrid -> db3b9613
+Real Betis -> fc536746
+Sevilla -> ad2be733
+Valencia -> dcc91a7b
+Espanyol -> a8661628
+Villareal -> 2a8183b3
 
 
 Llamar a script: Rscript descarga_datos_annio.R 2b390eca 2020
