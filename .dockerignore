@@ -1,0 +1,8 @@
+.git
+.gitignore
+README.md
+*.Rproj
+.Rproj.user
+.RData
+.Rhistory
+.DS_Store
