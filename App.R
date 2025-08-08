@@ -1052,8 +1052,10 @@ server <- function(input, output, session) {
                        "Tiros en Contra" = c("Predicción de Goles Encajados según Tiros Recibidos",
                                              "Predicción de xGA por Tiros Recibidos"
                        ),
-                       "Goles a favor" = c("Distancia de los goles a favor"),
-                       "Goles en contra" = c("Distancia de los goles en contra")
+                       "Goles a favor" = c("Distancia de los goles a favor",
+                                           "Distribución goles por minuto"),
+                       "Goles en contra" = c("Distancia de los goles en contra",
+                                             "Distribución goles en contra por minuto")
     )
     
     selectInput("prediccion_seleccionada", "Selecciona una predicción:", choices = opciones)
@@ -1074,8 +1076,10 @@ server <- function(input, output, session) {
                                "Predicción de xGA por Tiros Recibidos" = "TirosEnContra",
                                
                                "Distancia de los goles a favor" = "GolesAFavor",
+                               "Distribución goles por minuto" = "GolesAFavor",
                                
-                               "Distancia de los goles en contra" = "GolesEnContra"
+                               "Distancia de los goles en contra" = "GolesEnContra",
+                               "Distribución goles en contra por minuto" = "GolesEnContra"
                                
 
     )
@@ -1318,6 +1322,50 @@ server <- function(input, output, session) {
                      mi_tema_cadiz(equipo)
                  },
                  
+                 "Distribución goles por minuto" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Minute), !is.na(xG)) %>%
+                     mutate(Minute = as.numeric(gsub("\\+.*", "", Minute))) %>%
+                     filter(Minute >= 0 & Minute <= 120)
+                   
+                   modelo <- lm(xG ~ Minute, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Minute = seq(min(datos_filtrados$Minute, na.rm = TRUE),
+                                                        max(datos_filtrados$Minute, na.rm = TRUE),
+                                                        length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Minute, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Minute, y = Prediccion),
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Relación entre Minuto del Gol y xG",
+                          x = "Minuto del gol", y = "xG") +
+                     mi_tema_cadiz(equipo)
+                 },
+                 
+                 "Distribución goles en contra por minuto" = {
+                   datos_filtrados <- datos_combinados %>%
+                     filter(!is.na(Minute), !is.na(xG)) %>%
+                     mutate(Minute = as.numeric(gsub("\\+.*", "", Minute))) %>%
+                     filter(Minute >= 0 & Minute <= 120)
+                   
+                   modelo <- lm(xG ~ Minute, data = datos_filtrados)
+                   
+                   pred_data <- data.frame(Minute = seq(min(datos_filtrados$Minute, na.rm = TRUE),
+                                                        max(datos_filtrados$Minute, na.rm = TRUE),
+                                                        length.out = 100))
+                   pred_data$Prediccion <- predict(modelo, pred_data, type = "response")
+                   
+                   ggplot(datos_filtrados, aes(x = Minute, y = xG)) +
+                     geom_point(aes(color = Temporada), size = 3, alpha = 0.7) +
+                     geom_line(data = pred_data, aes(x = Minute, y = Prediccion),
+                               color = "#ffff00", size = 2) +
+                     labs(title = "Relación entre Minuto del Gol en Contra y xG",
+                          x = "Minuto del gol encajado", y = "xG") +
+                     mi_tema_cadiz(equipo)
+                 },
+                 
                  
                  
     )
@@ -1358,10 +1406,13 @@ server <- function(input, output, session) {
              
              # GOLES A FAVOR
              "Distancia de los goles a favor" = p("Este modelo analiza la relación entre la distancia media de los disparos y los goles marcados. Una distancia menor generalmente indica mejores ocasiones de gol y mayor probabilidad de conversión."),
+             "Distribución goles por minuto" = p("Este modelo examina la relación entre el minuto en el que se marca un gol y su valor de xG. Permite identificar si el equipo genera mejores ocasiones en momentos específicos del partido."),
              
              # GOLES EN CONTRA
              "Distancia de los goles en contra" = p("Predice los goles encajados según la distancia media desde la que dispara el rival. Distancias menores del rival suelen traducirse en más goles en contra, indicando problemas defensivos en zona de peligro."),
-            )
+             "Distribución goles en contra por minuto" = p("Este modelo analiza la relación entre el minuto en el que se encaja un gol y su xG. Puede revelar si el equipo tiende a conceder ocasiones peligrosas en fases concretas del encuentro.")
+             
+             )
     )
   })
 
