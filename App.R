@@ -698,7 +698,7 @@ server <- function(input, output, session) {
                    labs(title="Comparación de xG con y sin penaltis", x="xG (Goles Esperados)", y="xG sin penaltis") +
                    mi_tema_cadiz(equipo),
                  
-                 "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=as.numeric(Disparos), y=as.numeric(GF))) + 
+                 "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    scale_x_continuous(limits=c(0, 25)) +  
@@ -706,7 +706,7 @@ server <- function(input, output, session) {
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
                    mi_tema_cadiz(equipo),
                  
-                 "Comparación xG concedido vs Goles recibidos" = ggplot(datosResultados, aes(x=as.numeric(xG), y=as.numeric(GF))) +
+                 "Comparación xG concedido vs Goles recibidos" = ggplot(datosResultados, aes(x=xG, y=GF)) +
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    scale_x_continuous(limits=c(0, 4)) +  
