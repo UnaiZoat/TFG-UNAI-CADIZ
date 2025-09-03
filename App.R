@@ -695,7 +695,7 @@ server <- function(input, output, session) {
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    scale_x_continuous(limits = c(0, 3)) + 
                    scale_y_continuous(limits = c(0, 3)) +
-                   labs(title="Comparación de xG con y sin penaltis", x="xG", y="xG sin penaltis") +
+                   labs(title="Comparación de xG con y sin penaltis", x="xG (Goles Esperados)", y="xG sin penaltis") +
                    mi_tema_cadiz(equipo),
                  
                  "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=as.numeric(Disparos), y=as.numeric(GF))) + 
@@ -711,7 +711,7 @@ server <- function(input, output, session) {
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
                    scale_x_continuous(limits=c(0, 4)) +  
                    scale_y_continuous(limits=c(0, 5)) +
-                   labs(title="xG en Contra vs Goles Recibidos", x="xG Concedido", y="Goles Concedidos") +
+                   labs(title="xG en Contra vs Goles Recibidos", x="xG (Goles Esperados) Concedido", y="Goles Concedidos") +
                    mi_tema_cadiz(equipo),
                  
                  "Distancia media tiros en contra" = ggplot(datosResultados, aes(x=Distancia)) +
@@ -757,7 +757,7 @@ server <- function(input, output, session) {
                    geom_text(hjust = 0.5, vjust = 1, size = 3) +
                    labs(
                      title = "Comparación de Goles vs xG",
-                     x = "xG", y = "Goles"
+                     x = "xG (Goles Esperados)", y = "Goles"
                    ) +
                    mi_tema_cadiz(equipo),
                  
@@ -1212,7 +1212,7 @@ server <- function(input, output, session) {
                      geom_line(data = pred_data, aes(x = Disparos, y = Prediccion), 
                                color = "#ffff00", size = 2) +
                      labs(title = "Predicción de xG por Disparos", 
-                          x = "Disparos", y = "xG Predicho") +
+                          x = "Disparos", y = "xG (Goles Esperados) Predicho") +
                      mi_tema_cadiz(equipo)
                  },
                  
@@ -1296,7 +1296,7 @@ server <- function(input, output, session) {
                      geom_line(data = pred_data, aes(x = Distancia, y = Prediccion),
                                color = "#ffff00", size = 2) +
                      labs(title = "Relación entre Distancia del Gol y xG",
-                          x = "Distancia (m)", y = "xG") +
+                          x = "Distancia (m)", y = "xG (Goles Esperados)") +
                      mi_tema_cadiz(equipo)
                  },
                  
@@ -1318,7 +1318,7 @@ server <- function(input, output, session) {
                      geom_line(data = pred_data, aes(x = Distancia, y = Prediccion),
                                color = "#ffff00", size = 2) +
                      labs(title = "Relación entre Distancia de los Goles en Contra y xG",
-                          x = "Distancia (m)", y = "xG") +
+                          x = "Distancia (m)", y = "xG (Goles Esperados)") +
                      mi_tema_cadiz(equipo)
                  },
                  
@@ -1340,7 +1340,7 @@ server <- function(input, output, session) {
                      geom_line(data = pred_data, aes(x = Minute, y = Prediccion),
                                color = "#ffff00", size = 2) +
                      labs(title = "Relación entre Minuto del Gol y xG",
-                          x = "Minuto del gol", y = "xG") +
+                          x = "Minuto del gol", y = "xG (Goles Esperados)") +
                      mi_tema_cadiz(equipo)
                  },
                  
@@ -1362,7 +1362,7 @@ server <- function(input, output, session) {
                      geom_line(data = pred_data, aes(x = Minute, y = Prediccion),
                                color = "#ffff00", size = 2) +
                      labs(title = "Relación entre Minuto del Gol en Contra y xG",
-                          x = "Minuto del gol encajado", y = "xG") +
+                          x = "Minuto del gol encajado", y = "xG (Goles Esperados)") +
                      mi_tema_cadiz(equipo)
                  },
                  

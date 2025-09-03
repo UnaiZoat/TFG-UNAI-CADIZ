@@ -1,0 +1,12 @@
+name: Analisis_Cadiz
+title: Analisis_Cadiz
+username: unaiz
+account: unaiz
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 15334810
+bundleId: 10855355
+url: https://unaiz.shinyapps.io/Analisis_Cadiz/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
