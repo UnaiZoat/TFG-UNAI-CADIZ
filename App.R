@@ -656,28 +656,33 @@ server <- function(input, output, session) {
                  
                  "Resultados en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill=Resultado)) +
                    geom_bar(position = "dodge") +
+                   facet_wrap(~Temporada) +
                    labs(title = "Resultados en Casa vs Fuera", x= "Condición", y= "Cantidad de Partidos") +
                    mi_tema_cadiz(equipo), 
                  
                  "Posesión según Resultado" = ggplot(datosResultados, aes(x=Posesión, fill=Resultado)) +
                    geom_histogram(binwidth = 5, position= "dodge", color="black") +
+                   facet_wrap(~Temporada) +
                    labs(title= "Posesión según Resultado", x="Posesión(%)", y= "Cantidad de Partidos") +
                    mi_tema_cadiz(equipo),
                  
                  "Relación entre Posesión y Goles Marcados" = ggplot(datosResultados, aes(x=Posesión, y=GF, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
+                   facet_wrap(~Temporada) +
                    labs(title= "Relación entre Posesión y Goles Marcados", x="Posesión(%)", y= "Goles") +
                    mi_tema_cadiz(equipo),
                  
                  "Relación entre Posesión y Goles en Contra" = ggplot(datosResultados, aes(x=Posesión, y=GC, color=Resultado)) +
                    geom_point(size=3) +
                    geom_smooth(method = "lm", se=FALSE) +
+                   facet_wrap(~Temporada) +
                    labs(title= "Relación entre Posesión y Goles en Contra", x="Posesión(%)", y= "Goles") +
                    mi_tema_cadiz(equipo),
                  
                  "Comparación entre xG y Goles Marcados" = ggplot(datosResultados, aes(x=xG, y=GF, color=Resultado)) +
                    geom_point(size=3) +
+                   facet_wrap(~Temporada) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    labs(title = "Comparación entre xG y Goles Marcados", x="xG (Goles Esperados)", y = "Goles Marcados") +
                    mi_tema_cadiz(equipo),
@@ -685,6 +690,7 @@ server <- function(input, output, session) {
                  "Relación entre Disparos y Goles" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   facet_wrap(~Temporada) +
                    scale_x_continuous(limits = c(0, 25)) +  
                    scale_y_continuous(limits = c(0, 10)) +  
                    labs(title="Relación entre Disparos y Goles", x="Disparos", y="Goles") +
@@ -692,6 +698,7 @@ server <- function(input, output, session) {
                  
                  "Comparación de xG con y sin penaltis" = ggplot(datosResultados, aes(x=xG, y=xG...nopenalty)) + 
                    geom_point(color="#ffff00", size=3, alpha=0.7) +
+                   facet_wrap(~Temporada) +
                    geom_abline(slope = 1, intercept = 0, linetype="dashed", color="#ffff00") +
                    scale_x_continuous(limits = c(0, 3)) + 
                    scale_y_continuous(limits = c(0, 3)) +
@@ -701,6 +708,7 @@ server <- function(input, output, session) {
                  "Relación entre Disparos Recibidos y Goles en Contra" = ggplot(datosResultados, aes(x=Disparos, y=GF)) + 
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   facet_wrap(~Temporada) +
                    scale_x_continuous(limits=c(0, 25)) +  
                    scale_y_continuous(limits=c(0, 5)) +
                    labs(title="Relación entre Disparos Recibidos y Goles en Contra", x="Disparos Recibidos", y="Goles en Contra") +
@@ -709,6 +717,7 @@ server <- function(input, output, session) {
                  "Comparación xG concedido vs Goles recibidos" = ggplot(datosResultados, aes(x=xG, y=GF)) +
                    geom_jitter(color="#ffff00", size=3, alpha=0.7, width=0.3, height=0.3) +
                    geom_smooth(method="lm", color="#ffff00", se=FALSE) +
+                   facet_wrap(~Temporada) +
                    scale_x_continuous(limits=c(0, 4)) +  
                    scale_y_continuous(limits=c(0, 5)) +
                    labs(title="xG en Contra vs Goles Recibidos", x="xG (Goles Esperados) Concedido", y="Goles Concedidos") +
@@ -716,6 +725,7 @@ server <- function(input, output, session) {
                  
                  "Distancia media tiros en contra" = ggplot(datosResultados, aes(x=Distancia)) +
                    geom_histogram(binwidth=1, fill="#ffff00", color="black") +
+                   facet_wrap(~Temporada) +
                    labs(title="Distancia de los Tiros en Contra", x="Distancia (metros)", y="Número de Tiros") +
                    mi_tema_cadiz(equipo),
                  
@@ -725,6 +735,7 @@ server <- function(input, output, session) {
                    aes(x = Goles.Disparo, y = Goles.DisparoPuerta, color = Nombre, label = Nombre)
                  ) +
                    geom_point(size = 3) +
+                   facet_wrap(~Temporada) +
                    geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
                    geom_text(hjust = 0.5, vjust = -1, size = 3) +
                    labs(
@@ -739,6 +750,7 @@ server <- function(input, output, session) {
                    aes(x = Disparos.cada.90min, y = Goles, color = Nombre, label = Nombre)
                  ) +
                    geom_point(size = 2) +
+                   facet_wrap(~Temporada) +
                    geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
                    geom_text(hjust = 0.5, vjust = -1, size = 3) +
                    labs(
@@ -752,6 +764,7 @@ server <- function(input, output, session) {
                      filter(!Nombre %in% c("Squad Total", "Opponent Total")),
                    aes(x = xG, y = Goles, color = Nombre, label = Nombre)
                  ) +
+                   facet_wrap(~Temporada) +
                    geom_point(size = 3) +
                    geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "#ffff00") +
                    geom_text(hjust = 0.5, vjust = 1, size = 3) +
@@ -767,6 +780,7 @@ server <- function(input, output, session) {
                    aes(x = Edad, y = Goles.DisparoPuerta, color = Nombre, label = Nombre)
                  ) +
                    geom_point(size = 3) +
+                   facet_wrap(~Temporada) +
                    geom_smooth(method = "lm", se = FALSE, color = "#ffff00") +
                    geom_text(hjust = 0.5, vjust = -1, size = 3) +
                    labs(
@@ -777,6 +791,7 @@ server <- function(input, output, session) {
                  
                  "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
                    geom_bar() +
+                   facet_wrap(~Temporada) +
                    labs(title = "Goles en Casa vs Fuera", x="Local.Visitante", y="Goles")+
                    mi_tema_cadiz(equipo),
                  
@@ -787,6 +802,7 @@ server <- function(input, output, session) {
                    aes(x = Body.Part, fill = Body.Part)
                  ) +
                    geom_bar() +
+                   facet_wrap(~Temporada) +
                    labs(
                      title = "Goles con cada parte del cuerpo",
                      x = "Parte del cuerpo",
@@ -797,16 +813,19 @@ server <- function(input, output, session) {
                  
                  "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
                    geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
+                   facet_wrap(~Temporada) +
                    labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
                    mi_tema_cadiz(equipo),
                  
                  "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distancia))+
                    geom_histogram(binwidth= 5,fill="#ffff00", color="black") +
+                   facet_wrap(~Temporada) +
                    labs(title = "Distancia de los Goles", x="Distancia(metros)",y="Cantidad Goles")+
                    mi_tema_cadiz(equipo),
                  
                  "Goles en contra Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
                    geom_bar() +
+                   facet_wrap(~Temporada) +
                    labs(title = "Goles en contra en Casa vs Fuera", x="Condición", y="Goles en contra")+
                    mi_tema_cadiz(equipo),
                  
@@ -817,6 +836,7 @@ server <- function(input, output, session) {
                    aes(x = Body.Part, fill = Body.Part)
                  ) +
                    geom_bar() +
+                   facet_wrap(~Temporada) +
                    labs(
                      title = "Goles en contra según parte del cuerpo rival",
                      x = "Parte del cuerpo",
@@ -827,11 +847,13 @@ server <- function(input, output, session) {
                  
                  "Distribución goles en contra por minuto" = ggplot(datosResultados, aes(x=as.numeric(Minute)))+
                    geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
+                   facet_wrap(~Temporada) +
                    labs(title = "Distribución de goles en contra por minuto", x="Minuto", y="Goles en contra")+
                    mi_tema_cadiz(equipo),
                  
                  "Distancia de los Goles en contra" = ggplot(datosResultados, aes(x=Distancia))+
                    geom_histogram(binwidth = 5, fill="#ffff00", color="black") +
+                   facet_wrap(~Temporada) +
                    labs(title = "Distancia de los Goles en contra", x="Distancia (metros)", y="Goles en contra")+
                    mi_tema_cadiz(equipo)
                  
