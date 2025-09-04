@@ -644,6 +644,8 @@ server <- function(input, output, session) {
           )
       }
       
+      
+      
       if (nrow(datos_combinados) == 0) {
         showNotification("No hay datos disponibles para el gráfico seleccionado", type = "warning")
         return(NULL)
@@ -653,6 +655,8 @@ server <- function(input, output, session) {
     }
     
     gg <- switch(input$grafico_seleccionado,
+                 
+                 
                  
                  "Resultados en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill=Resultado)) +
                    geom_bar(position = "dodge") +
@@ -789,17 +793,17 @@ server <- function(input, output, session) {
                    ) +
                    mi_tema_cadiz(equipo),
                  
-                 "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante, fill = Local.Visitante))+
-                   geom_bar() +
+                 "Goles en Casa vs Fuera" = ggplot(datosResultados, aes(x=Local.Visitante))+
+                   geom_bar(aes(fill = Local.Visitante)) +
                    facet_wrap(~Temporada) +
                    labs(title = "Goles en Casa vs Fuera", x="Local.Visitante", y="Goles")+
                    mi_tema_cadiz(equipo),
                  
                  "Goles con cada parte del cuerpo" = ggplot(
                    datosResultados %>%
-                     mutate(Body.Part = trimws(tolower(Body.Part))) %>%
-                     filter(!Body.Part %in% c("trace", "unknown", "na", "")),
-                   aes(x = Body.Part, fill = Body.Part)
+                     mutate(`Parte del cuerpo` = trimws(tolower(Body.Part))) %>%
+                     filter(!`Parte del cuerpo` %in% c("trace", "unknown", "na", "")),
+                   aes(x = `Parte del cuerpo`, fill = `Parte del cuerpo`)
                  ) +
                    geom_bar() +
                    facet_wrap(~Temporada) +
@@ -811,10 +815,18 @@ server <- function(input, output, session) {
                    ) +
                    mi_tema_cadiz(equipo),
                  
-                 "Distribución goles por minuto" = ggplot(datosResultados,aes(x=as.numeric(Minute)))+
-                   geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
+                 "Distribución goles por minuto" = ggplot(
+                   datosResultados %>%
+                     mutate(Minuto = as.numeric(Minute)),
+                   aes(x = Minuto)
+                 ) +
+                   geom_histogram(binwidth = 5, fill = "#ffff00", color = "black") +
                    facet_wrap(~Temporada) +
-                   labs(title = "Distribución goles por minuto", x="Minuto", y="Cantidad Goles")+
+                   labs(
+                     title = "Distribución goles por minuto",
+                     x = "Minuto",
+                     y = "Cantidad de Goles"
+                   ) +
                    mi_tema_cadiz(equipo),
                  
                  "Distancia de los Goles" = ggplot(datosResultados, aes(x=Distancia))+
@@ -831,9 +843,9 @@ server <- function(input, output, session) {
                  
                  "Goles en contra con cada parte del cuerpo" = ggplot(
                    datosResultados %>%
-                     mutate(Body.Part = trimws(tolower(Body.Part))) %>%
-                     filter(!Body.Part %in% c("trace", "unknown", "na", "")),
-                   aes(x = Body.Part, fill = Body.Part)
+                     mutate(`Parte del cuerpo` = trimws(tolower(Body.Part))) %>%
+                     filter(!`Parte del cuerpo` %in% c("trace", "unknown", "na", "")),
+                   aes(x = `Parte del cuerpo`, fill = `Parte del cuerpo`)
                  ) +
                    geom_bar() +
                    facet_wrap(~Temporada) +
@@ -845,10 +857,18 @@ server <- function(input, output, session) {
                    ) +
                    mi_tema_cadiz(equipo),
                  
-                 "Distribución goles en contra por minuto" = ggplot(datosResultados, aes(x=as.numeric(Minute)))+
-                   geom_histogram(binwidth = 5, fill="#ffff00", color="black")+
+                 "Distribución goles en contra por minuto" = ggplot(
+                   datosResultados %>%
+                     mutate(Minuto = as.numeric(Minute)),
+                   aes(x = Minuto)
+                 ) +
+                   geom_histogram(binwidth = 5, fill = "#ffff00", color = "black") +
                    facet_wrap(~Temporada) +
-                   labs(title = "Distribución de goles en contra por minuto", x="Minuto", y="Goles en contra")+
+                   labs(
+                     title = "Distribución de goles en contra por minuto",
+                     x = "Minuto",
+                     y = "Goles en contra"
+                   ) +
                    mi_tema_cadiz(equipo),
                  
                  "Distancia de los Goles en contra" = ggplot(datosResultados, aes(x=Distancia))+
@@ -858,8 +878,11 @@ server <- function(input, output, session) {
                    mi_tema_cadiz(equipo)
                  
     )
+    gg <- gg +
+      labs(y = "Cantidad")
     
-    ggplotly(gg) %>%
+    ggplotly(gg, tooltip = c("x", "y")) %>%  
+      style(hoverlabel = list(namelength = -1)) %>% 
       config(
         displayModeBar = TRUE,
         displaylogo = FALSE,
