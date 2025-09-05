@@ -569,6 +569,12 @@ server <- function(input, output, session) {
             datos <- datos %>% dplyr::mutate(GC = as.numeric(GC))
           }
           
+          if (sufijo_categoria == "TopGoleadores" && "Goles" %in% colnames(datos)) {
+            datos <- datos %>%
+              arrange(desc(Goles)) %>%
+              head(12)
+          }
+          
           return(datos)
         } else {
           showNotification(paste("Dataset no encontrado:", nombre_dataset), type = "error")
@@ -576,15 +582,7 @@ server <- function(input, output, session) {
         }
       })
       
-      if (sufijo_categoria == "TopGoleadores") {
-        if ("Goles" %in% colnames(datos_combinados)) {
-          datos_combinados <- datos_combinados %>%
-            arrange(desc(Goles)) %>%
-            head(12)
-        } else {
-          datos_combinados <- head(datos_combinados, 8)
-        }
-      }
+      
       
       if (sufijo_categoria == "Resultados"){
         datos_combinados <- datos_combinados %>%
