@@ -878,8 +878,7 @@ server <- function(input, output, session) {
                    mi_tema_cadiz(equipo)
                  
     )
-    gg <- gg +
-      labs(y = "Cantidad")
+   
     
     ggplotly(gg, tooltip = c("x", "y")) %>%  
       style(hoverlabel = list(namelength = -1)) %>% 
